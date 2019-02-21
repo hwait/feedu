@@ -1,3 +1,4 @@
 /node_modules
 /config/keys.js
+/docs/todo.txt
 package-lock.json
