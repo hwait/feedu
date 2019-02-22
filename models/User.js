@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+/**
+|--------------------------------------------------
+| User, can be Teacher or Student
+|--------------------------------------------------
+*/
+
 const UserSchema = new Schema({
 	name: {
 		type: String,
