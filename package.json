@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "test": "jest ./",
+    "coverage": "jest --collectCoverageFrom=./**.js --coverage",
     "server": "nodemon server.js"
   },
   "author": "Nikolay Kashavkin",
@@ -21,6 +23,8 @@
     "validator": "^10.11.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "jest": "^24.1.0",
+    "nodemon": "^1.18.10",
+    "supertest": "^3.4.2"
   }
 }

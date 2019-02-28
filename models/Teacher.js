@@ -13,6 +13,10 @@ const TeacherSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'users'
 	},
+	active: {
+		type: Boolean,
+		default: true
+	},
 	rating: {
 		type: Number,
 		default: 0
@@ -20,7 +24,27 @@ const TeacherSchema = new Schema({
 	nstudents: {
 		type: Number,
 		default: 0
-	}
+	},
+	subjects: [
+		{
+			name: {
+				type: String,
+				required: true
+			},
+			class: {
+				type: Number,
+				required: true
+			}
+		}
+	],
+	students: [
+		{
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: 'users'
+			}
+		}
+	]
 });
 
 module.exports = Teacher = mongoose.model('teachers', TeacherSchema);

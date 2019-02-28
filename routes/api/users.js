@@ -13,12 +13,7 @@ const validateLoginInput = require('../../validators/login');
 // Load User model
 const User = require('../../models/User');
 
-// @route   GET api/users/test
-// @desc    just test
-// @access  Public
-router.get('/test', (req, res) => res.json({ msg: 'Users works' }));
-
-// @route   GET api/users/register
+// @route   POST api/users/register
 // @desc    Register user
 // @access  Public
 router.post('/register', (req, res) => {
@@ -103,7 +98,22 @@ router.post('/login', (req, res) => {
 // @desc    Return Current user
 // @access  Private
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-	res.json(req.user);
+	res.json({
+		id: req.user.id,
+		name: req.user.name,
+		email: req.user.email
+	});
+});
+
+// @route   DELETE api/users/delete
+// @desc    Delete Current user
+// @access  Private
+router.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
+	User.findById(req.user.id)
+		.then((user) => {
+			user.remove().then(() => res.json({ success: true }));
+		})
+		.catch((err) => res.status(401).json({ notauthorized: 'User not authorized' }));
 });
 
 module.exports = router;

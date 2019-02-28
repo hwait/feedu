@@ -12,10 +12,12 @@ const StudentSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'users'
 	},
-	teacher: {
-		type: Schema.Types.ObjectId,
-		ref: 'teacher'
-	},
+	teachers: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'teacher'
+		}
+	],
 	class: {
 		type: Number,
 		default: 1
