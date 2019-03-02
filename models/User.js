@@ -26,7 +26,45 @@ const UserSchema = new Schema({
 	date: {
 		type: Date,
 		default: Date.now
-	}
+	},
+	role: {
+		/**
+		|--------------------------------------------------
+		| 0 - Visiter
+		| 1 - Teacher
+		| 2 - Student
+		| 3 - Parent
+		|--------------------------------------------------
+		*/
+		type: Number,
+		default: 0
+	},
+	classn: {
+		type: Number,
+		default: 0 // No class
+	},
+	active: {
+		type: Boolean,
+		default: true
+	},
+	users: [
+		// Teachers or Students
+		{
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: 'users'
+			}
+		}
+	],
+	subjects: [
+		// Teacher is competent with / Student study
+		{
+			subject: {
+				type: Schema.Types.ObjectId,
+				ref: 'subjects'
+			}
+		}
+	]
 });
 
 module.exports = User = mongoose.model('users', UserSchema);

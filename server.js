@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const users = require('./routes/api/users');
-const teachers = require('./routes/api/teachers');
-const students = require('./routes/api/students');
 
 const app = express();
 
@@ -26,8 +24,6 @@ require('./config/passport')(passport);
 
 //Routes
 app.use('/api/users', users);
-app.use('/api/teachers', teachers);
-app.use('/api/students', students);
 
 const port = process.env.PORT || 5000;
 
