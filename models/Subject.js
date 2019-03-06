@@ -12,6 +12,10 @@ const SubjectSchema = new Schema({
 		type: String,
 		required: true
 	},
+	reshid: {
+		type: Number,
+		required: true
+	},
 	classfrom: {
 		type: Number,
 		required: true
@@ -20,14 +24,10 @@ const SubjectSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	lessons: [
-		{
-			lesson: {
-				type: Schema.Types.ObjectId,
-				ref: 'lessons'
-			}
-		}
-	]
+	extendable: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = Subject = mongoose.model('subjects', SubjectSchema);

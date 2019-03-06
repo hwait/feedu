@@ -6,6 +6,7 @@ let request = req('http://localhost:5000/api/users/');
 
 const validInput = {
 	name: 'test',
+	surname: 'tests',
 	email: 'test@gmail.com',
 	password: 'a1234567',
 	password2: 'a1234567',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Grid, Button, Header, Icon, Segment, Divider } from 'semantic-ui-react';
+import Login from '../auth/Login';
+import { Grid, Button, Header, Divider } from 'semantic-ui-react';
 
 class Landing extends Component {
 	render() {
@@ -21,17 +22,7 @@ class Landing extends Component {
 									Or
 								</Divider>
 								<Grid.Column>
-									<Form>
-										<Form.Input icon="user" iconPosition="left" placeholder="Username" />
-										<Form.Input
-											icon="lock"
-											iconPosition="left"
-											placeholder="Password"
-											type="password"
-										/>
-
-										<Button content="Sign In" icon="sign in" labelPosition="left" primary />
-									</Form>
+									<Login />
 								</Grid.Column>
 								<Grid.Column textAlign="left">
 									<Button

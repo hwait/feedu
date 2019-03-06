@@ -21,6 +21,7 @@ router.post(
 	'/register',
 	[
 		check('name').isLength({ min: 2, max: 30 }),
+		check('surname').isLength({ min: 2, max: 30 }),
 		check('email').isEmail(),
 		check('password').isLength({ min: 6, max: 30 }),
 		check('role').isIn([ 0, 1, 2, 3 ]),

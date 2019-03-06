@@ -15,7 +15,7 @@ class Navbar extends Component {
 				<Menu.Item
 					as={Link}
 					name="login"
-					to="/login"
+					to="/"
 					active={activeItem === 'login'}
 					onClick={this.handleItemClick}
 				/>

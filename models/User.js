@@ -12,6 +12,10 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	},
+	surname: {
+		type: String,
+		required: true
+	},
 	email: {
 		type: String,
 		required: true
@@ -30,10 +34,9 @@ const UserSchema = new Schema({
 	role: {
 		/**
 		|--------------------------------------------------
-		| 0 - Visiter
+		| 0 - Student
 		| 1 - Teacher
-		| 2 - Student
-		| 3 - Parent
+		| 2 - Parent
 		|--------------------------------------------------
 		*/
 		type: Number,
