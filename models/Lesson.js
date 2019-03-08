@@ -12,7 +12,7 @@ const LessonSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'subjects'
 	},
-	class: {
+	classn: {
 		type: Number,
 		required: true
 	},
@@ -34,7 +34,7 @@ const LessonSchema = new Schema({
 	},
 	videos: [
 		{
-			yid: {
+			link: {
 				type: String,
 				required: true
 			},

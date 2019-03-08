@@ -194,8 +194,16 @@ const subjects = [
 ];
 
 class Register extends Component {
-	state = { subjectCheckboxes: [] };
+	state = {
+		subjectCheckboxes: [],
+		subjectSelected: []
+	};
 	getSubjects = (e, { value }) => {
+		console.log('====================================');
+		console.log(e, value);
+		console.log('====================================');
+	};
+	setRole = (e, { value }) => {
 		const arr = subjects
 			.filter((x) => x.classfrom <= value && x.classto >= value)
 			.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
@@ -213,6 +221,14 @@ class Register extends Component {
 			});
 		this.setState({ subjectCheckboxes: arr });
 	};
+	/**
+	|--------------------------------------------------
+	| // TODO: Toggle check all visible
+	| // TODO: Class must be hidden by default
+	| // TODO: Select Parent should hide checkboxes and class selector
+	| // TODO: Select Teacher should hide class selector and show all subjects
+	|--------------------------------------------------
+	*/
 	render() {
 		const { subjectCheckboxes } = this.state;
 		return (
@@ -244,7 +260,13 @@ class Register extends Component {
 										placeholder="Confirm Password"
 										type="password"
 									/>
-									<Form.Select fluid label="Role" options={options} placeholder="Role" />
+									<Form.Select
+										fluid
+										label="Role"
+										options={options}
+										placeholder="Role"
+										onChange={this.setRole}
+									/>
 									<Form.Select
 										fluid
 										label="Class"

@@ -44,13 +44,13 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: errors.array() });
 		}
-		const { name, password, email, role, classn, users } = req.body;
+		const { name, password, email, role, classn, surname, users } = req.body;
 		const avatar = gravatar.url(req.body.email, {
 			s: 200, // Size
 			r: 'pg', // Rating
 			d: 'mm' // Default image
 		});
-		const newUser = new User({ name, email, avatar, password, role, classn, users });
+		const newUser = new User({ name, surname, email, avatar, password, role, classn, users });
 
 		bcrypt.genSalt(10, (err, salt) => {
 			bcrypt.hash(newUser.password, salt, (err, hash) => {
