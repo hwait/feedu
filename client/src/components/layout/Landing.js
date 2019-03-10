@@ -5,8 +5,8 @@ import { Grid, Button, Header, Divider } from 'semantic-ui-react';
 class Landing extends Component {
 	render() {
 		return (
-			<div class="landing">
-				<div class="dark-overlay landing-inner">
+			<div className="landing">
+				<div className="dark-overlay landing-inner">
 					<div>
 						<Grid columns="equal" stackable textAlign="center" relaxed>
 							<Grid.Row>

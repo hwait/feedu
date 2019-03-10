@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Form, Button, Segment, Grid, Checkbox } from 'semantic-ui-react';
+
+import { actions as authActions } from '../../reducers/auth';
 
 const options = [
 	{ key: 0, text: 'Student', value: 0 },
@@ -196,14 +199,40 @@ const subjects = [
 class Register extends Component {
 	state = {
 		subjectCheckboxes: [],
-		subjectSelected: []
+		subjectSelected: [],
+		name: '',
+		surname: '',
+		email: '',
+		password: '',
+		password2: '',
+		role: 1,
+		errors: {}
+	};
+
+	onChange = (e) => {
+		const { name, value } = e.target;
+		this.setState({ [name]: value });
+	};
+
+	submitUser = (e) => {
+		e.preventDefault();
+		const { name, email, password, password2, surname, role } = this.state;
+		const newUser = {
+			name,
+			email,
+			password,
+			password2,
+			surname,
+			role
+		};
+
+		this.props.signup(newUser);
+	};
+
+	setRole = (e, { value }) => {
+		this.setState({ role: value });
 	};
 	getSubjects = (e, { value }) => {
-		console.log('====================================');
-		console.log(e, value);
-		console.log('====================================');
-	};
-	setRole = (e, { value }) => {
 		const arr = subjects
 			.filter((x) => x.classfrom <= value && x.classto >= value)
 			.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
@@ -230,28 +259,50 @@ class Register extends Component {
 	|--------------------------------------------------
 	*/
 	render() {
-		const { subjectCheckboxes } = this.state;
+		const { subjectCheckboxes, name, email, password, password2, surname, role } = this.state;
 		return (
-			<div class="dark-overlay landing-inner">
+			<div className="dark-overlay landing-inner">
 				<Segment placeholder compact className="work-container">
 					<Form>
 						<Grid columns="equal" stackable textAlign="center" relaxed>
 							<Grid.Row>
 								<Grid.Column textAlign="left">
-									<Form.Input label="Name" icon="user" iconPosition="left" placeholder="Name" />
+									<Form.Input
+										label="Name"
+										name="name"
+										icon="user"
+										iconPosition="left"
+										placeholder="Name"
+										value={name}
+										onChange={this.onChange}
+									/>
 									<Form.Input
 										label="Surname"
+										name="surname"
 										icon="user outline"
 										iconPosition="left"
 										placeholder="Surname"
+										value={surname}
+										onChange={this.onChange}
 									/>
-									<Form.Input label="Email" icon="mail" iconPosition="left" placeholder="Email" />
+									<Form.Input
+										label="Email"
+										name="email"
+										icon="mail"
+										iconPosition="left"
+										placeholder="Email"
+										value={email}
+										onChange={this.onChange}
+									/>
 									<Form.Input
 										label="Password"
+										name="password"
 										icon="lock"
 										iconPosition="left"
 										placeholder="Password"
 										type="password"
+										value={password}
+										onChange={this.onChange}
 									/>
 									<Form.Input
 										label="Confirm Password"
@@ -259,12 +310,16 @@ class Register extends Component {
 										iconPosition="left"
 										placeholder="Confirm Password"
 										type="password"
+										name="password2"
+										value={password2}
+										onChange={this.onChange}
 									/>
 									<Form.Select
 										fluid
 										label="Role"
 										options={options}
 										placeholder="Role"
+										selected={role}
 										onChange={this.setRole}
 									/>
 									<Form.Select
@@ -285,7 +340,13 @@ class Register extends Component {
 
 							<Grid.Row>
 								<Grid.Column>
-									<Button content="Sign Up" icon="signup" labelPosition="left" primary />
+									<Button
+										content="Sign Up"
+										icon="signup"
+										labelPosition="left"
+										primary
+										onClick={this.submitUser}
+									/>
 								</Grid.Column>
 							</Grid.Row>
 						</Grid>
@@ -295,5 +356,4 @@ class Register extends Component {
 		);
 	}
 }
-
-export default Register;
+export default connect(null, { ...authActions })(Register);

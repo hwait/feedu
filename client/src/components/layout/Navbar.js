@@ -10,7 +10,7 @@ class Navbar extends Component {
 		const { activeItem } = this.state;
 
 		return (
-			<Sidebar as={Menu} icon="labeled" inverted vertical visible="true" width="thin">
+			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
 				<Menu.Item as={Link} name="home" to="/" active={activeItem === 'home'} onClick={this.handleItemClick} />
 				<Menu.Item
 					as={Link}
