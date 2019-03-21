@@ -42,7 +42,9 @@ router.post(
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
+			return res.status(422).json({
+				errors: errors.array().map((x) => ({ key: x.param, msg: x.msg }))
+			});
 		}
 		const { name, password, email, role, classn, surname, users } = req.body;
 		const avatar = gravatar.url(req.body.email, {

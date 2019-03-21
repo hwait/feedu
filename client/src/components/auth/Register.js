@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Button, Segment, Grid, Checkbox } from 'semantic-ui-react';
+import { Form, Button, Segment, Grid, Checkbox, Message } from 'semantic-ui-react';
 
 import { actions as authActions } from '../../reducers/auth';
 
@@ -211,12 +211,12 @@ class Register extends Component {
 
 	onChange = (e) => {
 		const { name, value } = e.target;
-		this.setState({ [name]: value });
+		this.props.fc(name, value);
 	};
 
 	submitUser = (e) => {
 		e.preventDefault();
-		const { name, email, password, password2, surname, role } = this.state;
+		const { name, email, password, password2, surname, role } = this.props;
 		const newUser = {
 			name,
 			email,
@@ -230,7 +230,7 @@ class Register extends Component {
 	};
 
 	setRole = (e, { value }) => {
-		this.setState({ role: value });
+		this.props.fc('role', value);
 	};
 	getSubjects = (e, { value }) => {
 		const arr = subjects
@@ -250,6 +250,24 @@ class Register extends Component {
 			});
 		this.setState({ subjectCheckboxes: arr });
 	};
+	getInputField = (name, label, icon) => {
+		const { errors } = this.props;
+		const error = errors.filter((x) => x.key === name);
+		const input = (
+			<Form.Input
+				label={label}
+				name={name}
+				icon={icon}
+				iconPosition="left"
+				placeholder={label}
+				value={this.props.user[name]}
+				onChange={this.onChange}
+				error={error.length > 0}
+			/>
+		);
+		if (error.length > 0) return [ input, <Message error content={error[0].msg} /> ];
+		else return input;
+	};
 	/**
 	|--------------------------------------------------
 	| // TODO: Toggle check all visible
@@ -259,67 +277,29 @@ class Register extends Component {
 	|--------------------------------------------------
 	*/
 	render() {
-		const { subjectCheckboxes, name, email, password, password2, surname, role } = this.state;
+		const { subjectCheckboxes } = this.state;
+		console.log(this.props);
+		const { role } = this.props.user;
+		const { errors } = this.props;
+
 		return (
 			<div className="dark-overlay landing-inner">
 				<Segment placeholder compact className="work-container">
-					<Form>
+					<Form error={errors.length > 0}>
 						<Grid columns="equal" stackable textAlign="center" relaxed>
 							<Grid.Row>
 								<Grid.Column textAlign="left">
-									<Form.Input
-										label="Name"
-										name="name"
-										icon="user"
-										iconPosition="left"
-										placeholder="Name"
-										value={name}
-										onChange={this.onChange}
-									/>
-									<Form.Input
-										label="Surname"
-										name="surname"
-										icon="user outline"
-										iconPosition="left"
-										placeholder="Surname"
-										value={surname}
-										onChange={this.onChange}
-									/>
-									<Form.Input
-										label="Email"
-										name="email"
-										icon="mail"
-										iconPosition="left"
-										placeholder="Email"
-										value={email}
-										onChange={this.onChange}
-									/>
-									<Form.Input
-										label="Password"
-										name="password"
-										icon="lock"
-										iconPosition="left"
-										placeholder="Password"
-										type="password"
-										value={password}
-										onChange={this.onChange}
-									/>
-									<Form.Input
-										label="Confirm Password"
-										icon="lock"
-										iconPosition="left"
-										placeholder="Confirm Password"
-										type="password"
-										name="password2"
-										value={password2}
-										onChange={this.onChange}
-									/>
+									{this.getInputField('name', 'Name', 'user')}
+									{this.getInputField('surname', 'Surname', 'user outline')}
+									{this.getInputField('email', 'Email', 'mail')}
+									{this.getInputField('password', 'Password', 'lock')}
+									{this.getInputField('password2', 'Confirm Password', 'lock')}
 									<Form.Select
 										fluid
 										label="Role"
 										options={options}
 										placeholder="Role"
-										selected={role}
+										value={role}
 										onChange={this.setRole}
 									/>
 									<Form.Select
@@ -356,4 +336,8 @@ class Register extends Component {
 		);
 	}
 }
-export default connect(null, { ...authActions })(Register);
+const mapStateToProps = (state) => ({
+	user: state.auth.user,
+	errors: state.auth.errors
+});
+export default connect(mapStateToProps, { ...authActions })(Register);
