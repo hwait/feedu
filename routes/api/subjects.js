@@ -40,7 +40,17 @@ router.post(
 router.get('/', (req, res) => {
 	Subject.find() //
 		.sort({ name: 1 })
-		.then((subjects) => res.json(subjects))
+		.then((subjects) =>
+			res.json(
+				subjects.map((x) => ({
+					id: x._id,
+					name: x.name,
+					extendable: x.extendable,
+					cf: x.classfrom,
+					ct: x.classto
+				}))
+			)
+		)
 		.catch((error) => {
 			res.status(404).json({ error });
 		});

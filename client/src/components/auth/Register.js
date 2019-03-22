@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Button, Segment, Grid, Checkbox, Message } from 'semantic-ui-react';
+import { Form, Button, Segment, Grid, Message } from 'semantic-ui-react';
 
 import { actions as authActions } from '../../reducers/auth';
+import { actions as subjectsActions } from '../../reducers/subjects';
+import SubjectsCheckboxes from '../subjects/subjectsCheckboxes';
 
 const options = [
 	{ key: 0, text: 'Student', value: 0 },
@@ -10,7 +12,6 @@ const options = [
 	{ key: 2, text: 'Parent', value: 2 }
 ];
 const classes = [
-	{ key: 0, text: 'All', value: 0 },
 	{ key: 1, text: '1', value: 1 },
 	{ key: 2, text: '2', value: 2 },
 	{ key: 3, text: '3', value: 3 },
@@ -23,191 +24,13 @@ const classes = [
 	{ key: 10, text: '10', value: 10 },
 	{ key: 11, text: '11', value: 11 }
 ];
-const subjects = [
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 1,
-		id: 51,
-		name: 'Алгебра и начала анализа',
-		reshid: 51
-	},
-	{
-		classfrom: 7,
-		classto: 11,
-		extendable: 1,
-		id: 17,
-		name: 'Геометрия',
-		reshid: 17
-	},
-	{
-		classfrom: 1,
-		classto: 6,
-		extendable: 1,
-		id: 12,
-		name: 'Математика',
-		reshid: 12
-	},
-	{
-		classfrom: 7,
-		classto: 9,
-		extendable: 1,
-		id: 16,
-		name: 'Алгебра',
-		reshid: 16
-	},
-
-	{
-		classfrom: 2,
-		classto: 11,
-		extendable: 1,
-		id: 11,
-		name: 'Английский язык',
-		reshid: 11
-	},
-
-	{
-		classfrom: 1,
-		classto: 11,
-		extendable: 0,
-		id: 13,
-		name: 'Русский язык',
-		reshid: 13
-	},
-	{
-		classfrom: 5,
-		classto: 11,
-		extendable: 0,
-		id: 14,
-		name: 'Литература',
-		reshid: 14
-	},
-	{
-		classfrom: 1,
-		classto: 4,
-		extendable: 0,
-		id: 32,
-		name: 'Литературное чтение',
-		reshid: 32
-	},
-	{
-		classfrom: 5,
-		classto: 11,
-		extendable: 0,
-		id: 3,
-		name: 'История',
-		reshid: 3
-	},
-	{
-		classfrom: 5,
-		classto: 11,
-		extendable: 0,
-		id: 4,
-		name: 'География',
-		reshid: 4
-	},
-	{
-		classfrom: 6,
-		classto: 11,
-		extendable: 0,
-		id: 24,
-		name: 'Обществознание',
-		reshid: 24
-	},
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 0,
-		id: 40,
-		name: 'Экология',
-		reshid: 40
-	},
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 0,
-		id: 42,
-		name: 'Россия в мире',
-		reshid: 42
-	},
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 0,
-		id: 41,
-		name: 'Право',
-		reshid: 41
-	},
-	{
-		classfrom: 1,
-		classto: 4,
-		extendable: 0,
-		id: 43,
-		name: 'Окружающий мир',
-		reshid: 43
-	},
-	{
-		classfrom: 8,
-		classto: 11,
-		extendable: 0,
-		id: 23,
-		name: 'ОБЖ',
-		reshid: 23
-	},
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 0,
-		id: 38,
-		name: 'Экономика',
-		reshid: 38
-	},
-	{
-		classfrom: 7,
-		classto: 11,
-		extendable: 1,
-		id: 28,
-		name: 'Физика',
-		reshid: 28
-	},
-	{
-		classfrom: 8,
-		classto: 11,
-		extendable: 1,
-		id: 29,
-		name: 'Химия',
-		reshid: 29
-	},
-	{
-		classfrom: 5,
-		classto: 11,
-		extendable: 1,
-		id: 5,
-		name: 'Биология',
-		reshid: 5
-	},
-	{
-		classfrom: 10,
-		classto: 11,
-		extendable: 0,
-		id: 33,
-		name: 'Естествознание',
-		reshid: 33
-	}
-];
 
 class Register extends Component {
-	state = {
-		subjectCheckboxes: [],
-		subjectSelected: [],
-		name: '',
-		surname: '',
-		email: '',
-		password: '',
-		password2: '',
-		role: 1,
-		errors: {}
-	};
+	componentDidMount() {
+		if (this.props.subjects.length === 0) {
+			this.props.init();
+		}
+	}
 
 	onChange = (e) => {
 		const { name, value } = e.target;
@@ -216,14 +39,15 @@ class Register extends Component {
 
 	submitUser = (e) => {
 		e.preventDefault();
-		const { name, email, password, password2, surname, role } = this.props;
+		const { name, email, password, password2, surname, role, subjects } = this.props;
 		const newUser = {
 			name,
 			email,
 			password,
 			password2,
 			surname,
-			role
+			role,
+			subjects
 		};
 
 		this.props.signup(newUser);
@@ -232,23 +56,9 @@ class Register extends Component {
 	setRole = (e, { value }) => {
 		this.props.fc('role', value);
 	};
+
 	getSubjects = (e, { value }) => {
-		const arr = subjects
-			.filter((x) => x.classfrom <= value && x.classto >= value)
-			.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
-			.map((x) => {
-				return x.extendable === 0 ? (
-					<Form.Group inline style={{ height: '16px' }}>
-						<Form.Field key={`subj${x.reshid}`} control={Checkbox} label={x.name} />
-					</Form.Group>
-				) : (
-					<Form.Group inline style={{ height: '16px' }}>
-						<Form.Field key={`subj${x.reshid}`} control={Checkbox} label={x.name} />
-						<Checkbox key={`subjext${x.reshid}`} />
-					</Form.Group>
-				);
-			});
-		this.setState({ subjectCheckboxes: arr });
+		this.props.setFilter(value);
 	};
 	getInputField = (name, label, icon) => {
 		const { errors } = this.props;
@@ -270,17 +80,13 @@ class Register extends Component {
 	};
 	/**
 	|--------------------------------------------------
-	| // TODO: Toggle check all visible
-	| // TODO: Class must be hidden by default
-	| // TODO: Select Parent should hide checkboxes and class selector
 	| // TODO: Select Teacher should hide class selector and show all subjects
 	|--------------------------------------------------
 	*/
 	render() {
-		const { subjectCheckboxes } = this.state;
 		console.log(this.props);
 		const { role } = this.props.user;
-		const { errors } = this.props;
+		const { errors, filter } = this.props;
 
 		return (
 			<div className="dark-overlay landing-inner">
@@ -302,20 +108,17 @@ class Register extends Component {
 										value={role}
 										onChange={this.setRole}
 									/>
-									<Form.Select
-										fluid
-										label="Class"
-										options={classes}
-										placeholder="Class"
-										onChange={this.getSubjects}
-									/>
+									{role < 2 && (
+										<Form.Select
+											fluid
+											label="Class"
+											options={classes}
+											placeholder="Class"
+											onChange={this.getSubjects}
+										/>
+									)}
 								</Grid.Column>
-								<Grid.Column textAlign="left">
-									<Form.Group inline style={{ height: '16px' }}>
-										<Form.Field control={Checkbox} />
-									</Form.Group>
-									{subjectCheckboxes}
-								</Grid.Column>
+								{filter > 0 && role < 2 && <SubjectsCheckboxes />}
 							</Grid.Row>
 
 							<Grid.Row>
@@ -338,6 +141,8 @@ class Register extends Component {
 }
 const mapStateToProps = (state) => ({
 	user: state.auth.user,
-	errors: state.auth.errors
+	errors: state.auth.errors,
+	subjects: state.subjects.subjects,
+	filter: state.subjects.filter
 });
-export default connect(mapStateToProps, { ...authActions })(Register);
+export default connect(mapStateToProps, { ...authActions, ...subjectsActions })(Register);
