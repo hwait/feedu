@@ -5,6 +5,7 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
+const convertErrors = require('../../utils/convertErrors');
 
 // Load Input validation
 //const validateRegisterInput = require('../../validators/register');
@@ -43,7 +44,8 @@ router.post(
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(422).json({
-				errors: errors.array().map((x) => ({ key: x.param, msg: x.msg }))
+				//errors: errors.array().map((x) => ({ key: x.param, msg: x.msg }))
+				errors: convertErrors(errors.array())
 			});
 		}
 		const { name, password, email, role, classn, surname, users } = req.body;
@@ -73,7 +75,7 @@ router.post(
 router.post('/login', [ check('email').isEmail(), check('password').isLength({ min: 6, max: 30 }) ], (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		return res.status(422).json({ errors: errors.array() });
+		return res.status(422).json({ errors: convertErrors(errors.array()) });
 	}
 
 	const { email, password } = req.body;
@@ -93,7 +95,7 @@ router.post('/login', [ check('email').isEmail(), check('password').isLength({ m
 							jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
 								return res.json({
 									success: true,
-									id: user.id,
+									//id: user.id,
 									token: 'Bearer ' + token
 								});
 							});

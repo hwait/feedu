@@ -51,6 +51,7 @@ export default (state = initialState, { type, payload }) => {
 					filter: 0
 				};
 		}
+		// eslint-disable-next-line
 		default: {
 			return state;
 		}

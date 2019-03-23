@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Button, Segment, Grid, Message } from 'semantic-ui-react';
+import { Form, Button, Segment, Grid } from 'semantic-ui-react';
 
 import { actions as authActions } from '../../reducers/auth';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import SubjectsCheckboxes from '../subjects/subjectsCheckboxes';
-
+import InputField from '../misc/InputField';
 const options = [
 	{ key: 0, text: 'Student', value: 0 },
 	{ key: 1, text: 'Teacher', value: 1 },
@@ -60,46 +60,85 @@ class Register extends Component {
 	getSubjects = (e, { value }) => {
 		this.props.setFilter(value);
 	};
-	getInputField = (name, label, icon) => {
-		const { errors } = this.props;
-		const error = errors.filter((x) => x.key === name);
-		const input = (
-			<Form.Input
-				label={label}
-				name={name}
-				icon={icon}
-				iconPosition="left"
-				placeholder={label}
-				value={this.props.user[name]}
-				onChange={this.onChange}
-				error={error.length > 0}
-			/>
-		);
-		if (error.length > 0) return [ input, <Message error content={error[0].msg} /> ];
-		else return input;
-	};
+	// getInputField = (name, label, icon, errors) => {
+	// 	const isError = errors.hasOwnProperty(name);
+	// 	const input = (
+	// 		<Form.Input
+	// 			label={label}
+	// 			name={name}
+	// 			icon={icon}
+	// 			iconPosition="left"
+	// 			placeholder={label}
+	// 			value={this.props.user[name]}
+	// 			onChange={this.onChange}
+	// 			error={isError}
+	// 		/>
+	// 	);
+	// 	if (isError) return [ input, <Message error content={errors[name]} /> ];
+	// 	else return input;
+	// };
 	/**
 	|--------------------------------------------------
 	| // TODO: Select Teacher should hide class selector and show all subjects
+	| // TODO: Make Profile page (similar to this one)
 	|--------------------------------------------------
 	*/
 	render() {
 		console.log(this.props);
-		const { role } = this.props.user;
+
+		const { user } = this.props;
+		const { role } = user;
 		const { errors, filter } = this.props;
 
 		return (
 			<div className="dark-overlay landing-inner">
 				<Segment placeholder compact className="work-container">
-					<Form error={errors.length > 0}>
+					<Form error={Object.keys(errors).length === 0}>
 						<Grid columns="equal" stackable textAlign="center" relaxed>
 							<Grid.Row>
 								<Grid.Column textAlign="left">
-									{this.getInputField('name', 'Name', 'user')}
-									{this.getInputField('surname', 'Surname', 'user outline')}
-									{this.getInputField('email', 'Email', 'mail')}
-									{this.getInputField('password', 'Password', 'lock')}
-									{this.getInputField('password2', 'Confirm Password', 'lock')}
+									<InputField
+										name="name"
+										label="Name"
+										icon="user"
+										value={user['name']}
+										errors={errors}
+										onChange={this.onChange}
+									/>
+									<InputField
+										name="surname"
+										label="Surname"
+										icon="user outline"
+										value={user['surname']}
+										errors={errors}
+										onChange={this.onChange}
+									/>
+									<InputField
+										name="email"
+										label="Email"
+										icon="mail"
+										value={user['email']}
+										errors={errors}
+										onChange={this.onChange}
+									/>
+									<InputField
+										name="password"
+										label="Password"
+										icon="lock"
+										type="password"
+										value={user['password']}
+										errors={errors}
+										onChange={this.onChange}
+									/>
+									<InputField
+										name="password2"
+										label="Confirm Password"
+										icon="lock"
+										type="password"
+										value={user['password2']}
+										errors={errors}
+										onChange={this.onChange}
+									/>
 									<Form.Select
 										fluid
 										label="Role"

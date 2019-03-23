@@ -1,10 +1,14 @@
 export const types = {
-	SIGNUP_REQUEST: 'AUTH/SIGNUP_REQUEST',
 	SIGNUP_FC: 'AUTH/SIGNUP_FC', // Field changed
 	SIGNUP_SUBJECT: 'AUTH/SIGNUP_SUBJECT',
 	SIGNUP_SUBJECTS: 'AUTH/SIGNUP_SUBJECTS',
+	SIGNUP_REQUEST: 'AUTH/SIGNUP_REQUEST',
 	SIGNUP_SUCCESS: 'AUTH/SIGNUP_SUCCESS',
 	SIGNUP_FAILURE: 'AUTH/SIGNUP_FAILURE',
+	LOGIN_REQUEST: 'AUTH/LOGIN_REQUEST',
+	LOGIN_SUCCESS: 'AUTH/LOGIN_SUCCESS',
+	LOGIN_FAILURE: 'AUTH/LOGIN_FAILURE',
+	PATH_CHANGED: 'PATH/PATH_CHANGED',
 	LOGOUT: 'AUTH/LOGOUT'
 };
 
@@ -19,10 +23,11 @@ const initialUser = {
 };
 
 const initialState = {
-	isAuthentificate: false,
+	isAuthentificated: false,
+	path: 'home',
 	loading: false,
 	user: initialUser,
-	errors: []
+	errors: {}
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -49,13 +54,14 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.SIGNUP_SUBJECTS: {
-			const arr = payload.flag ? payload.arr : [];
+			const arr = payload.flag ? payload.arr : {};
 			return {
 				...state,
 				user: { ...state.user, subjects: arr }
 			};
 		}
-		case types.SIGNUP_REQUEST: {
+		case types.SIGNUP_REQUEST:
+		case types.LOGIN_REQUEST: {
 			return {
 				...state,
 				loading: true
@@ -65,15 +71,34 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				data: payload,
-				errors: [],
+				errors: {},
 				loading: false
 			};
 		}
-		case types.SIGNUP_FAILURE: {
+		case types.LOGIN_SUCCESS: {
+			console.log('====================================');
+			console.log('LOGIN_SUCCESS', payload);
+			console.log('====================================');
+			return {
+				...state,
+				isAuthentificated: true,
+				user: payload,
+				errors: {},
+				loading: false
+			};
+		}
+		case types.SIGNUP_FAILURE:
+		case types.LOGIN_FAILURE: {
 			return {
 				...state,
 				errors: payload,
 				loading: false
+			};
+		}
+		case types.PATH_CHANGED: {
+			return {
+				...state,
+				path: payload
 			};
 		}
 		default: {
@@ -84,9 +109,10 @@ export default (state = initialState, { type, payload }) => {
 
 export const actions = {
 	fc: (field, value) => ({ type: types.SIGNUP_FC, payload: { field, value } }),
-	changeSubject: (sid) => ({ type: types.SIGNUP_SUBJECT, payload: sid }),
+	changePath: (payload) => ({ type: types.PATH_CHANGED, payload }),
+	changeSubject: (payload) => ({ type: types.SIGNUP_SUBJECT, payload }),
 	changeSubjects: (arr, flag) => ({ type: types.SIGNUP_SUBJECTS, payload: { arr, flag } }),
-	signup: (userData) => ({ type: types.SIGNUP_REQUEST, payload: userData }),
-	login: (email, password) => ({ type: types.LOGIN_REQUEST, email, password }),
+	signup: (payload) => ({ type: types.SIGNUP_REQUEST, payload }),
+	login: (email, password) => ({ type: types.LOGIN_REQUEST, payload: { email, password } }),
 	logout: () => ({ type: types.LOGOUT })
 };

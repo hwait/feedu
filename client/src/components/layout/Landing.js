@@ -3,6 +3,7 @@ import Login from '../auth/Login';
 import { Grid, Button, Header, Divider } from 'semantic-ui-react';
 
 class Landing extends Component {
+	// TODO: Split component on two - on isAuthentificated flag
 	render() {
 		return (
 			<div className="landing">

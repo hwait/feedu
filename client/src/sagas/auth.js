@@ -14,3 +14,16 @@ function* registerUser(action) {
 export function* watchRegisterUser() {
 	yield takeEvery(authTypes.SIGNUP_REQUEST, registerUser);
 }
+
+function* loginUser(action) {
+	const { response, errors } = yield call(AuthAPI.login, action.payload);
+	if (response) {
+		yield put({ type: authTypes.LOGIN_SUCCESS, payload: response });
+	} else {
+		yield put({ type: authTypes.LOGIN_FAILURE, payload: errors });
+	}
+}
+
+export function* watchLoginUser() {
+	yield takeEvery(authTypes.LOGIN_REQUEST, loginUser);
+}
