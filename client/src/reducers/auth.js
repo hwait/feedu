@@ -18,6 +18,7 @@ const initialUser = {
 	password: '',
 	password2: '',
 	surname: '',
+	classn: 0,
 	role: 0,
 	subjects: []
 };
@@ -70,7 +71,8 @@ export default (state = initialState, { type, payload }) => {
 		case types.SIGNUP_SUCCESS: {
 			return {
 				...state,
-				data: payload,
+				path: 'home',
+				user: initialUser,
 				errors: {},
 				loading: false
 			};

@@ -50,6 +50,11 @@ export default (state = initialState, { type, payload }) => {
 					...state,
 					filter: 0
 				};
+			if (payload.field === 'classn')
+				return {
+					...state,
+					filter: payload.value
+				};
 		}
 		// eslint-disable-next-line
 		default: {

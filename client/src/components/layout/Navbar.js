@@ -11,6 +11,7 @@ class Navbar extends Component {
 	render() {
 		// TODO: Add avatar
 		// TODO: Add icons
+		// TODO: Mark active menu based on path (set path in auth reducer)
 		console.log('====================================');
 		console.log(this.props.path, this.props.isAuthentificated);
 		console.log('====================================');

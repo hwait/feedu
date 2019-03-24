@@ -8,6 +8,7 @@ class InputField extends Component {
 		const props = noLabel ? {} : { label };
 		const input = (
 			<Form.Input
+				key={name}
 				name={name}
 				{...props}
 				icon={icon}
@@ -19,7 +20,7 @@ class InputField extends Component {
 				error={isError}
 			/>
 		);
-		if (isError) return [ input, <Message error content={errors[name]} /> ];
+		if (isError) return [ input, <Message key={`msg${name}`} error content={errors[name]} /> ];
 		else return input;
 	};
 	render() {

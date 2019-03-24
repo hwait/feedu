@@ -48,13 +48,13 @@ router.post(
 				errors: convertErrors(errors.array())
 			});
 		}
-		const { name, password, email, role, classn, surname, users } = req.body;
+		const { name, password, email, role, classn, surname, users, subjects } = req.body;
 		const avatar = gravatar.url(req.body.email, {
 			s: 200, // Size
 			r: 'pg', // Rating
 			d: 'mm' // Default image
 		});
-		const newUser = new User({ name, surname, email, avatar, password, role, classn, users });
+		const newUser = new User({ name, surname, email, avatar, password, role, classn, users, subjects });
 
 		bcrypt.genSalt(10, (err, salt) => {
 			bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -62,7 +62,7 @@ router.post(
 				newUser.password = hash;
 				newUser // Try to save User
 					.save()
-					.then((user) => res.json(user))
+					.then((user) => res.json({ success: true }))
 					.catch((err) => console.log(err));
 			});
 		});

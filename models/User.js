@@ -53,19 +53,15 @@ const UserSchema = new Schema({
 	users: [
 		// Teachers or Students
 		{
-			user: {
-				type: Schema.Types.ObjectId,
-				ref: 'users'
-			}
+			type: Schema.Types.ObjectId,
+			ref: 'users'
 		}
 	],
 	subjects: [
 		// Teacher is competent with / Student study
 		{
-			subject: {
-				type: Schema.Types.ObjectId,
-				ref: 'subjects'
-			}
+			type: Schema.Types.ObjectId,
+			ref: 'subjects'
 		}
 	]
 });
