@@ -29,9 +29,15 @@
 	height: 100%;
 }
 
+.menu-avatar {
+	width: 40%;
+	height: 40%;
+}
+
 .main-container {
 	margin-left: 150px;
 }
+
 .work-container {
 	margin-top: 200px;
 	margin-left: 30px;

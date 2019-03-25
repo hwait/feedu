@@ -130,9 +130,6 @@ router.post(
 			r: 'pg', // Rating
 			d: 'mm' // Default image
 		});
-		console.log('====================================');
-		console.log(req.body, req.user.id);
-		console.log('====================================');
 		User.findById(req.user.id).then((user) => {
 			if (user) {
 				user.name = name;

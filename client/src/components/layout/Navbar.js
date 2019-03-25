@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Sidebar } from 'semantic-ui-react';
+import { Menu, Sidebar, Icon, Image } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as authActions } from '../../reducers/auth';
@@ -13,16 +13,25 @@ class Navbar extends Component {
 		// TODO: Add avatar
 		// TODO: Add icons
 		// TODO: Mark active menu based on path (set path in auth reducer)
-		const { isAuthentificated, path, logout } = this.props;
+		const { isAuthentificated, path, logout, user } = this.props;
 		const linkHome = (
+			<Menu.Item as={Link} key="home" name="home" to="/" active={path === 'home'} onClick={this.handleItemClick}>
+				<Icon name="home" />
+				Home
+			</Menu.Item>
+		);
+		const linkDashboard = (
 			<Menu.Item
 				as={Link}
-				key="home"
-				name="home"
+				key="dashboard"
+				name="dashboard"
 				to="/"
-				active={path === 'home'}
+				active={path === 'dashboard'}
 				onClick={this.handleItemClick}
-			/>
+			>
+				<Icon name="lab" />
+				Dashboard
+			</Menu.Item>
 		);
 		const linkSignup = (
 			<Menu.Item
@@ -33,6 +42,7 @@ class Navbar extends Component {
 				active={path === 'register'}
 				onClick={this.handleItemClick}
 			>
+				<Icon name="signup" />
 				Sign Up
 			</Menu.Item>
 		);
@@ -45,15 +55,17 @@ class Navbar extends Component {
 				active={path === 'profile'}
 				onClick={this.handleItemClick}
 			>
+				<Image className="menu-avatar" src={user.avatar} circular centered />
 				Profile
 			</Menu.Item>
 		);
 		const linkLogout = (
 			<Menu.Item as={Link} key="logout" name="logout" to="/" onClick={logout}>
+				<Icon name="log out" />
 				Logout
 			</Menu.Item>
 		);
-		const menuItems = isAuthentificated ? [ linkHome, linkProfile, linkLogout ] : [ linkHome, linkSignup ];
+		const menuItems = isAuthentificated ? [ linkDashboard, linkProfile, linkLogout ] : [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
 				{menuItems}
