@@ -44,6 +44,12 @@ export default (state = initialState, { type, payload }) => {
 				loading: false
 			};
 		}
+		case authTypes.LOGIN_SUCCESS: {
+			return {
+				...state,
+				filter: payload.classn
+			};
+		}
 		case authTypes.SIGNUP_FC: {
 			if (payload.field === 'role' && payload.value === 2)
 				return {
@@ -56,6 +62,7 @@ export default (state = initialState, { type, payload }) => {
 					filter: payload.value
 				};
 		}
+
 		// eslint-disable-next-line
 		default: {
 			return state;

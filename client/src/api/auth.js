@@ -1,7 +1,7 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
-
+import transformErrors from '../utils/transformErrors';
 const root = '/api/users';
 
 export default class AuthAPI {
@@ -11,11 +11,17 @@ export default class AuthAPI {
 	static edit(payload) {
 		return axios.put(`${root}/edit/payload.id`, payload);
 	}
-	static add(payload) {
+	static register(payload) {
 		return axios
 			.post(`${root}/register`, payload)
 			.then((response) => ({ response: response.data }))
-			.catch((err) => ({ errors: err.response.data.errors }));
+			.catch((err) => transformErrors(err));
+	}
+	static save(payload) {
+		return axios
+			.post(`${root}/save`, payload)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => transformErrors(err));
 	}
 	static login(payload) {
 		return axios
@@ -30,7 +36,7 @@ export default class AuthAPI {
 				const decoded = jwt_decode(token);
 				return { response: decoded };
 			})
-			.catch((err) => ({ errors: err.response.data.errors }));
+			.catch((err) => transformErrors(err));
 	}
 	static delete(payload) {
 		return axios.delete(`${root}/delete/${payload.id}`);

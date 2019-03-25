@@ -1,7 +1,7 @@
 import { fork, all } from 'redux-saga/effects';
-import { watchRegisterUser, watchLoginUser } from './auth';
+import { watchRegisterUser, watchLoginUser, watchSaveUser } from './auth';
 import { watchGetSubjects } from './subjects';
 
 export default function* rootSaga() {
-	yield all([ fork(watchRegisterUser), fork(watchLoginUser), fork(watchGetSubjects) ]);
+	yield all([ fork(watchRegisterUser), fork(watchSaveUser), fork(watchLoginUser), fork(watchGetSubjects) ]);
 }

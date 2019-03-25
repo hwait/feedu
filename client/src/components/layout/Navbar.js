@@ -3,6 +3,7 @@ import { Menu, Sidebar } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as authActions } from '../../reducers/auth';
+import PropTypes from 'prop-types';
 class Navbar extends Component {
 	handleItemClick = (e, { name }) => {
 		this.props.changePath(name);
@@ -12,10 +13,7 @@ class Navbar extends Component {
 		// TODO: Add avatar
 		// TODO: Add icons
 		// TODO: Mark active menu based on path (set path in auth reducer)
-		console.log('====================================');
-		console.log(this.props.path, this.props.isAuthentificated);
-		console.log('====================================');
-		const { isAuthentificated, path } = this.props;
+		const { isAuthentificated, path, logout } = this.props;
 		const linkHome = (
 			<Menu.Item
 				as={Link}
@@ -51,14 +49,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const linkLogout = (
-			<Menu.Item
-				as={Link}
-				key="logout"
-				name="logout"
-				to="/logout"
-				active={path === 'logout'}
-				onClick={this.handleItemClick}
-			>
+			<Menu.Item as={Link} key="logout" name="logout" to="/" onClick={logout}>
 				Logout
 			</Menu.Item>
 		);
@@ -70,6 +61,13 @@ class Navbar extends Component {
 		);
 	}
 }
+Navbar.propTypes = {
+	changePath: PropTypes.func.isRequired,
+	logout: PropTypes.func.isRequired,
+	isAuthentificated: PropTypes.bool.isRequired,
+	user: PropTypes.object.isRequired,
+	path: PropTypes.string.isRequired
+};
 const mapStateToProps = (state) => ({
 	user: state.auth.user,
 	path: state.auth.path,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Grid, Checkbox } from 'semantic-ui-react';
 import { getSubjectsByClass } from '../../reducers/subjects';
 import { actions as authActions } from '../../reducers/auth';
+import PropTypes from 'prop-types';
 
 class SubjectsCheckboxes extends Component {
 	setSubject = (e, value) => {
@@ -37,4 +38,7 @@ class SubjectsCheckboxes extends Component {
 const mapStateToProps = (state) => ({
 	subjects: getSubjectsByClass(state)
 });
+SubjectsCheckboxes.propTypes = {
+	subjects: PropTypes.array.isRequired
+};
 export default connect(mapStateToProps, { ...authActions })(SubjectsCheckboxes);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import { actions as authActions } from '../../reducers/auth';
 import InputField from '../misc/InputField';
 
@@ -11,12 +11,20 @@ class Login extends Component {
 		email: '',
 		password: ''
 	};
+
+	componentDidMount() {
+		if (this.props.isAuthenticated) {
+			this.props.changePath('dashboard');
+			this.props.history.push('/dashboard');
+		}
+	}
+
 	componentDidUpdate() {
 		if (this.props.isAuthentificated) {
 			// TODO: should remove it to Profile component
-			this.props.changePath('profile');
+			this.props.changePath('dashboard');
 
-			this.props.history.push('/profile');
+			this.props.history.push('/dashboard');
 		}
 	}
 	submitUser = (e) => {
@@ -60,6 +68,13 @@ class Login extends Component {
 		);
 	}
 }
+Login.propTypes = {
+	changePath: PropTypes.func.isRequired,
+	login: PropTypes.func.isRequired,
+	isAuthentificated: PropTypes.bool.isRequired,
+	user: PropTypes.object.isRequired,
+	errors: PropTypes.object.isRequired
+};
 const mapStateToProps = (state) => ({
 	user: state.auth.user,
 	isAuthentificated: state.auth.isAuthentificated,

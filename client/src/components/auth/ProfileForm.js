@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Segment, Grid } from 'semantic-ui-react';
+import { Form, Button, Segment, Grid, Message } from 'semantic-ui-react';
 
 import SubjectsCheckboxes from '../subjects/subjectsCheckboxes';
 import InputField from '../misc/InputField';
@@ -54,15 +54,13 @@ class ProfileForm extends Component {
 
 	render() {
 		console.log(this.props);
-
-		const { user } = this.props;
-		const { role } = user;
-		const { errors, filter, onChange, submitUser, getSubjects, setRole } = this.props;
+		const { role, classn, name, surname, email, password, password2 } = this.props.user;
+		const { errors, filter, onChange, submitUser, getSubjects, setRole, butname } = this.props;
 
 		return (
 			<div className="dark-overlay landing-inner">
 				<Segment placeholder compact className="work-container">
-					<Form error={Object.keys(errors).length === 0}>
+					<Form error={Object.keys(errors).length > 0}>
 						<Grid columns="equal" stackable textAlign="center" relaxed>
 							<Grid.Row>
 								<Grid.Column textAlign="left">
@@ -70,7 +68,7 @@ class ProfileForm extends Component {
 										name="name"
 										label="Name"
 										icon="user"
-										value={user['name']}
+										value={name}
 										errors={errors}
 										onChange={onChange}
 									/>
@@ -78,7 +76,7 @@ class ProfileForm extends Component {
 										name="surname"
 										label="Surname"
 										icon="user outline"
-										value={user['surname']}
+										value={surname}
 										errors={errors}
 										onChange={onChange}
 									/>
@@ -86,25 +84,7 @@ class ProfileForm extends Component {
 										name="email"
 										label="Email"
 										icon="mail"
-										value={user['email']}
-										errors={errors}
-										onChange={onChange}
-									/>
-									<InputField
-										name="password"
-										label="Password"
-										icon="lock"
-										type="password"
-										value={user['password']}
-										errors={errors}
-										onChange={onChange}
-									/>
-									<InputField
-										name="password2"
-										label="Confirm Password"
-										icon="lock"
-										type="password"
-										value={user['password2']}
+										value={email}
 										errors={errors}
 										onChange={onChange}
 									/>
@@ -122,6 +102,7 @@ class ProfileForm extends Component {
 											label="Class"
 											options={classes}
 											placeholder="Class"
+											value={classn}
 											onChange={getSubjects}
 										/>
 									)}
@@ -131,9 +112,10 @@ class ProfileForm extends Component {
 
 							<Grid.Row>
 								<Grid.Column>
+									{errors.hasOwnProperty('code') && <Message error content={errors.code} />}
 									<Button
-										content="Sign Up"
-										icon="signup"
+										content={butname}
+										icon="save"
 										labelPosition="left"
 										primary
 										onClick={submitUser}

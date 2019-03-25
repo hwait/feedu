@@ -1,3 +1,5 @@
+import setAuthToken from '../utils/setAuthToken';
+
 export const types = {
 	SIGNUP_FC: 'AUTH/SIGNUP_FC', // Field changed
 	SIGNUP_SUBJECT: 'AUTH/SIGNUP_SUBJECT',
@@ -8,6 +10,9 @@ export const types = {
 	LOGIN_REQUEST: 'AUTH/LOGIN_REQUEST',
 	LOGIN_SUCCESS: 'AUTH/LOGIN_SUCCESS',
 	LOGIN_FAILURE: 'AUTH/LOGIN_FAILURE',
+	SAVE_REQUEST: 'PROFILE/SAVE_REQUEST',
+	SAVE_SUCCESS: 'PROFILE/SAVE_SUCCESS',
+	SAVE_FAILURE: 'PROFILE/SAVE_FAILURE',
 	PATH_CHANGED: 'PATH/PATH_CHANGED',
 	LOGOUT: 'AUTH/LOGOUT'
 };
@@ -32,6 +37,7 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload }) => {
+	state = { ...state, errors: {} };
 	switch (type) {
 		case types.SIGNUP_FC: {
 			if (payload.field === 'role' && payload.value === 2)
@@ -62,6 +68,7 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.SIGNUP_REQUEST:
+		case types.SAVE_REQUEST:
 		case types.LOGIN_REQUEST: {
 			return {
 				...state,
@@ -77,10 +84,15 @@ export default (state = initialState, { type, payload }) => {
 				loading: false
 			};
 		}
+		case types.SAVE_SUCCESS: {
+			return {
+				...state,
+				path: 'dashboard',
+				errors: {},
+				loading: false
+			};
+		}
 		case types.LOGIN_SUCCESS: {
-			console.log('====================================');
-			console.log('LOGIN_SUCCESS', payload);
-			console.log('====================================');
 			return {
 				...state,
 				isAuthentificated: true,
@@ -90,6 +102,7 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.SIGNUP_FAILURE:
+		case types.SAVE_FAILURE:
 		case types.LOGIN_FAILURE: {
 			return {
 				...state,
@@ -101,6 +114,16 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				path: payload
+			};
+		}
+		case types.LOGOUT: {
+			localStorage.removeItem('jwtToken');
+			setAuthToken(false);
+			return {
+				...state,
+				isAuthentificated: false,
+				path: 'home',
+				user: initialUser
 			};
 		}
 		default: {
@@ -115,6 +138,7 @@ export const actions = {
 	changeSubject: (payload) => ({ type: types.SIGNUP_SUBJECT, payload }),
 	changeSubjects: (arr, flag) => ({ type: types.SIGNUP_SUBJECTS, payload: { arr, flag } }),
 	signup: (payload) => ({ type: types.SIGNUP_REQUEST, payload }),
+	save: (payload) => ({ type: types.SAVE_REQUEST, payload }),
 	login: (email, password) => ({ type: types.LOGIN_REQUEST, payload: { email, password } }),
 	logout: () => ({ type: types.LOGOUT })
 };

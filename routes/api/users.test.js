@@ -15,11 +15,11 @@ const validInput = {
 	active: true,
 	users: []
 };
-describe('User Register Form Validation:', () => {
+describe('User add Form Validation:', () => {
 	test('Should contain field: name', (done) => {
 		const { name, ...uc } = validInput;
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -33,7 +33,7 @@ describe('User Register Form Validation:', () => {
 	test('Should contain field: email', (done) => {
 		const { email, ...uc } = validInput;
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -47,7 +47,7 @@ describe('User Register Form Validation:', () => {
 	test('Should contain field: password', (done) => {
 		const { password, ...uc } = validInput;
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -61,7 +61,7 @@ describe('User Register Form Validation:', () => {
 	test('Should contain field: password2', (done) => {
 		const { password2, ...uc } = validInput;
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -75,7 +75,7 @@ describe('User Register Form Validation:', () => {
 	test('Name should be min 2 smbs', (done) => {
 		const uc = { ...validInput, name: 'a' };
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -89,7 +89,7 @@ describe('User Register Form Validation:', () => {
 	test('Name should be max 30 smbs', (done) => {
 		const uc = { ...validInput, name: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' };
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -103,7 +103,7 @@ describe('User Register Form Validation:', () => {
 	test('Email must be in format', (done) => {
 		const uc = { ...validInput, email: 'aaaa.gmail.com' };
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -117,7 +117,7 @@ describe('User Register Form Validation:', () => {
 	test('Password should be min 6 smbs', (done) => {
 		const uc = { ...validInput, password: '12345', password2: '12345' };
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -135,7 +135,7 @@ describe('User Register Form Validation:', () => {
 			password2: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 		};
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -149,7 +149,7 @@ describe('User Register Form Validation:', () => {
 	test('Password must be equal to password2', (done) => {
 		const uc = { ...validInput, password2: '1234567' };
 		request //
-			.post('register')
+			.post('add')
 			.send(uc)
 			.expect(422)
 			.then((response) => {
@@ -178,9 +178,9 @@ describe('User not permitted actions:', () => {
 });
 
 describe('Permitted User actions:', () => {
-	test('Register User "test"', (done) => {
+	test('add User "test"', (done) => {
 		request //
-			.post('register')
+			.post('add')
 			.send(validInput)
 			.expect(200)
 			.then((response) => {

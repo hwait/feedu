@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { actions as authActions } from '../../reducers/auth';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import ProfileForm from './ProfileForm';
 
-class Register extends Component {
+class Profile extends Component {
 	componentDidMount() {
 		if (this.props.subjects.length === 0) {
 			this.props.init();
-		}
-		if (this.props.isAuthenticated) {
-			this.props.changePath('dashboard');
-			this.props.history.push('/dashboard');
 		}
 	}
 	componentDidUpdate() {
 		if (this.props.path === 'home') {
 			this.props.history.push('/');
+		}
+		if (this.props.path === 'dashboard') {
+			this.props.history.push('/dashboard');
 		}
 	}
 	onChange = (e) => {
@@ -28,7 +26,7 @@ class Register extends Component {
 
 	submitUser = (e) => {
 		e.preventDefault();
-		this.props.signup(this.props.user);
+		this.props.save(this.props.user);
 	};
 
 	setRole = (e, { value }) => {
@@ -40,7 +38,7 @@ class Register extends Component {
 	};
 	/**
 	|--------------------------------------------------
-	| // TODO: Make Profile page (similar to this one)
+	| // TODO: protected call 
 	| // TODO: Message about successfull signup on the Login page
 	|--------------------------------------------------
 	*/
@@ -48,7 +46,7 @@ class Register extends Component {
 		const { errors, filter, user } = this.props;
 		return (
 			<ProfileForm
-				butname="Sign Up"
+				butname="Save"
 				onChange={this.onChange}
 				errors={errors}
 				user={user}
@@ -60,9 +58,9 @@ class Register extends Component {
 		);
 	}
 }
-Register.propTypes = {
+Profile.propTypes = {
 	fc: PropTypes.func.isRequired,
-	signup: PropTypes.func.isRequired,
+	save: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	filter: PropTypes.number.isRequired,
 	path: PropTypes.string.isRequired,
@@ -75,4 +73,4 @@ const mapStateToProps = (state) => ({
 	subjects: state.subjects.subjects,
 	filter: state.subjects.filter
 });
-export default connect(mapStateToProps, { ...authActions, ...subjectsActions })(Register);
+export default connect(mapStateToProps, { ...authActions, ...subjectsActions })(Profile);
