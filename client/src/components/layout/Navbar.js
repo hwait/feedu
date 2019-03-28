@@ -10,9 +10,6 @@ class Navbar extends Component {
 	};
 
 	render() {
-		// TODO: Add avatar
-		// TODO: Add icons
-		// TODO: Mark active menu based on path (set path in auth reducer)
 		const { isAuthentificated, path, logout, user } = this.props;
 		const linkHome = (
 			<Menu.Item as={Link} key="home" name="home" to="/" active={path === 'home'} onClick={this.handleItemClick}>

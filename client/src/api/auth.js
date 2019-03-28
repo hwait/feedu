@@ -14,7 +14,16 @@ export default class AuthAPI {
 	static register(payload) {
 		return axios
 			.post(`${root}/register`, payload)
-			.then((response) => ({ response: response.data }))
+			.then((response) => {
+				// Save to localStorage
+				const { token } = response.data;
+				// Set token to ls
+				localStorage.setItem('jwtToken', token);
+				// Set token to Auth header
+				setAuthToken(token);
+				const decoded = jwt_decode(token);
+				return { response: decoded };
+			})
 			.catch((err) => transformErrors(err));
 	}
 	static save(payload) {

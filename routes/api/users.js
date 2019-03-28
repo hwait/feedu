@@ -48,7 +48,7 @@ router.post(
 				errors: convertErrors(errors.array())
 			});
 		}
-		const { name, password, email, role, classn, surname, users, subjects } = req.body;
+		const { name, email, role, classn, surname, users, subjects } = req.body;
 
 		const avatar = gravatar.url(req.body.email, {
 			s: 200, // Size
@@ -56,16 +56,25 @@ router.post(
 			d: 'mm' // Default image
 		});
 
-		const newUser = new User({ name, surname, email, avatar, password, role, classn, users, subjects });
+		const newUser = new User({ name, surname, email, avatar, role, classn, users, subjects });
 
 		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(newUser.password, salt, (err, hash) => {
+			bcrypt.hash(req.body.password, salt, (err, hash) => {
 				if (err) throw err;
 				newUser.password = hash;
 				newUser // Try to save User
 					.save()
-					.then((user) => res.json({ success: true }))
+					// .then((user) => res.json({ success: true }))
 					.catch((err) => console.log(err));
+			});
+		});
+		const { password, _id, ...payload } = newUser.toObject();
+		payload.id = newUser.id;
+		jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+			return res.json({
+				success: true,
+				//id: user.id,
+				token: 'Bearer ' + token
 			});
 		});
 	}

@@ -17,8 +17,8 @@ class Register extends Component {
 		}
 	}
 	componentDidUpdate() {
-		if (this.props.path === 'home') {
-			this.props.history.push('/');
+		if (this.props.path === 'dashboard') {
+			this.props.history.push('/dashboard');
 		}
 	}
 	onChange = (e) => {
@@ -40,7 +40,6 @@ class Register extends Component {
 	};
 	/**
 	|--------------------------------------------------
-	| // TODO: Make Profile page (similar to this one)
 	| // TODO: Message about successfull signup on the Login page
 	|--------------------------------------------------
 	*/

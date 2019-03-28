@@ -88,6 +88,28 @@ class ProfileForm extends Component {
 										errors={errors}
 										onChange={onChange}
 									/>
+									{butname === 'Sign Up' && (
+										<InputField
+											name="password"
+											type="password"
+											label="Password"
+											icon="lock"
+											value={password}
+											errors={errors}
+											onChange={onChange}
+										/>
+									)}
+									{butname === 'Sign Up' && (
+										<InputField
+											name="password2"
+											type="password"
+											label="Confirmation Password"
+											icon="lock"
+											value={password2}
+											errors={errors}
+											onChange={onChange}
+										/>
+									)}
 									<Form.Select
 										fluid
 										label="Role"

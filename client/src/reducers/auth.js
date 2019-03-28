@@ -78,8 +78,9 @@ export default (state = initialState, { type, payload }) => {
 		case types.SIGNUP_SUCCESS: {
 			return {
 				...state,
-				path: 'home',
-				user: initialUser,
+				isAuthentificated: true,
+				path: 'dashboard',
+				user: { ...payload, password: '', password2: '' },
 				errors: {},
 				loading: false
 			};

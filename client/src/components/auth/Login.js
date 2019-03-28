@@ -21,7 +21,6 @@ class Login extends Component {
 
 	componentDidUpdate() {
 		if (this.props.isAuthentificated) {
-			// TODO: should remove it to Profile component
 			this.props.changePath('dashboard');
 
 			this.props.history.push('/dashboard');
