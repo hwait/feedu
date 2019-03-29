@@ -30,6 +30,12 @@ class Navbar extends Component {
 				Dashboard
 			</Menu.Item>
 		);
+		const linkLessons = (
+			<Menu.Item as={Link} key="lessons" name="lessons" to="/lessons" onClick={this.handleItemClick}>
+				<Icon name="lab" />
+				Lessons
+			</Menu.Item>
+		);
 		const linkSignup = (
 			<Menu.Item
 				as={Link}
@@ -62,7 +68,9 @@ class Navbar extends Component {
 				Logout
 			</Menu.Item>
 		);
-		const menuItems = isAuthentificated ? [ linkDashboard, linkProfile, linkLogout ] : [ linkHome, linkSignup ];
+		const menuItems = isAuthentificated
+			? [ linkDashboard, linkLessons, linkProfile, linkLogout ]
+			: [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
 				{menuItems}
