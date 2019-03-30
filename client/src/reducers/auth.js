@@ -95,7 +95,7 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				isAuthentificated: true,
-				path: 'dashboard',
+				path: 'home',
 				user: { ...payload, password: '', password2: '' },
 				errors: {},
 				loading: false
@@ -104,7 +104,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.SAVE_SUCCESS: {
 			return {
 				...state,
-				path: 'dashboard',
+				path: 'home',
 				errors: {},
 				loading: false
 			};

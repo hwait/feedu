@@ -23,7 +23,8 @@ export default (state = initialState, { type, payload }) => {
 		case types.SUBJECTS_FILTER: {
 			return {
 				...state,
-				filter: payload
+				filter: payload,
+				current: ''
 			};
 		}
 		case lessonsTypes.LESSONS_REQUEST: {
@@ -110,4 +111,8 @@ export const getSubjectsByClass = (state) => {
 			name: x.name
 		}))
 		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+};
+export const getSubjectName = (state) => {
+	const subject = state.subjects.subjects.find((x) => x.id === state.subjects.current);
+	return subject ? subject.name : '';
 };

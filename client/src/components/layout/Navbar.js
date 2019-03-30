@@ -12,32 +12,50 @@ class Navbar extends Component {
 	render() {
 		const { isAuthentificated, path, logout, user } = this.props;
 		const linkHome = (
-			<Menu.Item as={Link} key="home" name="home" to="/" active={path === 'home'} onClick={this.handleItemClick}>
+			<Menu.Item
+				as={Link}
+				key="home"
+				name="home"
+				to="/"
+				active={path === 'home'}
+				onClick={this.handleItemClick}
+				className="menu-item"
+			>
 				<Icon name="home" />
 				Home
 			</Menu.Item>
 		);
 		const linkDashboard = (
 			<Menu.Item
+				className="menu-item"
 				as={Link}
 				key="dashboard"
-				name="dashboard"
+				name="home"
 				to="/"
-				active={path === 'dashboard'}
+				active={path === 'home'}
 				onClick={this.handleItemClick}
 			>
 				<Icon name="lab" />
-				Dashboard
+				Board
 			</Menu.Item>
 		);
 		const linkLessons = (
-			<Menu.Item as={Link} key="lessons" name="lessons" to="/lessons" onClick={this.handleItemClick}>
+			<Menu.Item
+				as={Link}
+				key="lessons"
+				name="lessons"
+				to="/lessons"
+				active={path === 'lessons'}
+				onClick={this.handleItemClick}
+				className="menu-item"
+			>
 				<Icon name="lab" />
 				Lessons
 			</Menu.Item>
 		);
 		const linkSignup = (
 			<Menu.Item
+				className="menu-item"
 				as={Link}
 				key="register"
 				name="register"
@@ -51,6 +69,7 @@ class Navbar extends Component {
 		);
 		const linkProfile = (
 			<Menu.Item
+				className="menu-item"
 				as={Link}
 				key="profile"
 				name="profile"
@@ -63,7 +82,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const linkLogout = (
-			<Menu.Item as={Link} key="logout" name="logout" to="/" onClick={logout}>
+			<Menu.Item as={Link} key="logout" name="logout" to="/" onClick={logout} className="menu-item">
 				<Icon name="log out" />
 				Logout
 			</Menu.Item>
@@ -72,7 +91,7 @@ class Navbar extends Component {
 			? [ linkDashboard, linkLessons, linkProfile, linkLogout ]
 			: [ linkHome, linkSignup ];
 		return (
-			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
+			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">
 				{menuItems}
 			</Sidebar>
 		);

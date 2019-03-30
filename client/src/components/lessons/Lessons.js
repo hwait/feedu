@@ -7,6 +7,7 @@ import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as lessonsActions } from '../../reducers/lessons';
 import SubjectsList from '../subjects/subjectsList';
 import LessonsList from './LessonsList';
+import Lesson from './Lesson';
 
 const classes = getClasses();
 
@@ -15,24 +16,16 @@ class Lessons extends Component {
 		if (this.props.subjects.length === 0) {
 			this.props.init();
 		}
-		if (this.props.isAuthenticated) {
-			this.props.changePath('dashboard');
-			this.props.history.push('/dashboard');
-		}
-	}
-	componentDidUpdate() {
-		if (this.props.path === 'dashboard') {
-			this.props.history.push('/dashboard');
+		if (!this.props.isAuthentificated) {
+			this.props.history.push('/');
 		}
 	}
 	getSubjects = (value) => {
 		this.props.setFilter(value);
 	};
 	setLesson = (value) => {
-		console.log('==============setLesson================');
-		console.log(value);
-		console.log('====================================');
-		//this.props.setFilter(value);
+		this.props.setCurrent(value);
+		this.props.history.push('/lesson');
 	};
 	setSubject = (value) => {
 		const { filter, getLessons } = this.props;
@@ -40,9 +33,9 @@ class Lessons extends Component {
 		getLessons(filter, value);
 	};
 	render() {
-		const { current, filter, loading } = this.props;
+		const { curSubject, curLesson, filter, loading } = this.props;
 		const classitems = classes.map(({ text, value }) => (
-			<Menu.Item active={filter === value} color="blue" key={value} onClick={(e, d) => this.getSubjects(value)}>
+			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
 				{text}
 			</Menu.Item>
 		));
@@ -61,8 +54,12 @@ class Lessons extends Component {
 							</Header>
 						)}
 					</Segment>
-					<Segment placeholder={current === ''} textAlign={current ? 'left' : 'center'} loading={loading}>
-						{current ? (
+					<Segment
+						placeholder={curSubject === ''}
+						textAlign={curSubject ? 'left' : 'center'}
+						loading={loading}
+					>
+						{curSubject ? (
 							<LessonsList setLesson={this.setLesson} />
 						) : (
 							<Header as="h1" disabled>
@@ -78,15 +75,19 @@ class Lessons extends Component {
 Lessons.propTypes = {
 	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
-	current: PropTypes.string.isRequired,
+	curSubject: PropTypes.string.isRequired,
+	curLesson: PropTypes.string.isRequired,
 	errors: PropTypes.object.isRequired,
-	loading: PropTypes.bool.isRequired
+	loading: PropTypes.bool.isRequired,
+	isAuthentificated: PropTypes.bool.isRequired
 };
 const mapStateToProps = (state) => ({
-	errors: state.auth.errors,
+	errors: state.lessons.errors,
 	subjects: state.subjects.subjects,
 	filter: state.subjects.filter,
-	current: state.subjects.current,
-	loading: state.lessons.loading
+	curSubject: state.subjects.current,
+	curLesson: state.lessons.current,
+	loading: state.lessons.loading,
+	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, { ...subjectsActions, ...lessonsActions })(Lessons);

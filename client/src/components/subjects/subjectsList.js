@@ -10,13 +10,13 @@ class SubjectsDropdown extends Component {
 		const { subjects, current, setSubject } = this.props;
 		const items = subjects.map(({ id, name }) => {
 			return (
-				<List.Item as="a" active={id === current} key={id} onClick={(e, d) => setSubject(id)}>
+				<List.Item active={id === current} key={id} onClick={(e, d) => setSubject(id)}>
 					{name}
 				</List.Item>
 			);
 		});
 		return (
-			<List selection verticalAlign="middle">
+			<List selection verticalAlign="middle" size="large">
 				{items}
 			</List>
 		);

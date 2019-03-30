@@ -20,7 +20,7 @@ class LessonsList extends Component {
 			);
 		});
 		return (
-			<List selection verticalAlign="middle">
+			<List selection verticalAlign="middle" size="large">
 				{items}
 			</List>
 		);

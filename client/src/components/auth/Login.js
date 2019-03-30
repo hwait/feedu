@@ -12,20 +12,22 @@ class Login extends Component {
 		password: ''
 	};
 
-	componentDidMount() {
-		if (this.props.isAuthenticated) {
-			this.props.changePath('dashboard');
-			this.props.history.push('/dashboard');
-		}
-	}
+	// componentDidMount() {
+	// 	if (this.props.isAuthenticated) {
+	// 		this.props.changePath('home');
+	// 		this.props.history.push('/');
+	// 	} else {
+	// 		this.props.changePath('home');
+	// 	}
+	// }
 
-	componentDidUpdate() {
-		if (this.props.isAuthentificated) {
-			this.props.changePath('dashboard');
+	// componentDidUpdate() {
+	// 	if (this.props.isAuthentificated) {
+	// 		this.props.changePath('dashboard');
 
-			this.props.history.push('/dashboard');
-		}
-	}
+	// 		this.props.history.push('/dashboard');
+	// 	}
+	// }
 	submitUser = (e) => {
 		e.preventDefault();
 		const { email, password } = this.state;
