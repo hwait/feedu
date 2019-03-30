@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 class LessonsList extends Component {
 	render() {
-		const { lessons, setLesson } = this.props;
-		const buttons = lessons.map((x) => {
-			return <Form.Button key={x.id} label={`№${x.nmb}: ${x.name}`} onChange={(e, d) => setLesson(x.id)} />;
+		const { lessons, setLesson, current } = this.props;
+		console.log('====================================');
+		console.log(lessons);
+		console.log('====================================');
+		const items = lessons.map(({ _id, nmb, name }) => {
+			return (
+				<List.Item
+					as="a"
+					active={current === _id}
+					key={_id}
+					onClick={(e, d) => setLesson(_id)}
+				>{`№${nmb}: ${name}`}</List.Item>
+			);
 		});
-		return buttons;
+		return (
+			<List selection verticalAlign="middle">
+				{items}
+			</List>
+		);
 	}
 }
 const mapStateToProps = (state) => ({
-	lessons: state.lessons.lessons
+	lessons: state.lessons.lessons,
+	current: state.lessons.current
 });
 LessonsList.propTypes = {
-	lessons: PropTypes.array.isRequired
+	lessons: PropTypes.array.isRequired,
+	current: PropTypes.string.isRequired
 };
 export default connect(mapStateToProps, null)(LessonsList);

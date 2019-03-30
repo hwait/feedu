@@ -30,7 +30,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.LESSONS_SUCCESS: {
 			return {
 				...state,
-				LESSONS: payload,
+				lessons: payload,
 				errors: [],
 				loading: false
 			};

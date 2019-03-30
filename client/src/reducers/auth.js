@@ -1,5 +1,5 @@
 import setAuthToken from '../utils/setAuthToken';
-
+import jwt_decode from 'jwt-decode';
 export const types = {
 	SIGNUP_FC: 'AUTH/SIGNUP_FC', // Field changed
 	SIGNUP_SUBJECT: 'AUTH/SIGNUP_SUBJECT',
@@ -39,6 +39,22 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
 	state = { ...state, errors: {} };
 	switch (type) {
+		case '@@INIT': {
+			if (localStorage.jwtToken) {
+				setAuthToken(localStorage.jwtToken);
+				const decoded = jwt_decode(localStorage.jwtToken);
+				const currentTime = Date.now() / 1000;
+				if (decoded.exp < currentTime) {
+					return logout(state);
+				}
+				return {
+					...state,
+					user: decoded,
+					isAuthentificated: true
+				};
+			}
+			return state;
+		}
 		case types.SIGNUP_FC: {
 			if (payload.field === 'role' && payload.value === 2)
 				return {
@@ -118,19 +134,23 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.LOGOUT: {
-			localStorage.removeItem('jwtToken');
-			setAuthToken(false);
-			return {
-				...state,
-				isAuthentificated: false,
-				path: 'home',
-				user: initialUser
-			};
+			return logout(state);
 		}
 		default: {
 			return state;
 		}
 	}
+};
+
+const logout = (state) => {
+	localStorage.removeItem('jwtToken');
+	setAuthToken(false);
+	return {
+		...state,
+		isAuthentificated: false,
+		path: 'home',
+		user: initialUser
+	};
 };
 
 export const actions = {

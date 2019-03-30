@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import { getSubjectsByClass } from '../../reducers/subjects';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import PropTypes from 'prop-types';
 
 class SubjectsDropdown extends Component {
-	setSubject = (e, { value }) => {
-		const { setCurrent } = this.props;
-		setCurrent(value);
-	};
 	render() {
 		const { subjects, current, setSubject } = this.props;
-		const options = subjects.map(({ name, id }) => ({ text: name, value: id, key: id }));
+		const items = subjects.map(({ id, name }) => {
+			return (
+				<List.Item as="a" active={id === current} key={id} onClick={(e, d) => setSubject(id)}>
+					{name}
+				</List.Item>
+			);
+		});
 		return (
-			<Form.Select
-				label="Subject"
-				options={options}
-				placeholder="Subject"
-				value={current}
-				onChange={setSubject}
-			/>
+			<List selection verticalAlign="middle">
+				{items}
+			</List>
 		);
 	}
 }
