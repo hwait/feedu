@@ -6,9 +6,6 @@ import PropTypes from 'prop-types';
 class LessonsList extends Component {
 	render() {
 		const { lessons, setLesson, current } = this.props;
-		console.log('====================================');
-		console.log(lessons);
-		console.log('====================================');
 		const items = lessons.map(({ _id, nmb, name }) => {
 			return (
 				<List.Item

@@ -7,7 +7,6 @@ import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as lessonsActions } from '../../reducers/lessons';
 import SubjectsList from '../subjects/subjectsList';
 import LessonsList from './LessonsList';
-import Lesson from './Lesson';
 
 const classes = getClasses();
 
@@ -24,16 +23,15 @@ class Lessons extends Component {
 		this.props.setFilter(value);
 	};
 	setLesson = (value) => {
-		this.props.setCurrent(value);
+		this.props.lessonSetCurrent(value);
 		this.props.history.push('/lesson');
 	};
 	setSubject = (value) => {
-		const { filter, getLessons } = this.props;
-
-		getLessons(filter, value);
+		const { filter, lessonsGet } = this.props;
+		lessonsGet(filter, value);
 	};
 	render() {
-		const { curSubject, curLesson, filter, loading } = this.props;
+		const { curSubject, filter, loading } = this.props;
 		const classitems = classes.map(({ text, value }) => (
 			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
 				{text}

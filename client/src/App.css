@@ -45,8 +45,13 @@
 
 .dashboard {
 	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .menu-item {
 	margin-left: -15px;
+}
+
+.largetext {
+	font-size: 200%;
 }

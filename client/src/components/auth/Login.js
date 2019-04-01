@@ -12,22 +12,6 @@ class Login extends Component {
 		password: ''
 	};
 
-	// componentDidMount() {
-	// 	if (this.props.isAuthenticated) {
-	// 		this.props.changePath('home');
-	// 		this.props.history.push('/');
-	// 	} else {
-	// 		this.props.changePath('home');
-	// 	}
-	// }
-
-	// componentDidUpdate() {
-	// 	if (this.props.isAuthentificated) {
-	// 		this.props.changePath('dashboard');
-
-	// 		this.props.history.push('/dashboard');
-	// 	}
-	// }
 	submitUser = (e) => {
 		e.preventDefault();
 		const { email, password } = this.state;
@@ -39,9 +23,6 @@ class Login extends Component {
 	render() {
 		const { email, password } = this.state;
 		const { errors } = this.props;
-		console.log('====================================');
-		console.log(this.props);
-		console.log('====================================');
 		return (
 			<Form>
 				<InputField
@@ -70,7 +51,6 @@ class Login extends Component {
 	}
 }
 Login.propTypes = {
-	changePath: PropTypes.func.isRequired,
 	login: PropTypes.func.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired,
 	user: PropTypes.object.isRequired,

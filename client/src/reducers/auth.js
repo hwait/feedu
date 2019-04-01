@@ -155,7 +155,7 @@ const logout = (state) => {
 
 export const actions = {
 	fc: (field, value) => ({ type: types.SIGNUP_FC, payload: { field, value } }),
-	changePath: (payload) => ({ type: types.PATH_CHANGED, payload }),
+	pathChange: (payload) => ({ type: types.PATH_CHANGED, payload }),
 	changeSubject: (payload) => ({ type: types.SIGNUP_SUBJECT, payload }),
 	changeSubjects: (arr, flag) => ({ type: types.SIGNUP_SUBJECTS, payload: { arr, flag } }),
 	signup: (payload) => ({ type: types.SIGNUP_REQUEST, payload }),

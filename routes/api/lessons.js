@@ -63,7 +63,29 @@ router.get('/:sid/:cn', (req, res) => {
 	const { sid, cn } = req.params;
 	Lesson.find({ subject: sid, classn: cn }) //
 		.sort({ nmb: 1 })
-		.then((lessons) => res.json(lessons))
+		.then((lessons) =>
+			res.json(
+				lessons.map(({ _id, name, nmb }) => {
+					return {
+						_id,
+						name,
+						nmb
+					};
+				})
+			)
+		)
+		.catch((error) => {
+			res.status(404).json({ error });
+		});
+});
+
+// @route   GET api/lessons/:lid
+// @desc    Select full Lesson info by _id
+// @access  Public
+router.get('/:lid', (req, res) => {
+	const { lid } = req.params;
+	Lesson.findOne({ _id: lid }) //
+		.then((lesson) => res.json(lesson))
 		.catch((error) => {
 			res.status(404).json({ error });
 		});

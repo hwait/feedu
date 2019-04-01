@@ -6,7 +6,7 @@ import { actions as authActions } from '../../reducers/auth';
 import PropTypes from 'prop-types';
 class Navbar extends Component {
 	handleItemClick = (e, { name }) => {
-		this.props.changePath(name);
+		this.props.pathChange(name);
 	};
 
 	render() {
@@ -49,7 +49,7 @@ class Navbar extends Component {
 				onClick={this.handleItemClick}
 				className="menu-item"
 			>
-				<Icon name="lab" />
+				<Icon name="flipboard" />
 				Lessons
 			</Menu.Item>
 		);
@@ -98,7 +98,7 @@ class Navbar extends Component {
 	}
 }
 Navbar.propTypes = {
-	changePath: PropTypes.func.isRequired,
+	pathChange: PropTypes.func.isRequired,
 	logout: PropTypes.func.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired,
 	user: PropTypes.object.isRequired,

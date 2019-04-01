@@ -12,7 +12,7 @@ class Register extends Component {
 			this.props.init();
 		}
 		if (this.props.isAuthenticated) {
-			this.props.changePath('dashboard');
+			this.props.pathChange('dashboard');
 			this.props.history.push('/dashboard');
 		}
 	}

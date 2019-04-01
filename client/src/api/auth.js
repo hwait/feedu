@@ -33,6 +33,9 @@ export default class AuthAPI {
 			.catch((err) => transformErrors(err));
 	}
 	static login(payload) {
+		console.log('==============login======================');
+		console.log(payload);
+		console.log('====================================');
 		return axios
 			.post(`${root}/login`, payload)
 			.then((response) => {

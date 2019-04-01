@@ -38,7 +38,7 @@ const LessonSchema = new Schema({
 				type: String,
 				required: true
 			},
-			duration: {
+			dur: {
 				type: Number,
 				required: true
 			}
