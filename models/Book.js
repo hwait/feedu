@@ -8,6 +8,11 @@ const Schema = mongoose.Schema;
 */
 
 const BookSchema = new Schema({
+	subject: {
+		type: Schema.Types.ObjectId,
+		ref: 'subject',
+		required: true
+	},
 	name: {
 		type: String,
 		required: true
@@ -42,9 +47,10 @@ const BookSchema = new Schema({
 		type: String,
 		required: true
 	},
-	solution: {
+	binded: {
 		type: Schema.Types.ObjectId,
-		ref: 'books'
+		ref: 'books',
+		required: false
 	}
 });
 

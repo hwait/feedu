@@ -53,6 +53,20 @@ class Navbar extends Component {
 				Lessons
 			</Menu.Item>
 		);
+		const linkBooks = (
+			<Menu.Item
+				as={Link}
+				key="books"
+				name="books"
+				to="/books"
+				active={path === 'books'}
+				onClick={this.handleItemClick}
+				className="menu-item"
+			>
+				<Icon name="book" />
+				Books
+			</Menu.Item>
+		);
 		const linkSignup = (
 			<Menu.Item
 				className="menu-item"
@@ -88,7 +102,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const menuItems = isAuthentificated
-			? [ linkDashboard, linkLessons, linkProfile, linkLogout ]
+			? [ linkDashboard, linkBooks, linkLessons, linkProfile, linkLogout ]
 			: [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">

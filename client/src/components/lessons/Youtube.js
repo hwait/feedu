@@ -35,7 +35,7 @@ class Youtube extends Component {
 							{name}
 						</Label>
 					)}
-					{dur === 0 || <Label horizontal>{dur} m.</Label>}
+					{dur === '' || <Label horizontal>{dur} m.</Label>}
 				</Segment.Inline>
 			</Segment>
 		);

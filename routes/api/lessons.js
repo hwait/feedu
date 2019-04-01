@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const request = require('request');
 
 // Load Input validation
 const { check, validationResult } = require('express-validator/check');
@@ -55,7 +56,21 @@ router.post(
 			.catch((error) => res.status(400).json({ error }));
 	}
 );
-
+// @route   GET api/lessons/video/:yid
+// @desc    Retrieve video info from Yourtube API (key AIzaSyAfxTUKFVUhc2MlpgZOD84PUHj0CTg3fls)
+// @access  Public
+router.get('/video/:yid', (req, res) => {
+	const { yid } = req.params;
+	request({
+		uri: 'https://www.googleapis.com/youtube/v3/videos',
+		qs: {
+			key: 'AIzaSyAfxTUKFVUhc2MlpgZOD84PUHj0CTg3fls',
+			id: yid,
+			fields: 'items(id,snippet(title),contentDetails(duration))',
+			part: 'snippet,contentDetails'
+		}
+	}).pipe(res);
+});
 // @route   GET api/lessons/:sid/:cn
 // @desc    Select all Lessons by Subject and ClassN
 // @access  Public
@@ -90,4 +105,5 @@ router.get('/:lid', (req, res) => {
 			res.status(404).json({ error });
 		});
 });
+
 module.exports = router;

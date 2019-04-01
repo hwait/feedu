@@ -13,6 +13,8 @@ import Profile from './components/auth/Profile';
 import Login from './components/auth/Login';
 import Lessons from './components/lessons/Lessons';
 import Lesson from './components/lessons/Lesson';
+import Books from './components/books/Books';
+import Book from './components/books/Book';
 
 class App extends Component {
 	render() {
@@ -26,6 +28,8 @@ class App extends Component {
 							<Route exact path="/register" component={Register} />
 							<Route exact path="/profile" component={Profile} />
 							<Route exact path="/login" component={Login} />
+							<Route exact path="/books" component={Books} />
+							<Route exact path="/book" component={Book} />
 							<Route exact path="/lessons" component={Lessons} />
 							<Route exact path="/lesson" component={Lesson} />
 						</div>

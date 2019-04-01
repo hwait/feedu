@@ -4,6 +4,8 @@ export const types = {
 	LESSON_FC: 'LESSON/LESSON_FC',
 	YOUTUBE_ADD: 'LESSON/YOUTUBE_ADD',
 	YOUTUBE_LOAD: 'LESSON/YOUTUBE_LOAD',
+	YOUTUBE_SUCCESS: 'LESSON/YOUTUBE_SUCCESS',
+	YOUTUBE_FAILURE: 'LESSON/YOUTUBE_FAILURE',
 	YOUTUBE_CHANGE: 'LESSON/YOUTUBE_CHANGE',
 	YOUTUBE_REMOVE: 'LESSON/YOUTUBE_REMOVE',
 	LESSON_EXTENDED: 'LESSON/LESSON_EXTENDED',
@@ -45,7 +47,10 @@ export default (state = initialState, { type, payload }) => {
 				lesson: { ...state.lesson, videos: Immutable.updateObjectInArray(state.lesson.videos, payload) }
 			};
 		}
-		case types.YOUTUBE_CHANGE: {
+		case types.YOUTUBE_CHANGE:
+		case types.YOUTUBE_FAILURE:
+		case types.YOUTUBE_SUCCESS: {
+			// In the payload should be index and item
 			return {
 				...state,
 				lesson: { ...state.lesson, videos: Immutable.updateObjectInArray(state.lesson.videos, payload) }
@@ -65,7 +70,7 @@ export default (state = initialState, { type, payload }) => {
 					videos: Immutable.addItem(state.lesson.videos, {
 						link: '',
 						name: '',
-						dur: 0,
+						dur: '',
 						errors: {},
 						loading: false
 					})
@@ -115,11 +120,14 @@ export default (state = initialState, { type, payload }) => {
 export const actions = {
 	fc: (field, value) => ({ type: types.LESSON_FC, payload: { field, value } }),
 	youtubeAdd: () => ({ type: types.YOUTUBE_ADD }),
-	youtubeLoad: (index, link) => ({ type: types.YOUTUBE_LOAD, payload: { index, link, item: { loading: true } } }),
+	youtubeLoad: (index, link) => {
+		const yid = link.split('&')[0].split('v=')[1];
+		return { type: types.YOUTUBE_LOAD, payload: { index, link: yid, item: { loading: true } } };
+	},
 	youtubeChange: (index, link) => ({ type: types.YOUTUBE_CHANGE, payload: { index, item: { link } } }),
 	youtubeRemove: (index) => ({ type: types.YOUTUBE_REMOVE, payload: index }),
 	lessonGet: (lid) => ({ type: types.LESSON_GET, payload: lid }),
-	essonSave: (lesson) => ({ type: types.LESSON_SAVE, payload: lesson }),
+	lessonSave: (lesson) => ({ type: types.LESSON_SAVE, payload: lesson }),
 	toggleExtended: () => ({ type: types.LESSON_EXTENDED }),
 	lessonNew: (payload) => ({ type: types.LESSON_SET, payload })
 };
