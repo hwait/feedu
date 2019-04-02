@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Form, Label, Button, Icon, Input } from 'semantic-ui-react';
+import { Segment, Form, Label, Button, Icon } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
 import { getSubjectName } from '../../reducers/subjects';
 import Youtube from './Youtube';
@@ -40,7 +40,7 @@ class Lesson extends Component {
 	render() {
 		const { subject, toggleExtended, errors, loading, youtubeAdd } = this.props;
 		const { classn, isextended, name, nmb, videos, papers, tasks } = this.props.lesson;
-
+		if (errors) console.log(errors, papers, tasks);
 		return (
 			<div className="dashboard">
 				<Segment loading={loading}>

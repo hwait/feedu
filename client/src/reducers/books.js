@@ -1,6 +1,6 @@
 export const types = {
-	BOOKS_REQUEST: 'BOOKS_REQUEST',
-	BOOKS_SUCCESS: 'BOOKS_SUCCESS',
+	BOOKS_GET: 'BOOKS_GET',
+	BOOKS_GET_OK: 'BOOKS_GET_OK',
 	BOOKS_FAILURE: 'BOOKS_FAILURE',
 	BOOKS_SET: 'BOOKS_SET'
 };
@@ -12,8 +12,6 @@ const initialState = {
 	filter: 0,
 	current: ''
 };
-// TODO: Make Lessons just list of names and ids
-// TODO: Make new reducer for Lesson to operate
 export default (state = initialState, { type, payload }) => {
 	switch (type) {
 		case types.BOOKS_SET: {
@@ -22,13 +20,13 @@ export default (state = initialState, { type, payload }) => {
 				current: payload
 			};
 		}
-		case types.BOOKS_REQUEST: {
+		case types.BOOKS_GET: {
 			return {
 				...state,
 				loading: true
 			};
 		}
-		case types.BOOKS_SUCCESS: {
+		case types.BOOKS_GET_OK: {
 			return {
 				...state,
 				books: payload,
@@ -50,7 +48,7 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	booksGet: (classn, sid) => ({ type: types.BOOKS_REQUEST, payload: { classn, sid } }),
+	booksGet: (classn, sid) => ({ type: types.BOOKS_GET, payload: { classn, sid } }),
 	bookSetCurrent: (payload) => ({ type: types.BOOKS_SET, payload })
 };
 export const booksToBindGet = (state) => {

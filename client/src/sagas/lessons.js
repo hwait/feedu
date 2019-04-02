@@ -32,12 +32,12 @@ export function* lessonGetWatch() {
 function* lessonsGet(action) {
 	const { response, errors } = yield call(LessonsAPI.get, action.payload);
 	if (response) {
-		yield put({ type: lessonsTypes.LESSONS_SUCCESS, payload: response });
+		yield put({ type: lessonsTypes.LESSONS_GET_OK, payload: response });
 	} else {
 		yield put({ type: lessonsTypes.LESSONS_FAILURE, payload: errors });
 	}
 }
 
 export function* lessonsGetWatch() {
-	yield takeEvery(lessonsTypes.LESSONS_REQUEST, lessonsGet);
+	yield takeEvery(lessonsTypes.LESSONS_GET, lessonsGet);
 }

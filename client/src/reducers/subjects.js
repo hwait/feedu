@@ -1,5 +1,6 @@
 import { types as authTypes } from './auth';
 import { types as lessonsTypes } from './lessons';
+import { types as booksTypes } from './books';
 
 export const types = {
 	SUBJECTS_LOAD: 'SUBJECTS/SUBJECTS_LOAD',
@@ -27,7 +28,8 @@ export default (state = initialState, { type, payload }) => {
 				current: ''
 			};
 		}
-		case lessonsTypes.LESSONS_REQUEST: {
+		case lessonsTypes.LESSONS_GET:
+		case booksTypes.BOOKS_GET: {
 			return {
 				...state,
 				current: payload.sid

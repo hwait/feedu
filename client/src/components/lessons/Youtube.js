@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment, Form, Label, Button, Input, Icon } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
+import { Segment, Form, Label, Button, Input } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
 
 class Youtube extends Component {

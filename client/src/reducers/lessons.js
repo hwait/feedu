@@ -1,6 +1,6 @@
 export const types = {
-	LESSONS_REQUEST: 'LESSONS_REQUEST',
-	LESSONS_SUCCESS: 'LESSONS_SUCCESS',
+	LESSONS_GET: 'LESSONS_GET',
+	LESSONS_GET_OK: 'LESSONS_GET_OK',
 	LESSONS_FAILURE: 'LESSONS_FAILURE',
 	LESSONS_SET: 'LESSONS_SET'
 };
@@ -22,13 +22,13 @@ export default (state = initialState, { type, payload }) => {
 				current: payload
 			};
 		}
-		case types.LESSONS_REQUEST: {
+		case types.LESSONS_GET: {
 			return {
 				...state,
 				loading: true
 			};
 		}
-		case types.LESSONS_SUCCESS: {
+		case types.LESSONS_GET_OK: {
 			return {
 				...state,
 				lessons: payload,
@@ -50,6 +50,6 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	lessonsGet: (classn, sid) => ({ type: types.LESSONS_REQUEST, payload: { classn, sid } }),
+	lessonsGet: (classn, sid) => ({ type: types.LESSONS_GET, payload: { classn, sid } }),
 	lessonSetCurrent: (payload) => ({ type: types.LESSONS_SET, payload })
 };

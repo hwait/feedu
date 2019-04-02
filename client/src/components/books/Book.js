@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Form, Label, Button, Icon, Input, Select } from 'semantic-ui-react';
+import { Segment, Form, Label, Button, Input } from 'semantic-ui-react';
 import { actions as bookActions } from '../../reducers/book';
 import { getSubjectName } from '../../reducers/subjects';
 import { booksToBindGet } from '../../reducers/books';
@@ -45,8 +45,13 @@ class Book extends Component {
 	render() {
 		const { subject, errors, loading, booksToBind } = this.props;
 		const { name, author, classfrom, classto, type, year, binded } = this.props.book;
+		if (errors) console.log(errors);
 		const hdr =
 			classfrom === classto ? `${subject} ${classfrom} класс.` : `${subject} ${classfrom}-${classto} классы.`;
+		//TODO: Make two fields for classfrom and classto
+		//TODO: Binding list (get task/text books except current)
+		//TODO: Probably more then one binded book
+		//TODO: Binding field should be wider
 		return (
 			<div className="dashboard">
 				<Segment loading={loading}>
@@ -59,6 +64,7 @@ class Book extends Component {
 							control={Input}
 							onChange={this.onChange}
 							label="Author"
+							name="author"
 							placeholder="Author"
 							size="big"
 						/>
@@ -70,7 +76,14 @@ class Book extends Component {
 							size="big"
 						/>
 						<Form.Group widths="equal">
-							<Form.Field name="year" value={year} control={Input} label="Year" placeholder="Year" />
+							<Form.Field
+								name="year"
+								value={year}
+								control={Input}
+								label="Year"
+								placeholder="Year"
+								onChange={this.onChange}
+							/>
 							<Form.Select
 								fluid
 								label="Type"

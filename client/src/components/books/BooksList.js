@@ -6,14 +6,17 @@ import PropTypes from 'prop-types';
 class BooksList extends Component {
 	render() {
 		const { books, setBook, current } = this.props;
-		const items = books.map(({ _id, nmb, name }) => {
+		console.log('====================================');
+		console.log(books);
+		console.log('====================================');
+		const items = books.map(({ _id, author, name }) => {
 			return (
 				<List.Item
 					as="a"
 					active={current === _id}
 					key={_id}
 					onClick={(e, d) => setBook(_id)}
-				>{`№${nmb}: ${name}`}</List.Item>
+				>{`${author}. ${name}`}</List.Item>
 			);
 		});
 		return (

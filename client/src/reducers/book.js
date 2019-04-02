@@ -19,15 +19,11 @@ const initialBook = {
 	classto: 0,
 	type: 0,
 	year: 0,
-	binded: '',
-	errors: {},
-	loading: false
+	binded: ''
 };
-
 const initialState = {
-	books: [],
+	book: initialBook,
 	errors: {},
-	current: {},
 	loading: false
 };
 export default (state = initialState, { type, payload }) => {
@@ -36,7 +32,7 @@ export default (state = initialState, { type, payload }) => {
 			// In the payload should be index and item
 			return {
 				...state,
-				books: Immutable.updateObjectInArray(state.books, payload)
+				book: { ...state.book, [payload.field]: payload.value }
 			};
 		}
 		case types.BOOK_SAVE:
@@ -50,21 +46,18 @@ export default (state = initialState, { type, payload }) => {
 		case types.BOOK_SAVE_OK: {
 			return {
 				...state,
-				books: Immutable.updateObjectInArray(state.books, payload),
+				book: payload,
 				loading: false
 			};
 		}
 		case types.BOOK_REMOVE_OK: {
-			return {
-				...state,
-				books: Immutable.removeItem(state.books, payload),
-				loading: false
-			};
+			// Remove
+			return initialState;
 		}
 		case types.BOOK_GET_OK: {
 			return {
 				...state,
-				books: payload,
+				book: payload,
 				loading: false
 			};
 		}
@@ -72,7 +65,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.BOOK_ADD: {
 			return {
 				...state,
-				books: Immutable.addItem(state.books, initialBook)
+				book: initialBook
 			};
 		}
 
@@ -83,9 +76,9 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	fc: (index, field, value) => ({ type: types.BOOK_FC, payload: { index, item: { [field]: value } } }),
-	booksGet: (classn, sid) => ({ type: types.BOOK_GET, payload: { classn, sid } }),
-	booksAdd: () => ({ type: types.BOOK_ADD }),
-	booksSave: (index, item) => ({ type: types.BOOK_SAVE, payload: { index, item } }),
-	booksRemove: (index) => ({ type: types.BOOK_REMOVE, payload: index })
+	fc: (field, value) => ({ type: types.BOOK_FC, payload: { field, value } }),
+	bookGet: (bid) => ({ type: types.BOOK_GET, payload: bid }),
+	bookAdd: () => ({ type: types.BOOK_ADD }),
+	bookSave: (index, item) => ({ type: types.BOOK_SAVE, payload: { index, item } }),
+	bookRemove: (index) => ({ type: types.BOOK_REMOVE, payload: index })
 };
