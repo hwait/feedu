@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Form, Label, Button, Input } from 'semantic-ui-react';
 import { actions as bookActions } from '../../reducers/book';
-import { getSubjectName } from '../../reducers/subjects';
+import { getCurentSubject } from '../../reducers/subjects';
 import { booksToBindGet } from '../../reducers/books';
 
 const types = [
@@ -17,11 +17,12 @@ const types = [
 class Book extends Component {
 	componentDidMount() {
 		const { bookId, bookGet } = this.props;
-		if (bookId !== '') {
-			bookGet(bookId);
-		} else {
-			this.props.history.push('/books');
-		}
+		if (bookId === '') this.props.history.push('/books');
+		else if (bookId !== 'NEW') bookGet(bookId);
+	}
+	componentDidUpdate() {
+		const { errors } = this.props;
+		if (errors && errors.success) this.props.history.push('/books');
 	}
 	onChange = (e) => {
 		const { name, value } = e.target;
@@ -34,7 +35,8 @@ class Book extends Component {
 		this.props.fc('binded', value);
 	};
 	save = () => {
-		console.log('save');
+		const { bookSave, book, subject } = this.props;
+		bookSave({ ...book, subject: subject.id });
 	};
 	cancel = () => {
 		this.props.history.goBack();
@@ -46,19 +48,35 @@ class Book extends Component {
 		const { subject, errors, loading, booksToBind } = this.props;
 		const { name, author, classfrom, classto, type, year, binded } = this.props.book;
 		if (errors) console.log(errors);
-		const hdr =
-			classfrom === classto ? `${subject} ${classfrom} класс.` : `${subject} ${classfrom}-${classto} классы.`;
-		//TODO: Make two fields for classfrom and classto
-		//TODO: Binding list (get task/text books except current)
-		//TODO: Probably more then one binded book
-		//TODO: Binding field should be wider
+
+		const hdr = `${subject.name}, класс(ы):`;
+		//TODO: Not refresh after history.push here
+		//TODO: Probably more than one binded book
 		return (
 			<div className="dashboard">
 				<Segment loading={loading}>
 					<Form>
-						<Label horizontal size="big">
-							{hdr}
-						</Label>
+						<Form.Group>
+							<Label horizontal size="big">
+								{hdr}
+							</Label>
+							<Form.Field
+								value={classfrom ? classfrom : subject.classn}
+								control={Input}
+								onChange={this.onChange}
+								name="classfrom"
+								size="big"
+								width={2}
+							/>
+							<Form.Field
+								value={classto ? classto : subject.classn}
+								control={Input}
+								onChange={this.onChange}
+								name="classto"
+								size="big"
+								width={2}
+							/>
+						</Form.Group>
 						<Form.Field
 							value={author}
 							control={Input}
@@ -75,7 +93,7 @@ class Book extends Component {
 							onChange={this.onChange}
 							size="big"
 						/>
-						<Form.Group widths="equal">
+						<Form.Group>
 							<Form.Field
 								name="year"
 								value={year}
@@ -83,6 +101,7 @@ class Book extends Component {
 								label="Year"
 								placeholder="Year"
 								onChange={this.onChange}
+								width={2}
 							/>
 							<Form.Select
 								fluid
@@ -91,6 +110,7 @@ class Book extends Component {
 								placeholder="Type"
 								value={type}
 								onChange={this.setType}
+								width={4}
 							/>
 							<Form.Select
 								fluid
@@ -120,7 +140,7 @@ class Book extends Component {
 	}
 }
 Book.propTypes = {
-	subject: PropTypes.string.isRequired,
+	subject: PropTypes.object.isRequired,
 	book: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired
 };
@@ -128,7 +148,7 @@ const mapStateToProps = (state) => ({
 	errors: state.book.errors,
 	book: state.book.book,
 	bookId: state.books.current,
-	subject: getSubjectName(state),
+	subject: getCurentSubject(state),
 	booksToBind: booksToBindGet(state)
 });
 export default connect(mapStateToProps, { ...bookActions })(Book);

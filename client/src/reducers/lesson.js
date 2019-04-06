@@ -1,13 +1,22 @@
 import Immutable from '../utils/immutable';
-
+// TODO: Add, Change and Remove
 export const types = {
 	LESSON_FC: 'LESSON/LESSON_FC',
-	YOUTUBE_ADD: 'LESSON/YOUTUBE_ADD',
 	YOUTUBE_LOAD: 'LESSON/YOUTUBE_LOAD',
 	YOUTUBE_SUCCESS: 'LESSON/YOUTUBE_SUCCESS',
 	YOUTUBE_FAILURE: 'LESSON/YOUTUBE_FAILURE',
+	YOUTUBE_ADD: 'LESSON/YOUTUBE_ADD',
 	YOUTUBE_CHANGE: 'LESSON/YOUTUBE_CHANGE',
 	YOUTUBE_REMOVE: 'LESSON/YOUTUBE_REMOVE',
+
+	PAPER_ADD: 'LESSON/PAPER_ADD',
+	PAPER_CHANGE: 'LESSON/PAPER_CHANGE',
+	PAPER_REMOVE: 'LESSON/PAPER_REMOVE',
+
+	TASK_ADD: 'LESSON/TASK_ADD',
+	TASK_CHANGE: 'LESSON/TASK_CHANGE',
+	TASK_REMOVE: 'LESSON/TASK_REMOVE',
+
 	LESSON_EXTENDED: 'LESSON/LESSON_EXTENDED',
 	LESSON_GET: 'LESSON/LESSON_GET',
 	LESSON_SAVE: 'LESSON/LESSON_SAVE',
@@ -48,6 +57,8 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.YOUTUBE_CHANGE:
+		case types.PAPER_CHANGE:
+		case types.TASK_CHANGE:
 		case types.YOUTUBE_FAILURE:
 		case types.YOUTUBE_SUCCESS: {
 			// In the payload should be index and item
@@ -71,6 +82,47 @@ export default (state = initialState, { type, payload }) => {
 						link: '',
 						name: '',
 						dur: '',
+						errors: {},
+						loading: false
+					})
+				}
+			};
+		}
+		case types.PAPER_REMOVE: {
+			return {
+				...state,
+				lesson: { ...state.lesson, papers: Immutable.removeItem(state.lesson.papers, payload) }
+			};
+		}
+		case types.PAPER_ADD: {
+			return {
+				...state,
+				lesson: {
+					...state.lesson,
+					papers: Immutable.addItem(state.lesson.papers, {
+						book: '',
+						paragraph: 0,
+						errors: {},
+						loading: false
+					})
+				}
+			};
+		}
+		case types.TASK_REMOVE: {
+			return {
+				...state,
+				lesson: { ...state.lesson, tasks: Immutable.removeItem(state.lesson.tasks, payload) }
+			};
+		}
+		case types.TASK_ADD: {
+			return {
+				...state,
+				lesson: {
+					...state.lesson,
+					tasks: Immutable.addItem(state.lesson.tasks, {
+						book: '',
+						nmb: 0,
+						difficulty: 0,
 						errors: {},
 						loading: false
 					})
@@ -124,6 +176,12 @@ export const actions = {
 		const yid = link.split('&')[0].split('v=')[1];
 		return { type: types.YOUTUBE_LOAD, payload: { index, link: yid, item: { loading: true } } };
 	},
+	paperAdd: () => ({ type: types.PAPER_ADD }),
+	paperChange: (index, link) => ({ type: types.PAPER_CHANGE, payload: { index, item: { link } } }),
+	paperRemove: (index) => ({ type: types.PAPER_REMOVE, payload: index }),
+	taskAdd: () => ({ type: types.TASK_ADD }),
+	taskChange: (index, link) => ({ type: types.TASK_CHANGE, payload: { index, item: { link } } }),
+	taskRemove: (index) => ({ type: types.TASK_REMOVE, payload: index }),
 	youtubeChange: (index, link) => ({ type: types.YOUTUBE_CHANGE, payload: { index, item: { link } } }),
 	youtubeRemove: (index) => ({ type: types.YOUTUBE_REMOVE, payload: index }),
 	lessonGet: (lid) => ({ type: types.LESSON_GET, payload: lid }),

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Menu, Segment, Header } from 'semantic-ui-react';
+import { Menu, Segment, Header, Label, Icon } from 'semantic-ui-react';
 import getClasses from '../../utils/getClasses';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as booksActions } from '../../reducers/books';
@@ -24,11 +24,18 @@ class Books extends Component {
 	};
 	setBook = (value) => {
 		this.props.bookSetCurrent(value);
+		console.log('====================================');
+		console.log('before push');
+		console.log('====================================');
 		this.props.history.push('/book');
 	};
 	setSubject = (value) => {
 		const { filter, booksGet } = this.props;
 		booksGet(filter, value);
+	};
+	addBook = () => {
+		this.props.bookNew();
+		this.props.history.push('/book');
 	};
 	render() {
 		const { curSubject, filter, loading } = this.props;
@@ -58,7 +65,12 @@ class Books extends Component {
 						loading={loading}
 					>
 						{curSubject ? (
-							<BooksList setBook={this.setBook} />
+							[
+								<BooksList setBook={this.setBook} />,
+								<Label as="a" attached="bottom right" onClick={this.addBook} color="blue">
+									<Icon name="add" />
+								</Label>
+							]
 						) : (
 							<Header as="h1" disabled>
 								Books

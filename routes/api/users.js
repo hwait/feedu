@@ -89,7 +89,7 @@ router.post(
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
+			return res.status(422).json({ errors: convertErrors(errors.array()) });
 		}
 		User.findById(req.user.id)
 			.then((user) => {
@@ -98,7 +98,7 @@ router.post(
 					user //
 						.save()
 						.then(() => res.json({ success: true }))
-						.catch((error) => res.status(400).json({ error }));
+						.catch((errors) => res.status(400).json({ errors: convertErrors(errors.array()) }));
 				} else {
 					return res.status(404).json({ user: 'User not found' });
 				}

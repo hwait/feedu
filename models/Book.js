@@ -44,7 +44,7 @@ const BookSchema = new Schema({
 		| 5 - Solutions book
 		|--------------------------------------------------
 		*/
-		type: String,
+		type: Number,
 		required: true
 	},
 	binded: {

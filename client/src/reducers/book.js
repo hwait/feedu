@@ -1,4 +1,4 @@
-import Immutable from '../utils/immutable';
+import { types as booksTypes } from '../reducers/books';
 export const types = {
 	BOOK_GET: 'BOOK_GET',
 	BOOK_GET_OK: 'BOOK_GET_OK',
@@ -27,6 +27,7 @@ const initialState = {
 	loading: false
 };
 export default (state = initialState, { type, payload }) => {
+	state = { ...state, errors: {} };
 	switch (type) {
 		case types.BOOK_FC: {
 			// In the payload should be index and item
@@ -46,7 +47,14 @@ export default (state = initialState, { type, payload }) => {
 		case types.BOOK_SAVE_OK: {
 			return {
 				...state,
-				book: payload,
+				errors: { success: true },
+				loading: false
+			};
+		}
+		case types.BOOK_FAILURE: {
+			return {
+				...state,
+				errors: payload,
 				loading: false
 			};
 		}
@@ -68,6 +76,12 @@ export default (state = initialState, { type, payload }) => {
 				book: initialBook
 			};
 		}
+		case booksTypes.BOOKS_NEW: {
+			return {
+				...state,
+				book: initialBook
+			};
+		}
 
 		default: {
 			return state;
@@ -79,6 +93,6 @@ export const actions = {
 	fc: (field, value) => ({ type: types.BOOK_FC, payload: { field, value } }),
 	bookGet: (bid) => ({ type: types.BOOK_GET, payload: bid }),
 	bookAdd: () => ({ type: types.BOOK_ADD }),
-	bookSave: (index, item) => ({ type: types.BOOK_SAVE, payload: { index, item } }),
+	bookSave: (item) => ({ type: types.BOOK_SAVE, payload: item }),
 	bookRemove: (index) => ({ type: types.BOOK_REMOVE, payload: index })
 };

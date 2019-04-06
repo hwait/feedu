@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Form, Label, Button, Icon } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
-import { getSubjectName } from '../../reducers/subjects';
+import { getCurentSubject } from '../../reducers/subjects';
 import Youtube from './Youtube';
 
 class Lesson extends Component {
@@ -46,7 +46,7 @@ class Lesson extends Component {
 				<Segment loading={loading}>
 					<Form>
 						<Segment.Inline>
-							<Label horizontal size="big">{`${subject} ${classn} класс.`}</Label>
+							<Label horizontal size="big">{`${subject.name} ${classn} класс.`}</Label>
 							<Label horizontal size="big">
 								{`Урок № ${nmb}.`}
 							</Label>
@@ -119,6 +119,6 @@ const mapStateToProps = (state) => ({
 	errors: state.lesson.errors,
 	lesson: state.lesson.lesson,
 	lessonId: state.lessons.current,
-	subject: getSubjectName(state)
+	subject: getCurentSubject(state)
 });
 export default connect(mapStateToProps, { ...lessonActions })(Lesson);

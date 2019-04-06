@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const request = require('request');
-
+const convertError = require('../../utils/convertError');
 const { check, validationResult } = require('express-validator/check');
 const Book = require('../../models/Book');
 
@@ -23,28 +23,27 @@ router.post(
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
+			return res.status(422).json({ errors: convertError(errors.errors) });
 		}
 		const { _id, name, author, classfrom, classto, type, year, binded, subject } = req.body;
 		if (_id) {
 			Book.findById(_id).then((book) => {
 				if (book) {
-					book = {
-						...book,
-						subject,
-						name,
-						author,
-						classfrom,
-						classto,
-						type,
-						year,
-						binded
-					};
+					book.subject = subject;
+					book.name = name;
+					book.author = author;
+					book.classfrom = classfrom;
+					book.classto = classto;
+					book.type = type;
+					book.year = year;
+					if (binded) book.binded = binded;
+					book // Try to save Book
+						.save()
+						.then(() => res.json({ success: true }))
+						.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
+				} else {
+					console.log('404');
 				}
-				book // Try to save Book
-					.save()
-					.then(() => res.json({ success: true }))
-					.catch((err) => console.log(err));
 			});
 		} else {
 			const newBook = new Book({
@@ -55,12 +54,14 @@ router.post(
 				classto,
 				type,
 				year,
-				binded
+				...(binded && { binded })
 			});
 			newBook // Try to save Book
 				.save()
 				.then((book) => res.json({ success: true, _id: book._id }))
-				.catch((error) => res.status(400).json({ error }));
+				.catch((errors) => {
+					return res.status(400).json({ errors: convertError(errors.errors) });
+				});
 		}
 	}
 );
@@ -72,9 +73,7 @@ router.get('/:bid', (req, res) => {
 	const { bid } = req.params;
 	Book.findById(bid) //
 		.then((book) => res.json(book))
-		.catch((error) => {
-			res.status(404).json({ error });
-		});
+		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
 });
 
 // @route   GET api/books/:sid/:cn
@@ -94,9 +93,7 @@ router.get('/:sid/:cn', (req, res) => {
 				})
 			)
 		)
-		.catch((error) => {
-			res.status(404).json({ error });
-		});
+		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
 });
 
 module.exports = router;
