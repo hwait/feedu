@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const request = require('request');
-
+const convertErrors = require('../../utils/convertErrors');
+const convertError = require('../../utils/convertError');
 // Load Input validation
 const { check, validationResult } = require('express-validator/check');
 
@@ -10,50 +11,62 @@ const { check, validationResult } = require('express-validator/check');
 const Subject = require('../../models/Subject');
 const Lesson = require('../../models/Lesson');
 
-// @route   POST api/lessons/add
-// @desc    Add Lesson
+// @route   POST api/lessons/save
+// @desc    Save Lesson
 // @access  Private
-//n;cln;name;reshid;sid
+
 router.post(
-	'/add',
+	'/save',
 	[
 		check('name').isLength({ min: 2 }),
 		check('reshid').isInt(),
-		check('cln').isInt({ gt: -1, lt: 13 }),
-		check('n').isInt(),
-		check('sid').isInt()
+		check('classn').isInt({ gt: -1, lt: 13 }),
+		check('nmb').isInt()
 	],
 	passport.authenticate('jwt', { session: false }),
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
+			return res.status(422).json({ errors: convertErrors(errors.array()) });
 		}
-		const { name, reshid, cln, n, sid, isextended } = req.body;
-
-		Subject.findOne({ reshid: sid })
-			.then((subject) => {
-				if (subject) {
-					const newLesson = new Lesson({
-						subject,
-						name,
-						reshid,
-						classn: cln,
-						nmb: n,
-						isextended,
-						videos: [],
-						papers: [],
-						tasks: []
-					});
-					newLesson // Try to save Lesson
+		const { _id, name, reshid, classn, nmb, subject, isextended, videos, papers, tasks } = req.body;
+		if (_id) {
+			Lesson.findById(_id).then((lesson) => {
+				if (lesson) {
+					lesson.subject = subject;
+					lesson.name = name;
+					lesson.reshid = reshid;
+					lesson.classn = classn;
+					lesson.nmb = nmb;
+					lesson.isextended = isextended;
+					lesson.videos = videos;
+					lesson.papers = papers;
+					lesson.tasks = tasks;
+					lesson // Try to save Book
 						.save()
 						.then(() => res.json({ success: true }))
-						.catch((error) => res.status(400).json({ error }));
+						.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
 				} else {
-					throw new Error('No Subject has found with reshid=' + sid);
+					console.log('404');
 				}
-			})
-			.catch((error) => res.status(400).json({ error }));
+			});
+		} else {
+			const newLesson = new Lesson({
+				subject,
+				name,
+				reshid,
+				classn: cln,
+				nmb: n,
+				isextended,
+				videos: [],
+				papers: [],
+				tasks: []
+			});
+			newLesson // Try to save Lesson
+				.save()
+				.then(() => res.json({ success: true }))
+				.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
+		}
 	}
 );
 // @route   GET api/lessons/video/:yid

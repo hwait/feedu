@@ -14,7 +14,10 @@ export default class Immutable {
 		});
 	}
 	static removeItem(array, index) {
-		return [ ...array.slice(0, index), ...array.slice(index + 1) ];
+		//return [ ...array.slice(0, index), ...array.slice(index + 1) ];
+		let newArray = array.slice();
+		newArray.splice(index, 1);
+		return newArray;
 	}
 	static insertItem(array, action) {
 		let newArray = array.slice();

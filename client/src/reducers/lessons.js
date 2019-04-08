@@ -53,3 +53,9 @@ export const actions = {
 	lessonsGet: (classn, sid) => ({ type: types.LESSONS_GET, payload: { classn, sid } }),
 	lessonSetCurrent: (payload) => ({ type: types.LESSONS_SET, payload })
 };
+
+export const getNextNmb = (state) => {
+	const cn = state.lesson.lesson.nmb;
+	const nn = state.lessons.lessons.find((x) => x.nmb > cn);
+	return nn ? nn.nmb : cn + 1;
+};

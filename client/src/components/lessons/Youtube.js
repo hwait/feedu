@@ -29,11 +29,9 @@ class Youtube extends Component {
 				/>
 				<Label as="a" corner="right" icon="remove" onClick={this.youtubeRemove} color="red" size="tiny" />
 				<Segment.Inline>
-					{name === '' || (
-						<Label horizontal basic>
-							{name}
-						</Label>
-					)}
+					<Label horizontal basic>
+						{name ? name : 'Please, search a link to auto-fill this.'}
+					</Label>
 					{dur === '' || <Label horizontal>{dur} m.</Label>}
 				</Segment.Inline>
 			</Segment>

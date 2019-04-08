@@ -29,6 +29,19 @@ export function* lessonGetWatch() {
 	yield takeEvery(lessonTypes.LESSON_GET, lessonGet);
 }
 
+function* lessonSave(action) {
+	const { response, errors } = yield call(LessonsAPI.lessonSave, action.payload);
+	if (response) {
+		yield put({ type: lessonTypes.LESSON_SAVE_OK, payload: response });
+	} else {
+		yield put({ type: lessonTypes.LESSON_FAILURE, payload: errors });
+	}
+}
+
+export function* lessonSaveWatch() {
+	yield takeEvery(lessonTypes.LESSON_SAVE, lessonSave);
+}
+
 function* lessonsGet(action) {
 	const { response, errors } = yield call(LessonsAPI.get, action.payload);
 	if (response) {

@@ -116,5 +116,5 @@ export const getSubjectsByClass = (state) => {
 };
 export const getCurentSubject = (state) => {
 	const subject = state.subjects.subjects.find((x) => x.id === state.subjects.current);
-	return subject ? { name: subject.name, id: subject.id, classn: state.subjects.filter } : '';
+	return subject ? { name: subject.name, id: subject.id, classn: state.subjects.filter } : {};
 };

@@ -5,6 +5,7 @@ import { Menu, Segment, Header } from 'semantic-ui-react';
 import getClasses from '../../utils/getClasses';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as lessonsActions } from '../../reducers/lessons';
+import { actions as booksActions } from '../../reducers/books';
 import SubjectsList from '../subjects/subjectsList';
 import LessonsList from './LessonsList';
 
@@ -27,8 +28,9 @@ class Lessons extends Component {
 		this.props.history.push('/lesson');
 	};
 	setSubject = (value) => {
-		const { filter, lessonsGet } = this.props;
+		const { filter, lessonsGet, booksGet } = this.props;
 		lessonsGet(filter, value);
+		booksGet(filter, value);
 	};
 	render() {
 		const { curSubject, filter, loading } = this.props;
@@ -88,4 +90,6 @@ const mapStateToProps = (state) => ({
 	loading: state.lessons.loading,
 	isAuthentificated: state.auth.isAuthentificated
 });
-export default connect(mapStateToProps, { ...subjectsActions, ...lessonsActions })(Lessons);
+export default connect(mapStateToProps, { ...subjectsActions, ...lessonsActions, booksGet: booksActions.booksGet })(
+	Lessons
+);

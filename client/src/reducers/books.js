@@ -64,6 +64,11 @@ export const booksToBindGet = (state) => {
 		.filter((x) => x._id !== state.books.current)
 		.map(({ name, author, _id }) => ({ key: _id, value: _id, text: `${name}.${author}` }));
 };
+export const booksToTasksGet = (state) => {
+	return state.books.books
+		.filter((x) => x._id !== state.books.current && x.type === 5)
+		.map(({ name, author, _id }) => ({ key: _id, value: _id, text: `${name}.${author}` }));
+};
 export const getSubjectName = (state) => {
 	const subject = state.subjects.subjects.find((x) => x.id === state.subjects.current);
 	return subject ? subject.name : '';

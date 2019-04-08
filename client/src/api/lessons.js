@@ -44,4 +44,10 @@ export default class LessonsAPI {
 				};
 			});
 	}
+	static lessonSave(payload) {
+		return axios
+			.post(`${root}/save`, payload)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
 }

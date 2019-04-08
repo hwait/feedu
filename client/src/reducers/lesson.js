@@ -20,9 +20,11 @@ export const types = {
 	LESSON_EXTENDED: 'LESSON/LESSON_EXTENDED',
 	LESSON_GET: 'LESSON/LESSON_GET',
 	LESSON_SAVE: 'LESSON/LESSON_SAVE',
+	LESSON_SAVE_OK: 'LESSON/LESSON_SAVE_OK',
 	LESSON_SUCCESS: 'LESSON/LESSON_SUCCESS',
 	LESSON_FAILURE: 'LESSON/LESSON_FAILURE',
-	LESSON_NEW: 'LESSON/LESSON_NEW'
+	LESSON_NEW: 'LESSON/LESSON_NEW',
+	LESSON_COPY: 'LESSON/LESSON_COPY'
 };
 
 const initialLesson = {
@@ -43,6 +45,7 @@ const initialState = {
 // TODO: Make Lesson just list of names and ids
 // TODO: Make new reducer for Lesson to operate
 export default (state = initialState, { type, payload }) => {
+	state = { ...state, errors: {} };
 	switch (type) {
 		case types.LESSON_FC: {
 			return {
@@ -57,8 +60,6 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.YOUTUBE_CHANGE:
-		case types.PAPER_CHANGE:
-		case types.TASK_CHANGE:
 		case types.YOUTUBE_FAILURE:
 		case types.YOUTUBE_SUCCESS: {
 			// In the payload should be index and item
@@ -88,12 +89,7 @@ export default (state = initialState, { type, payload }) => {
 				}
 			};
 		}
-		case types.PAPER_REMOVE: {
-			return {
-				...state,
-				lesson: { ...state.lesson, papers: Immutable.removeItem(state.lesson.papers, payload) }
-			};
-		}
+
 		case types.PAPER_ADD: {
 			return {
 				...state,
@@ -108,10 +104,16 @@ export default (state = initialState, { type, payload }) => {
 				}
 			};
 		}
-		case types.TASK_REMOVE: {
+		case types.PAPER_CHANGE: {
 			return {
 				...state,
-				lesson: { ...state.lesson, tasks: Immutable.removeItem(state.lesson.tasks, payload) }
+				lesson: { ...state.lesson, papers: Immutable.updateObjectInArray(state.lesson.papers, payload) }
+			};
+		}
+		case types.PAPER_REMOVE: {
+			return {
+				...state,
+				lesson: { ...state.lesson, papers: Immutable.removeItem(state.lesson.papers, payload) }
 			};
 		}
 		case types.TASK_ADD: {
@@ -122,17 +124,35 @@ export default (state = initialState, { type, payload }) => {
 					tasks: Immutable.addItem(state.lesson.tasks, {
 						book: '',
 						nmb: 0,
-						difficulty: 0,
+						difficulty: 1,
 						errors: {},
 						loading: false
 					})
 				}
 			};
 		}
+		case types.TASK_CHANGE: {
+			return {
+				...state,
+				lesson: { ...state.lesson, tasks: Immutable.updateObjectInArray(state.lesson.tasks, payload) }
+			};
+		}
+		case types.TASK_REMOVE: {
+			return {
+				...state,
+				lesson: { ...state.lesson, tasks: Immutable.removeItem(state.lesson.tasks, payload) }
+			};
+		}
 		case types.LESSON_NEW: {
 			return {
 				...state,
 				lesson: { ...state.lesson, ...payload }
+			};
+		}
+		case types.LESSON_COPY: {
+			return {
+				...state,
+				lesson: { ...state.lesson, ...payload, isextended: true, name: payload.name + '-COPY' }
 			};
 		}
 		case types.LESSON_EXTENDED: {
@@ -146,6 +166,13 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				loading: true
+			};
+		}
+		case types.LESSON_SAVE_OK: {
+			return {
+				...state,
+				errors: { success: true },
+				loading: false
 			};
 		}
 		case types.LESSON_SUCCESS: {
@@ -177,15 +204,19 @@ export const actions = {
 		return { type: types.YOUTUBE_LOAD, payload: { index, link: yid, item: { loading: true } } };
 	},
 	paperAdd: () => ({ type: types.PAPER_ADD }),
-	paperChange: (index, link) => ({ type: types.PAPER_CHANGE, payload: { index, item: { link } } }),
+	paperChange: (index, field, value) => ({ type: types.PAPER_CHANGE, payload: { index, item: { [field]: value } } }),
 	paperRemove: (index) => ({ type: types.PAPER_REMOVE, payload: index }),
 	taskAdd: () => ({ type: types.TASK_ADD }),
-	taskChange: (index, link) => ({ type: types.TASK_CHANGE, payload: { index, item: { link } } }),
+	taskChange: (index, field, value) => ({ type: types.TASK_CHANGE, payload: { index, item: { [field]: value } } }),
 	taskRemove: (index) => ({ type: types.TASK_REMOVE, payload: index }),
-	youtubeChange: (index, link) => ({ type: types.YOUTUBE_CHANGE, payload: { index, item: { link } } }),
+	youtubeChange: (index, link) => ({
+		type: types.YOUTUBE_CHANGE,
+		payload: { index, item: { link } }
+	}),
 	youtubeRemove: (index) => ({ type: types.YOUTUBE_REMOVE, payload: index }),
 	lessonGet: (lid) => ({ type: types.LESSON_GET, payload: lid }),
 	lessonSave: (lesson) => ({ type: types.LESSON_SAVE, payload: lesson }),
 	toggleExtended: () => ({ type: types.LESSON_EXTENDED }),
-	lessonNew: (payload) => ({ type: types.LESSON_SET, payload })
+	lessonNew: (payload) => ({ type: types.LESSON_SET, payload }),
+	lessonCopy: (payload) => ({ type: types.LESSON_COPY, payload })
 };

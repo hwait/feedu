@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Form, Label, Button, Icon } from 'semantic-ui-react';
+import { Segment, Form, Label, Button, Icon, Input } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
+import { getNextNmb } from '../../reducers/lessons';
 import { getCurentSubject } from '../../reducers/subjects';
+import { booksToBindGet } from '../../reducers/books';
+import round from '../../utils/round';
 import Youtube from './Youtube';
+import Paper from './Paper';
+import Task from './Task';
 
 class Lesson extends Component {
 	componentDidMount() {
@@ -15,21 +20,23 @@ class Lesson extends Component {
 			this.props.history.push('/lessons');
 		}
 	}
+	componentDidUpdate() {
+		const { errors } = this.props;
+		if (errors && errors.success) this.props.history.push('/lessons');
+	}
 	onChange = (e) => {
 		const { name, value } = e.target;
 		this.props.fc(name, value);
 	};
 	copyLesson = () => {
-		console.log('copyLesson');
+		console.log('lessonCopy');
+		const { lessonCopy, lesson, subject, nextnmb } = this.props;
+		lessonCopy({ ...lesson, nmb: round((lesson.nmb + nextnmb) / 2) });
 	};
-	addPaper = () => {
-		console.log('addPaper');
-	};
-	addTask = () => {
-		console.log('addTask');
-	};
+
 	save = () => {
-		console.log('save');
+		const { lessonSave, lesson, subject } = this.props;
+		lessonSave({ ...lesson, subject: subject.id, classn: subject.filter });
 	};
 	cancel = () => {
 		this.props.history.goBack();
@@ -38,7 +45,7 @@ class Lesson extends Component {
 		console.log('remove');
 	};
 	render() {
-		const { subject, toggleExtended, errors, loading, youtubeAdd } = this.props;
+		const { subject, toggleExtended, errors, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
 		const { classn, isextended, name, nmb, videos, papers, tasks } = this.props.lesson;
 		if (errors) console.log(errors, papers, tasks);
 		return (
@@ -46,10 +53,13 @@ class Lesson extends Component {
 				<Segment loading={loading}>
 					<Form>
 						<Segment.Inline>
-							<Label horizontal size="big">{`${subject.name} ${classn} класс.`}</Label>
-							<Label horizontal size="big">
-								{`Урок № ${nmb}.`}
-							</Label>
+							<Form.Group inline>
+								<Label horizontal size="big">{`${subject.name} ${classn} класс.`}</Label>
+								<Label horizontal size="big">
+									{`Урок № ${nmb}.`}
+								</Label>
+								<Form.Field value={nmb} control={Input} onChange={this.onChange} name="nmb" width={1} />
+							</Form.Group>
 							<Button
 								content="Copy"
 								icon="copy"
@@ -82,15 +92,21 @@ class Lesson extends Component {
 						</Segment>
 						<Segment>
 							<Label attached="top">Papers</Label>
-							<Label attached="top right" onClick={this.addPaper}>
+							<Label attached="top right" onClick={paperAdd}>
 								<Icon name="add" />
 							</Label>
+							{papers.map((paper, index) => (
+								<Paper key={`paper${index}`} paper={paper} index={index} books={booksToBind} />
+							))}
 						</Segment>
 						<Segment>
 							<Label attached="top">Tasks</Label>
-							<Label attached="top right" onClick={this.addTask}>
+							<Label attached="top right" onClick={taskAdd}>
 								<Icon name="add" />
 							</Label>
+							{tasks.map((task, index) => (
+								<Task key={`task${index}`} task={task} index={index} books={booksToBind} />
+							))}
 						</Segment>
 						<Segment>
 							<Button content="Save" icon="save" labelPosition="left" onClick={this.save} positive />
@@ -111,7 +127,7 @@ class Lesson extends Component {
 	}
 }
 Lesson.propTypes = {
-	subject: PropTypes.string.isRequired,
+	subject: PropTypes.object.isRequired,
 	lesson: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired
 };
@@ -119,6 +135,8 @@ const mapStateToProps = (state) => ({
 	errors: state.lesson.errors,
 	lesson: state.lesson.lesson,
 	lessonId: state.lessons.current,
-	subject: getCurentSubject(state)
+	nextnmb: getNextNmb(state),
+	subject: getCurentSubject(state),
+	booksToBind: booksToBindGet(state)
 });
 export default connect(mapStateToProps, { ...lessonActions })(Lesson);
