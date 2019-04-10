@@ -39,6 +39,20 @@ class Navbar extends Component {
 				Board
 			</Menu.Item>
 		);
+		const calendar = (
+			<Menu.Item
+				className="menu-item"
+				as={Link}
+				key="calendar"
+				name="calendar"
+				to="/calendar"
+				active={path === 'calendar'}
+				onClick={this.handleItemClick}
+			>
+				<Icon name="calendar" />
+				Board
+			</Menu.Item>
+		);
 		const linkLessons = (
 			<Menu.Item
 				as={Link}
@@ -102,7 +116,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const menuItems = isAuthentificated
-			? [ linkDashboard, linkBooks, linkLessons, linkProfile, linkLogout ]
+			? [ linkDashboard, linkBooks, linkLessons, calendar, linkProfile, linkLogout ]
 			: [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">

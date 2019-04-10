@@ -13,11 +13,20 @@ export default class Immutable {
 			};
 		});
 	}
-	static removeItem(array, index) {
+	static removeIndex(array, index) {
 		//return [ ...array.slice(0, index), ...array.slice(index + 1) ];
 		let newArray = array.slice();
 		newArray.splice(index, 1);
 		return newArray;
+	}
+	static removeItem(array, item) {
+		return array.filter((x) => x !== item);
+	}
+	static removeObject(array, item) {
+		return array.filter((x) => !x.isSame(item));
+	}
+	static removeObjects(array, items) {
+		return array.filter((x) => !items.some((y) => y.isSame(x)));
 	}
 	static insertItem(array, action) {
 		let newArray = array.slice();
@@ -25,6 +34,14 @@ export default class Immutable {
 		return newArray;
 	}
 	static addItem(array, item) {
+		let newArray = array.slice();
+		newArray.splice(array.length, 0, item);
+		return newArray;
+	}
+	static addObject(array, item) {
+		console.log('==============addObject=================');
+		console.log(array, item);
+		console.log('====================================');
 		let newArray = array.slice();
 		newArray.splice(array.length, 0, item);
 		return newArray;

@@ -71,7 +71,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.YOUTUBE_REMOVE: {
 			return {
 				...state,
-				lesson: { ...state.lesson, videos: Immutable.removeItem(state.lesson.videos, payload) }
+				lesson: { ...state.lesson, videos: Immutable.removeIndex(state.lesson.videos, payload) }
 			};
 		}
 		case types.YOUTUBE_ADD: {
@@ -113,7 +113,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.PAPER_REMOVE: {
 			return {
 				...state,
-				lesson: { ...state.lesson, papers: Immutable.removeItem(state.lesson.papers, payload) }
+				lesson: { ...state.lesson, papers: Immutable.removeIndex(state.lesson.papers, payload) }
 			};
 		}
 		case types.TASK_ADD: {
@@ -140,7 +140,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.TASK_REMOVE: {
 			return {
 				...state,
-				lesson: { ...state.lesson, tasks: Immutable.removeItem(state.lesson.tasks, payload) }
+				lesson: { ...state.lesson, tasks: Immutable.removeIndex(state.lesson.tasks, payload) }
 			};
 		}
 		case types.LESSON_NEW: {

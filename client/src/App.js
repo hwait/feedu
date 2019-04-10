@@ -15,6 +15,7 @@ import Lessons from './components/lessons/Lessons';
 import Lesson from './components/lessons/Lesson';
 import Books from './components/books/Books';
 import Book from './components/books/Book';
+import Calendar from './components/calendar/Calendar';
 
 class App extends Component {
 	render() {
@@ -30,6 +31,7 @@ class App extends Component {
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/books" component={Books} />
 							<Route exact path="/book" component={Book} />
+							<Route exact path="/calendar" component={Calendar} />
 							<Route exact path="/lessons" component={Lessons} />
 							<Route exact path="/lesson" component={Lesson} />
 						</div>
