@@ -2,3 +2,34 @@ npm init
 npm i express passport passport-jwt jsonwebtoken body-parser bcryptjs validator mongoose
 npm i -D nodemon jest supertest
 
+REDUCER
+case types.CALENDAR_GET:
+		case types.CALENDARS_GET:
+		case types.CALENDAR_SAVE: {
+			return {
+				...state,
+				loading: true
+			};
+		}
+		case types.CALENDAR_SAVE_OK: {
+			return {
+				...state,
+				errors: { success: true }, // JUST TO MAKE COMPONENT ACTIONS (REDIRECTS)
+				loading: false
+			};
+		}
+		case types.CALENDAR_SUCCESS: { // ALL PIPELINES ENDS HERE
+			return {
+				...state,
+				...payload, // SAGAS SHOULD FORMAT A PAYLOAD ACCORDINGLY STATE
+				errors: {},
+				loading: false
+			};
+		}
+		case types.CALENDAR_FAILURE: {
+			return {
+				...state,
+				errors: payload, 
+				loading: false
+			};
+		}

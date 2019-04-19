@@ -6,6 +6,7 @@ const users = require('./routes/api/users');
 const subjects = require('./routes/api/subjects');
 const lessons = require('./routes/api/lessons');
 const books = require('./routes/api/books');
+const calendars = require('./routes/api/calendars');
 
 const app = express();
 
@@ -28,6 +29,7 @@ require('./config/passport')(passport);
 //Routes
 app.use('/api/users', users);
 app.use('/api/subjects', subjects);
+app.use('/api/calendars', calendars);
 app.use('/api/books', books);
 app.use('/api/lessons', lessons);
 

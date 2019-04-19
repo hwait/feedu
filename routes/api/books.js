@@ -6,7 +6,7 @@ const convertError = require('../../utils/convertError');
 const { check, validationResult } = require('express-validator/check');
 const Book = require('../../models/Book');
 
-// @route   POST api/books/add
+// @route   POST api/books/save
 // @desc    Add Book
 // @access  Private
 router.post(

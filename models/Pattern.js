@@ -12,6 +12,10 @@ const PatternSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'students'
 	},
+	calendar: {
+		type: Schema.Types.ObjectId,
+		ref: 'calendar'
+	},
 	subject: {
 		type: String,
 		required: true

@@ -38,6 +38,6 @@ Month.propTypes = {
 	dates: PropTypes.array.isRequired
 };
 const mapStateToProps = (state, ownProps) => ({
-	dates: getMarks(state.calendar.dates, ownProps.initialDate)
+	dates: getMarks(state.calendar.calendar.dates, ownProps.initialDate)
 });
 export default connect(mapStateToProps, { ...calendarActions })(Month);

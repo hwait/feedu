@@ -2,56 +2,124 @@ import Immutable from '../utils/immutable';
 import moment from 'moment';
 
 export const types = {
+	FC: 'CALENDAR/FC',
 	START_SET: 'CALENDAR/START_SET',
 	WEEKEND_TOGGLE: 'CALENDAR/WEEKEND_TOGGLE',
 	DATE_TOGGLE: 'CALENDAR/DATE_TOGGLE',
-	DATES_TOGGLE: 'CALENDAR/DATES_TOGGLE'
+	DATES_TOGGLE: 'CALENDAR/DATES_TOGGLE',
+	CALENDAR_SAVE: 'CALENDAR/CALENDAR_SAVE',
+	CALENDAR_SAVE_OK: 'CALENDAR/CALENDAR_SAVE_OK',
+	CALENDAR_FAILURE: 'CALENDAR/CALENDAR_FAILURE',
+	CALENDAR_GET: 'CALENDAR/CALENDAR_GET',
+	CALENDARS_GET: 'CALENDAR/CALENDARS_GET',
+	CALENDAR_SUCCESS: 'CALENDAR/CALENDAR_SUCCESS'
+};
+
+const initialCalendar = {
+	dates: [],
+	name: '',
+	start: 8,
+	weekends: [ 6, 7 ]
 };
 
 const initialState = {
-	dates: [],
-	start: 8,
-	weekends: [ 6, 7 ],
+	calendar: initialCalendar,
+	calendars: [],
+	current: '',
+	errors: {},
 	loading: false
 };
 
 export default (state = initialState, { type, payload }) => {
+	state = { ...state, errors: {} };
 	switch (type) {
+		case types.FC: {
+			return {
+				...state,
+				calendar: {
+					...state.calendar,
+					[payload.field]: payload.value
+				}
+			};
+		}
 		case types.DATE_TOGGLE: {
 			return {
 				...state,
-				dates: state.dates.includes(payload)
-					? Immutable.removeItem(state.dates, payload)
-					: Immutable.addItem(state.dates, payload)
+				calendar: {
+					...state.calendar,
+					dates: state.calendar.dates.includes(payload)
+						? Immutable.removeItem(state.calendar.dates, payload)
+						: Immutable.addItem(state.calendar.dates, payload)
+				}
 			};
 		}
 		case types.START_SET: {
 			return {
 				...state,
-				start: payload,
-				dates: []
+				calendar: {
+					...state.calendar,
+					start: payload,
+					dates: []
+				}
 			};
 		}
 		case types.WEEKEND_TOGGLE: {
 			return {
 				...state,
-				weekends: state.weekends.includes(payload)
-					? Immutable.removeItem(state.weekends, payload)
-					: Immutable.addItem(state.weekends, payload),
-				dates: []
+				calendar: {
+					...state.calendar,
+					weekends: state.calendar.weekends.includes(payload)
+						? Immutable.removeItem(state.calendar.weekends, payload)
+						: Immutable.addItem(state.calendar.weekends, payload),
+					dates: []
+				}
 			};
 		}
 		case types.DATES_TOGGLE: {
 			const patt = payload.substr(0, 7);
-			const dates = state.dates.filter((x) => x.includes(patt));
+			const dates = state.calendar.dates.filter((x) => x.includes(patt));
 			return {
 				...state,
-				dates:
-					dates.length > 0
-						? state.dates.filter((x) => !x.includes(patt))
-						: [ ...state.dates, ...fillMonth(payload, state.weekends) ]
+				calendar: {
+					...state.calendar,
+					dates:
+						dates.length > 0
+							? state.calendar.dates.filter((x) => !x.includes(patt))
+							: [ ...state.calendar.dates, ...fillMonth(payload, state.calendar.weekends) ]
+				}
 			};
 		}
+		case types.CALENDAR_GET:
+		case types.CALENDARS_GET:
+		case types.CALENDAR_SAVE: {
+			return {
+				...state,
+				loading: true
+			};
+		}
+		case types.CALENDAR_SAVE_OK: {
+			return {
+				...state,
+				...initialState,
+				errors: { success: true }
+			};
+		}
+		case types.CALENDAR_SUCCESS: {
+			return {
+				...state,
+				...payload,
+				errors: {},
+				loading: false
+			};
+		}
+		case types.CALENDAR_FAILURE: {
+			return {
+				...state,
+				errors: payload,
+				loading: false
+			};
+		}
+
 		default: {
 			return state;
 		}
@@ -70,10 +138,14 @@ const fillMonth = (initialDate, weekends) => {
 };
 
 export const actions = {
+	fc: (field, value) => ({ type: types.FC, payload: { field, value } }),
 	dateToggle: (date) => ({ type: types.DATE_TOGGLE, payload: date }),
 	weekendToggle: (day) => ({ type: types.WEEKEND_TOGGLE, payload: day }),
 	startSet: (month) => ({ type: types.START_SET, payload: month }),
-	monthToggle: (initialDate) => ({ type: types.DATES_TOGGLE, payload: initialDate })
+	monthToggle: (initialDate) => ({ type: types.DATES_TOGGLE, payload: initialDate }),
+	calendarsGet: () => ({ type: types.CALENDARS_GET }),
+	calendarGet: (id) => ({ type: types.CALENDAR_GET, payload: id }),
+	calendarSave: (calendar) => ({ type: types.CALENDAR_SAVE, payload: calendar })
 };
 
 export const getMarks = (dates, initialDate) => {
