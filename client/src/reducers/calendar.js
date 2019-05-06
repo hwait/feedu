@@ -11,11 +11,14 @@ export const types = {
 	CALENDAR_SAVE_OK: 'CALENDAR/CALENDAR_SAVE_OK',
 	CALENDAR_FAILURE: 'CALENDAR/CALENDAR_FAILURE',
 	CALENDAR_GET: 'CALENDAR/CALENDAR_GET',
+	CALENDAR_CANCEL: 'CALENDAR/CALENDAR_CANCEL',
 	CALENDARS_GET: 'CALENDAR/CALENDARS_GET',
 	CALENDAR_SUCCESS: 'CALENDAR/CALENDAR_SUCCESS'
 };
 
 const initialCalendar = {
+	group: '',
+	year: 2019,
 	dates: [],
 	name: '',
 	start: 8,
@@ -61,6 +64,13 @@ export default (state = initialState, { type, payload }) => {
 					start: payload,
 					dates: []
 				}
+			};
+		}
+		case types.CALENDAR_CANCEL: {
+			return {
+				...state,
+				current: '',
+				calendar: initialCalendar
 			};
 		}
 		case types.WEEKEND_TOGGLE: {
@@ -145,6 +155,7 @@ export const actions = {
 	monthToggle: (initialDate) => ({ type: types.DATES_TOGGLE, payload: initialDate }),
 	calendarsGet: () => ({ type: types.CALENDARS_GET }),
 	calendarGet: (id) => ({ type: types.CALENDAR_GET, payload: id }),
+	calendarCancel: () => ({ type: types.CALENDAR_CANCEL }),
 	calendarSave: (calendar) => ({ type: types.CALENDAR_SAVE, payload: calendar })
 };
 
@@ -155,4 +166,8 @@ export const getMarks = (dates, initialDate) => {
 
 export const getStats = (dates) => {
 	return dates.length;
+};
+
+export const calendarsGet = (state) => {
+	return state.calendar.calendars.map(({ name, _id }) => ({ key: _id, value: _id, text: `${name}.` }));
 };

@@ -119,4 +119,15 @@ router.get('/:lid', (req, res) => {
 		});
 });
 
+// @route   POST api/lessons/count
+// @desc    Get lessons count for Subject and Class number
+// @access  Public
+router.post('/count', (req, res) => {
+	const { subject, classn, isextended } = req.body;
+	Lesson.find({ subject, classn, ...(isextended && { isextended }) }) // isextended is false only for ordinal lessons. For all please omit the parameter
+		.then((results) => res.json({ classn: results.length }))
+		.catch((error) => {
+			res.status(404).json({ error });
+		});
+});
 module.exports = router;

@@ -35,19 +35,21 @@ class Calendar extends Component {
 		calendarSave(calendar);
 	};
 	cancel = () => {
-		this.props.history.goBack();
+		this.props.calendarCancel();
+		//this.props.history.goBack();
 	};
 	remove = () => {
 		console.log('remove');
 	};
 	render() {
 		const { days, errors, loading, calendars, current } = this.props;
-		const { start, weekends, name } = this.props.calendar;
+		const { start, weekends, name, group, year } = this.props.calendar;
 		const selections = calendars.map(({ _id, name }) => ({ key: _id, value: _id, text: name }));
 		const workWeeks = weekends.length < 7 ? Math.round(days / (7 - weekends.length)) : 0;
 		const workRate = Math.round(days / 365 * 100);
 		let dt = moment({ year: 2019, month: start, day: 1 });
 		const mm = [];
+
 		for (let i = 0; i < 12; i++) {
 			mm.push(
 				<Grid.Column key={`month${i}`}>
@@ -58,6 +60,7 @@ class Calendar extends Component {
 					/>
 				</Grid.Column>
 			);
+
 			dt.add(1, 'month');
 		}
 		return (
@@ -78,17 +81,41 @@ class Calendar extends Component {
 							placeholder="Выберите календарь или начните заполнять новый"
 							value={current}
 							onChange={this.calendarSet}
-							width={5}
+							width={16}
 						/>
-						<Form.Field
-							value={name}
-							control={Input}
-							onChange={this.onChange}
-							name="name"
-							label="Title"
-							placeholder="Title"
-							size="big"
-						/>
+						<Form.Group>
+							<Form.Field
+								value={name}
+								control={Input}
+								onChange={this.onChange}
+								name="name"
+								label="Title"
+								placeholder="Title"
+								size="big"
+								width={9}
+							/>
+
+							<Form.Field
+								value={group}
+								control={Input}
+								onChange={this.onChange}
+								name="group"
+								label="Group"
+								placeholder="Group"
+								size="big"
+								width={5}
+							/>
+							<Form.Field
+								value={year}
+								control={Input}
+								onChange={this.onChange}
+								name="year"
+								label="Start Year"
+								placeholder="Year"
+								size="big"
+								width={2}
+							/>
+						</Form.Group>
 						<Form.Group inline>
 							<Form.Select
 								fluid

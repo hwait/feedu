@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Segment, Grid, Message } from 'semantic-ui-react';
 
-import SubjectsCheckboxes from '../subjects/subjectsCheckboxes';
+import SubjectsCheckboxes from '../subjects/SubjectsCheckboxes';
 import InputField from '../misc/InputField';
 import getClasses from '../../utils/getClasses';
 

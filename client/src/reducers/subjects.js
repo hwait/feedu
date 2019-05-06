@@ -114,6 +114,12 @@ export const getSubjectsByClass = (state) => {
 		}))
 		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 };
+export const getSubjectsByUser = (state) => {
+	const arr = state.auth.user.subjects;
+	return state.subjects.subjects
+		.filter((x) => arr.findIndex((s) => s === x.id) > -1)
+		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+};
 export const getCurentSubject = (state) => {
 	const subject = state.subjects.subjects.find((x) => x.id === state.subjects.current);
 	return subject ? { name: subject.name, id: subject.id, classn: state.subjects.filter } : {};

@@ -18,7 +18,7 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: convertErrors(errors.array()) });
 		}
-		const { _id, name, dates, weekends, start } = req.body;
+		const { _id, name, dates, weekends, start, year, group } = req.body;
 		if (_id) {
 			Calendar.findById(_id).then((calendar) => {
 				if (calendar) {
@@ -26,6 +26,8 @@ router.post(
 					calendar.dates = dates;
 					calendar.weekends = weekends;
 					calendar.start = start;
+					calendar.year = year;
+					calendar.group = group;
 					calendar // Try to save Calendar
 						.save()
 						.then(() => res.json({ success: true }))
@@ -39,7 +41,9 @@ router.post(
 				name,
 				dates,
 				weekends,
-				start
+				start,
+				year,
+				group
 			});
 			newCalendar // Try to save Calendar
 				.save()
@@ -68,10 +72,10 @@ router.get('/', (req, res) => {
 	Calendar.find({}) //
 		.then((calendars) =>
 			res.json(
-				calendars.map(({ _id, name, author }) => {
+				calendars.map(({ _id, name, group }) => {
 					return {
 						_id,
-						name
+						name: `[${group}]: ${name}`
 					};
 				})
 			)

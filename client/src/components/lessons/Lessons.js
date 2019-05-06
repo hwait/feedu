@@ -6,7 +6,8 @@ import getClasses from '../../utils/getClasses';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as lessonsActions } from '../../reducers/lessons';
 import { actions as booksActions } from '../../reducers/books';
-import SubjectsList from '../subjects/subjectsList';
+import { getSubjectsByClass } from '../../reducers/subjects';
+import SubjectsList from '../subjects/SubjectsList';
 import LessonsList from './LessonsList';
 
 const classes = getClasses();
@@ -33,7 +34,7 @@ class Lessons extends Component {
 		booksGet(filter, value);
 	};
 	render() {
-		const { curSubject, filter, loading } = this.props;
+		const { curSubject, subjects, filter, loading } = this.props;
 		const classitems = classes.map(({ text, value }) => (
 			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
 				{text}
@@ -47,7 +48,7 @@ class Lessons extends Component {
 					</Menu>
 					<Segment placeholder={filter === 0} textAlign={filter === 0 ? 'center' : 'left'}>
 						{filter > 0 ? (
-							<SubjectsList setSubject={this.setSubject} />
+							<SubjectsList setSubject={this.setSubject} subjects={subjects} />
 						) : (
 							<Header as="h1" disabled>
 								Subjects
@@ -83,7 +84,7 @@ Lessons.propTypes = {
 };
 const mapStateToProps = (state) => ({
 	errors: state.lessons.errors,
-	subjects: state.subjects.subjects,
+	subjects: getSubjectsByClass(state),
 	filter: state.subjects.filter,
 	curSubject: state.subjects.current,
 	curLesson: state.lessons.current,

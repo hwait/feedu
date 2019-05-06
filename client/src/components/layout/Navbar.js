@@ -39,7 +39,7 @@ class Navbar extends Component {
 				Board
 			</Menu.Item>
 		);
-		const calendar = (
+		const linkCalendar = (
 			<Menu.Item
 				className="menu-item"
 				as={Link}
@@ -51,6 +51,20 @@ class Navbar extends Component {
 			>
 				<Icon name="calendar" />
 				Board
+			</Menu.Item>
+		);
+		const linkPatterns = (
+			<Menu.Item
+				className="menu-item"
+				as={Link}
+				key="patterns"
+				name="patterns"
+				to="/patterns"
+				active={path === 'patterns'}
+				onClick={this.handleItemClick}
+			>
+				<Icon name="paste" />
+				Pattern
 			</Menu.Item>
 		);
 		const linkLessons = (
@@ -116,7 +130,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const menuItems = isAuthentificated
-			? [ linkDashboard, linkBooks, linkLessons, calendar, linkProfile, linkLogout ]
+			? [ linkDashboard, linkBooks, linkLessons, linkPatterns, linkCalendar, linkProfile, linkLogout ]
 			: [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">

@@ -5,7 +5,8 @@ import { Menu, Segment, Header, Label, Icon } from 'semantic-ui-react';
 import getClasses from '../../utils/getClasses';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as booksActions } from '../../reducers/books';
-import SubjectsList from '../subjects/subjectsList';
+import { getSubjectsByClass } from '../../reducers/subjects';
+import SubjectsList from '../subjects/SubjectsList';
 import BooksList from './BooksList';
 
 const classes = getClasses();
@@ -24,9 +25,6 @@ class Books extends Component {
 	};
 	setBook = (value) => {
 		this.props.bookSetCurrent(value);
-		console.log('====================================');
-		console.log('before push');
-		console.log('====================================');
 		this.props.history.push('/book');
 	};
 	setSubject = (value) => {
@@ -38,7 +36,7 @@ class Books extends Component {
 		this.props.history.push('/book');
 	};
 	render() {
-		const { curSubject, filter, loading } = this.props;
+		const { curSubject, filter, loading, subjects } = this.props;
 		const classitems = classes.map(({ text, value }) => (
 			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
 				{text}
@@ -52,7 +50,7 @@ class Books extends Component {
 					</Menu>
 					<Segment placeholder={filter === 0} textAlign={filter === 0 ? 'center' : 'left'}>
 						{filter > 0 ? (
-							<SubjectsList setSubject={this.setSubject} />
+							<SubjectsList setSubject={this.setSubject} subjects={subjects} />
 						) : (
 							<Header as="h1" disabled>
 								Subjects
@@ -93,7 +91,7 @@ Books.propTypes = {
 };
 const mapStateToProps = (state) => ({
 	errors: state.books.errors,
-	subjects: state.subjects.subjects,
+	subjects: getSubjectsByClass(state),
 	filter: state.subjects.filter,
 	curSubject: state.subjects.current,
 	curBook: state.books.current,

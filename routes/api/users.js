@@ -261,4 +261,20 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
 		.catch((error) => res.status(400).json({ error }));
 });
 
+// @route   get api/users/bind/:uid
+// @desc    Bind Current Studint to Teacher or Parent
+// TODO: This part is not realized yet. It is outside this partial-demo project
+// @access  Private
+router.get('/bind/:uid', passport.authenticate('jwt', { session: false }), (req, res) => {
+	User.findById(req.params.uid)
+		.then((teacher) => {
+			if (teacher) {
+				teacher.users.push(req.user.id);
+			} else {
+				return res.status(404).json({ teacher: 'Target user account not found' });
+			}
+		})
+		.catch((error) => res.status(400).json({ error }));
+});
+
 module.exports = router;

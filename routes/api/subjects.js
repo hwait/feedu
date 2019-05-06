@@ -7,6 +7,7 @@ const { check, validationResult } = require('express-validator/check');
 
 // Load Subject model
 const Subject = require('../../models/Subject');
+const Lesson = require('../../models/Lesson');
 
 // @route   POST api/subjects/add
 // @desc    Add Subject
@@ -55,4 +56,5 @@ router.get('/', (req, res) => {
 			res.status(404).json({ error });
 		});
 });
+
 module.exports = router;

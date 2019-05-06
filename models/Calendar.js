@@ -8,6 +8,14 @@ const Schema = mongoose.Schema;
 */
 
 const CalendarSchema = new Schema({
+	group: {
+		type: String,
+		required: true
+	},
+	year: {
+		type: Number,
+		required: true
+	},
 	name: {
 		type: String,
 		required: true

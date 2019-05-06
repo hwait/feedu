@@ -17,10 +17,14 @@ const PatternSchema = new Schema({
 		ref: 'calendar'
 	},
 	subject: {
-		type: String,
-		required: true
+		type: Schema.Types.ObjectId,
+		ref: 'subject'
 	},
 	weekday: {
+		type: Number,
+		required: true
+	},
+	hour: {
 		type: Number,
 		required: true
 	}
