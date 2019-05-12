@@ -38,6 +38,10 @@
 	margin-left: 60px;
 }
 
+.left-spaced {
+	margin-left: 10px !important;
+}
+
 .work-container {
 	margin-top: 200px;
 	margin-left: 30px;
@@ -58,4 +62,28 @@
 
 .calendar {
 	font-size: 300%;
+}
+
+.c1-odd {
+	background-color: rgba(255, 238, 238, 1);
+}
+
+.c0-odd {
+	background-color: rgba(215, 205, 205, 0.5);
+}
+
+.c2-odd {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.c1-even {
+	background-color: rgba(238, 238, 255, 1);
+}
+
+.c0-even {
+	background-color: rgba(205, 205, 215, 0.5);
+}
+
+.c2-even {
+	background-color: rgba(255, 255, 255, 1);
 }

@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { List, Menu } from 'semantic-ui-react';
+import { Dropdown, Menu, Segment, Select } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-
-class SubjectsClassesList extends Component {
+import isempty from '../../utils/isempty';
+class SubjectsClassesDropdown extends Component {
+	subjectChoose = (e, { value }) => {
+		const { setSubject } = this.props;
+		setSubject(value);
+	};
 	choose = (sid, cn) => {
 		const { setSubjectClass } = this.props;
 		setSubjectClass(sid, cn);
 	};
-
 	classitems = (sid, cls, cle) => {
 		const { filter, current } = this.props;
+		const curid = isempty(current) ? null : current.id;
 		const classes = Array.from(Array(cle + 1).keys()).slice(cls);
 		return classes.map((x) => (
 			<Menu.Item
-				active={current === sid && filter === x}
+				active={curid === sid && filter === x}
 				color="red"
 				key={`${sid}${x}`}
 				onClick={(e, s, c) => this.choose(sid, x)}
@@ -26,20 +30,27 @@ class SubjectsClassesList extends Component {
 
 	render() {
 		const { subjects, current } = this.props;
-		const items = subjects.map(({ id, name, cf, ct }) => {
-			return (
-				<List.Item active={id === current} key={id}>
-					<b>{name}</b>
-					<List.Content floated="right">
-						<Menu compact>{this.classitems(id, cf, ct)}</Menu>
-					</List.Content>
-				</List.Item>
-			);
-		});
+		console.log('====================================');
+		console.log(current, isempty(current));
+		console.log('====================================');
+
+		const sitems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
+		const items = isempty(current) ? null : (
+			<Menu compact className="left-spaced">
+				{this.classitems(current.id, current.cf, current.ct)}
+			</Menu>
+		);
 		return (
-			<List divided selection verticalAlign="middle" size="large">
+			<Segment>
+				<Select
+					label="Subjects"
+					options={sitems}
+					placeholder="Subjects"
+					value={isempty(current) ? null : current.id}
+					onChange={this.subjectChoose}
+				/>
 				{items}
-			</List>
+			</Segment>
 		);
 	}
 }
@@ -47,9 +58,9 @@ const mapStateToProps = (state) => ({
 	filter: state.subjects.filter,
 	current: state.subjects.current
 });
-SubjectsClassesList.propTypes = {
+SubjectsClassesDropdown.propTypes = {
 	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
-	current: PropTypes.string.isRequired
+	current: PropTypes.object.isRequired
 };
-export default connect(mapStateToProps, null)(SubjectsClassesList);
+export default connect(mapStateToProps, null)(SubjectsClassesDropdown);

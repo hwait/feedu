@@ -9,7 +9,7 @@ class SubjectsList extends Component {
 		const { subjects, current, setSubject } = this.props;
 		const items = subjects.map(({ id, name }) => {
 			return (
-				<List.Item active={id === current} key={id} onClick={(e, d) => setSubject(id)}>
+				<List.Item active={id === current.id} key={id} onClick={(e, d) => setSubject(id)}>
 					{name}
 				</List.Item>
 			);
@@ -26,6 +26,6 @@ const mapStateToProps = (state) => ({
 });
 SubjectsList.propTypes = {
 	subjects: PropTypes.array.isRequired,
-	current: PropTypes.string.isRequired
+	current: PropTypes.object.isRequired
 };
 export default connect(mapStateToProps, { ...subjectsActions })(SubjectsList);

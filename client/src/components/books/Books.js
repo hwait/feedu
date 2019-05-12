@@ -8,7 +8,7 @@ import { actions as booksActions } from '../../reducers/books';
 import { getSubjectsByClass } from '../../reducers/subjects';
 import SubjectsList from '../subjects/SubjectsList';
 import BooksList from './BooksList';
-
+import isempty from '../../utils/isempty';
 const classes = getClasses();
 
 class Books extends Component {
@@ -58,11 +58,11 @@ class Books extends Component {
 						)}
 					</Segment>
 					<Segment
-						placeholder={curSubject === ''}
-						textAlign={curSubject ? 'left' : 'center'}
+						placeholder={isempty(curSubject)}
+						textAlign={!isempty(curSubject) ? 'left' : 'center'}
 						loading={loading}
 					>
-						{curSubject ? (
+						{!isempty(curSubject) ? (
 							[
 								<BooksList setBook={this.setBook} />,
 								<Label as="a" attached="bottom right" onClick={this.addBook} color="blue">
@@ -83,7 +83,7 @@ class Books extends Component {
 Books.propTypes = {
 	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
-	curSubject: PropTypes.string.isRequired,
+	curSubject: PropTypes.object.isRequired,
 	curBook: PropTypes.string.isRequired,
 	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,

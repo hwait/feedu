@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Menu, Segment, Header, Form } from 'semantic-ui-react';
+import { Menu, Segment, Header, Select } from 'semantic-ui-react';
 import { actions as subjectsActions, getSubjectsByUser } from '../../reducers/subjects';
 import { actions as patternsActions } from '../../reducers/patterns';
 import { actions as calendarsActions, calendarsGet } from '../../reducers/calendar';
 import SubjectsClassesList from '../subjects/SubjectsClassesList';
+import Pattern from './Pattern';
 import calendar from '../../reducers/calendar';
-
+import isempty from '../../utils/isempty';
 class Patterns extends Component {
 	componentDidMount() {
 		if (this.props.subjects.length === 0) {
@@ -50,7 +51,7 @@ class Patterns extends Component {
 		this.props.calendarGet(value);
 	};
 	render() {
-		const { curSubject, subjects, calendars, calendar, loading } = this.props;
+		const { curSubject, subjects, calendars, calendar, loading, setCurrent } = this.props;
 		console.log('====================================');
 		console.log(subjects);
 		console.log('====================================');
@@ -62,30 +63,32 @@ class Patterns extends Component {
 		return (
 			<div className="dashboard">
 				<Segment.Group>
-					<Form.Select
-						fluid
-						label="Calendars"
-						options={calendars}
-						placeholder="Calendars"
-						value={calendar ? calendar._id : null}
-						onChange={this.calendarGet}
-					/>
 					<Segment>
-						<SubjectsClassesList setSubjectClass={this.setSubjectClass} subjects={subjects} />
+						<Select
+							label="Calendars"
+							options={calendars}
+							placeholder="Calendars"
+							value={calendar ? calendar._id : null}
+							onChange={this.calendarGet}
+						/>
 					</Segment>
+
+					<SubjectsClassesList
+						setSubjectClass={this.setSubjectClass}
+						setSubject={setCurrent}
+						subjects={subjects}
+					/>
 					<Segment
-						placeholder={curSubject === ''}
-						textAlign={curSubject ? 'left' : 'center'}
+						placeholder={isempty(curSubject)}
+						textAlign={isempty(curSubject) ? 'left' : 'center'}
 						loading={loading}
 					>
-						{curSubject ? (
+						{isempty(curSubject) ? (
 							<Header as="h1" disabled>
 								Books curSubject
 							</Header>
 						) : (
-							<Header as="h1" disabled>
-								Books
-							</Header>
+							<Pattern />
 						)}
 					</Segment>
 				</Segment.Group>
@@ -96,7 +99,7 @@ class Patterns extends Component {
 Patterns.propTypes = {
 	subjects: PropTypes.array.isRequired,
 	calendars: PropTypes.array.isRequired,
-	curSubject: PropTypes.string.isRequired,
+	curSubject: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired

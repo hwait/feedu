@@ -16,7 +16,7 @@ const initialState = {
 	errors: [],
 	loading: false,
 	filter: 0,
-	current: ''
+	current: {}
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -25,20 +25,20 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				filter: payload,
-				current: ''
+				current: {}
 			};
 		}
 		case lessonsTypes.LESSONS_GET:
 		case booksTypes.BOOKS_GET: {
 			return {
 				...state,
-				current: payload.sid
+				current: state.subjects.find((x) => x.id === payload.sid)
 			};
 		}
 		case types.SUBJECTS_SET: {
 			return {
 				...state,
-				current: payload
+				current: state.subjects.find((x) => x.id === payload)
 			};
 		}
 		case types.SUBJECTS_REQUEST: {

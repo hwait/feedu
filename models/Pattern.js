@@ -24,7 +24,11 @@ const PatternSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	hour: {
+	ts: {
+		type: Number,
+		required: true
+	},
+	duration: {
 		type: Number,
 		required: true
 	}
