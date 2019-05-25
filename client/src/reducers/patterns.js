@@ -7,21 +7,14 @@ export const types = {
 	PATTERNS_SAVE_OK: 'PATTERNS_SAVE_OK',
 	PATTERNS_FAILURE: 'PATTERNS_FAILURE',
 	PATTERN_ADD: 'PATTERN_ADD',
+	PATTERN_DURATION: 'PATTERN_DURATION',
 	PATTERN_CURRENT: 'PATTERN_CURRENT',
 	PATTERN_REMOVE: 'PATTERN_REMOVE'
 };
 
-const initialPattern = {
-	_id: 0,
-	subject: '',
-	student: '',
-	calendar: '',
-	weekday: 0,
-	hour: 9
-};
-
 const initialState = {
 	patterns: [],
+	duration: 2,
 	errors: {},
 	loading: false
 };
@@ -51,15 +44,23 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.PATTERN_REMOVE: {
+			const { weekday, ts } = payload;
 			return {
 				...state,
-				patterns: Immutable.removeObject(state.patterns, payload)
+				patterns: state.patterns.filter((x) => !(x.weekday === weekday && x.ts === ts))
 			};
 		}
 		case types.PATTERN_ADD: {
+			const collision = state.patterns;
 			return {
 				...state,
 				patterns: Immutable.addItem(state.patterns, payload)
+			};
+		}
+		case types.PATTERN_DURATION: {
+			return {
+				...state,
+				duration: payload
 			};
 		}
 		case types.PATTERN_CURRENT: {
@@ -77,7 +78,17 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
+	patternsGet: (uid) => ({ type: types.PATTERNS_GET, payload: uid }),
 	patternAdd: (item) => ({ type: types.PATTERN_ADD, payload: item }),
-	patternCurrent: (index, isCurrent) => ({ type: types.PATTERN_CURRENT, payload: { index, item: { isCurrent } } }),
-	patternRemove: (index) => ({ type: types.PATTERN_REMOVE, payload: index })
+	patternDuration: (duration) => ({ type: types.PATTERN_DURATION, payload: duration }),
+	//patternCurrent: (index, isCurrent) => ({ type: types.PATTERN_CURRENT, payload: { index, item: { isCurrent } } }),
+	patternRemove: (item) => ({ type: types.PATTERN_REMOVE, payload: item })
+};
+
+export const getPatternsByWeek = (state, weekday) => {
+	const patterns = state.patterns.patterns.filter((x) => x.weekday === weekday).map((x) => {
+		const subj = state.subjects.subjects.find((s) => s.id === x.subject);
+		return { ...x, color: `#${subj.color}`, name: `${subj.name}-${x.cn}` };
+	});
+	return patterns;
 };

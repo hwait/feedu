@@ -219,9 +219,6 @@ router.get('/user/:email', (req, res) => {
 // @desc    Get current user
 // @access  Private
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-	console.log('====================================');
-	console.log(req.user);
-	console.log('====================================');
 	User.findById(req.user.id)
 		.then((user) => {
 			if (user) {

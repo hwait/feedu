@@ -30,7 +30,7 @@ class Lesson extends Component {
 	};
 	copyLesson = () => {
 		console.log('lessonCopy');
-		const { lessonCopy, lesson, subject, nextnmb } = this.props;
+		const { lessonCopy, lesson, nextnmb } = this.props;
 		lessonCopy({ ...lesson, nmb: round((lesson.nmb + nextnmb) / 2) });
 	};
 

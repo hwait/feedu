@@ -27,6 +27,10 @@ const SubjectSchema = new Schema({
 	extendable: {
 		type: Boolean,
 		default: false
+	},
+	color: {
+		type: String,
+		required: true
 	}
 });
 

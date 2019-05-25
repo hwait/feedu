@@ -19,9 +19,6 @@ export default class LessonsAPI {
 		return axios
 			.get(`${root}/video/${payload.link}`)
 			.then((response) => {
-				console.log('=============getVideoInfo==========');
-				console.log(payload, response.data.items[0]);
-				console.log('====================================');
 				return {
 					response: {
 						index: payload.index,

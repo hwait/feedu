@@ -13,7 +13,7 @@ const Pattern = require('../../models/Pattern');
 router.post('/save', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const patternsSave = (depth) => {
 		if (depth >= 0) {
-			const { _id, student, calendar, weekday, hour, subject } = req.body.patterns[depth];
+			const { _id, student, calendar, weekday, ts, dur, cn, subject } = req.body.patterns[depth];
 			if (_id) {
 				Pattern.findById(_id).then((pattern) => {
 					if (pattern) {
@@ -21,7 +21,9 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 						pattern.student = student;
 						pattern.calendar = calendar;
 						pattern.weekday = weekday;
-						pattern.hour = hour;
+						pattern.ts = ts;
+						pattern.dur = dur;
+						pattern.cn = cn;
 						pattern // Try to save Pattern
 							.save()
 							.then(patternsSave(depth - 1))
@@ -36,7 +38,9 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 					student,
 					calendar,
 					weekday,
-					hour
+					ts,
+					dur,
+					cn
 				});
 				newPattern // Try to save Pattern
 					.save()

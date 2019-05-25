@@ -42,7 +42,7 @@ class Calendar extends Component {
 		console.log('remove');
 	};
 	render() {
-		const { days, errors, loading, calendars, current } = this.props;
+		const { days, loading, calendars, current } = this.props;
 		const { start, weekends, name, group, year } = this.props.calendar;
 		const selections = calendars.map(({ _id, name }) => ({ key: _id, value: _id, text: name }));
 		const workWeeks = weekends.length < 7 ? Math.round(days / (7 - weekends.length)) : 0;

@@ -2,96 +2,39 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Menu, Segment, Label, Table } from 'semantic-ui-react';
-import { actions as subjectsActions, getSubjectsByUser } from '../../reducers/subjects';
-import { actions as patternsActions } from '../../reducers/patterns';
-import { actions as calendarsActions, calendarsGet } from '../../reducers/calendar';
-import SubjectsClassesList from '../subjects/SubjectsClassesList';
-import calendar from '../../reducers/calendar';
+import { Segment, Label, Table } from 'semantic-ui-react';
+import { getPatternsByWeek } from '../../reducers/patterns';
 import isempty from '../../utils/isempty';
 class Pattern extends Component {
-	setCurrentPattern = (value) => {
-		console.log('============setCurrentPattern=================');
-		console.log(value);
-		console.log('====================================');
-	};
-	addPattern = (value) => {
-		let ts = moment('0800', 'Hmm');
-		ts.add(20 * value, 'm');
-		console.log('============addPattern=================');
-		console.log(value, ts.format('HHmm'));
-		console.log('====================================');
-	};
-	removePattern = (value) => {
-		let ts = moment('0800', 'Hmm');
-		ts.add(20 * value, 'm');
-		console.log('============removePattern=================');
-		console.log(value, ts.format('HHmm'));
-		console.log('====================================');
-	};
 	getGrid = () => {
-		const scheduled = [
-			{
-				student: '',
-				calendar: '',
-				subject: '',
-				weekday: 0,
-				ts: 14,
-				duration: 3,
-				color: '#992555',
-				name: 'Математика-6'
-			},
-			{
-				student: '',
-				calendar: '',
-				subject: '',
-				weekday: 0,
-				ts: 18,
-				duration: 2,
-				color: '#656588',
-				name: 'Химия-8'
-			},
-			{
-				student: '',
-				calendar: '',
-				subject: '',
-				weekday: 0,
-				ts: 41,
-				duration: 3,
-				color: '#656588',
-				name: 'Химия-8'
-			}
-		];
+		const { weekday, patterns, addPattern, removePattern } = this.props;
 		let ts = moment('0800', 'Hmm');
-		let bgc = '',
-			pref = '',
-			max = 0,
-			cell = null;
+		let pref = '',
+			max = 0;
 		const tt = [];
 		for (let i = 0; i <= 41; i++) {
 			if (i % 3 === 0) {
 				pref = pref === 'odd' ? 'even' : 'odd';
 			}
 			const cln = `c${i % 3}-${pref}`;
-			const x = scheduled.find((x) => x.ts === i);
-			let cell = <Table.Cell className={cln} onClick={(e, t) => this.addPattern(i)} />;
+			let x = patterns.find((x) => x.ts === i);
+			let cell = <Table.Cell className={cln} onClick={(e, t, w) => addPattern(i, weekday)} />;
 			if (!isempty(x)) {
-				console.log(i, 'start rowspan');
 				cell = (
-					<Table.Cell rowSpan={x.duration} style={{ backgroundColor: x.color, color: '#FFF' }}>
+					<Table.Cell rowSpan={x.dur} style={{ backgroundColor: x.color, color: '#FFF' }}>
 						{x.name}
 						<Label
 							size="mini"
 							as="a"
 							color="red"
 							className="left-spaced"
-							onClick={(e, t) => this.removePattern(i)}
+							onClick={(e, t, w) => removePattern(i, weekday)}
 						>
 							X
 						</Label>
 					</Table.Cell>
 				);
-				max = x.ts + x.duration;
+				max = x.ts + x.dur;
 				x = {};
 			} else if (i < max) {
 				cell = null;
@@ -114,11 +57,17 @@ class Pattern extends Component {
 		return tt;
 	};
 	render() {
-		//const { curSubject, subjects, calendars, calendar, loading, setCurrent } = this.props;
+		const { name } = this.props;
 		const tt = this.getGrid();
 		return (
 			<Segment>
 				<Table celled padded compact="very" size="small">
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell colSpan={2}>{name}</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+
 					<Table.Body>{tt}</Table.Body>
 				</Table>
 			</Segment>
@@ -126,24 +75,13 @@ class Pattern extends Component {
 	}
 }
 Pattern.propTypes = {
-	subjects: PropTypes.array.isRequired,
-	calendars: PropTypes.array.isRequired,
-	curSubject: PropTypes.object.isRequired,
-	errors: PropTypes.object.isRequired,
-	loading: PropTypes.bool.isRequired,
-	isAuthentificated: PropTypes.bool.isRequired
+	addPattern: PropTypes.func.isRequired,
+	name: PropTypes.string.isRequired,
+	removePattern: PropTypes.func.isRequired,
+	patterns: PropTypes.array.isRequired,
+	weekday: PropTypes.number.isRequired
 };
-const mapStateToProps = (state) => ({
-	errors: state.patterns.errors,
-	calendar: state.calendar.calendar,
-	calendars: calendarsGet(state),
-	subjects: getSubjectsByUser(state),
-	curSubject: state.subjects.current,
-	loading: state.patterns.loading,
-	isAuthentificated: state.auth.isAuthentificated
+const mapStateToProps = (state, ownProps) => ({
+	patterns: getPatternsByWeek(state, ownProps.weekday)
 });
-export default connect(mapStateToProps, {
-	...subjectsActions,
-	...patternsActions,
-	...calendarsActions
-})(Pattern);
+export default connect(mapStateToProps, null)(Pattern);

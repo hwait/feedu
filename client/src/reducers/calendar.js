@@ -1,6 +1,6 @@
 import Immutable from '../utils/immutable';
 import moment from 'moment';
-
+moment.locale('ru');
 export const types = {
 	FC: 'CALENDAR/FC',
 	START_SET: 'CALENDAR/START_SET',
@@ -170,4 +170,13 @@ export const getStats = (dates) => {
 
 export const calendarsGet = (state) => {
 	return state.calendar.calendars.map(({ name, _id }) => ({ key: _id, value: _id, text: `${name}.` }));
+};
+
+export const calendarDaysInWeeks = (state) => {
+	const arr = [ 0, 0, 0, 0, 0, 0, 0 ];
+	state.calendar.calendar.dates.forEach((x) => {
+		arr[moment(x).weekday()]++;
+	});
+
+	return arr;
 };

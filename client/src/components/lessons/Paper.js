@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment, Form, Label, Button, Input } from 'semantic-ui-react';
+import { Segment, Form, Label, Input } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
 
 class Paper extends Component {

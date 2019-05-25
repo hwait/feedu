@@ -28,7 +28,12 @@ const PatternSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	duration: {
+	dur: {
+		type: Number,
+		required: true
+	},
+	cn: {
+		//Class Nmb
 		type: Number,
 		required: true
 	}

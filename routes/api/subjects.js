@@ -47,6 +47,7 @@ router.get('/', (req, res) => {
 					id: x._id,
 					name: x.name,
 					extendable: x.extendable,
+					color: x.color,
 					cf: x.classfrom,
 					ct: x.classto
 				}))

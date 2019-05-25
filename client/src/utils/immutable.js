@@ -22,6 +22,9 @@ export default class Immutable {
 	static removeItem(array, item) {
 		return array.filter((x) => x !== item);
 	}
+	static removeItemById(array, id) {
+		return array.filter((x) => x._id !== id);
+	}
 	static removeObject(array, item) {
 		return array.filter((x) => !x.isSame(item));
 	}

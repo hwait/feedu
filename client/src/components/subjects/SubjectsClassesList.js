@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown, Menu, Segment, Select } from 'semantic-ui-react';
+import { Menu, Segment, Select } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import isempty from '../../utils/isempty';
 class SubjectsClassesDropdown extends Component {
@@ -30,10 +30,6 @@ class SubjectsClassesDropdown extends Component {
 
 	render() {
 		const { subjects, current } = this.props;
-		console.log('====================================');
-		console.log(current, isempty(current));
-		console.log('====================================');
-
 		const sitems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const items = isempty(current) ? null : (
 			<Menu compact className="left-spaced">
