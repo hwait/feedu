@@ -13,7 +13,7 @@ const Pattern = require('../../models/Pattern');
 router.post('/save', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const patternsSave = (depth) => {
 		if (depth >= 0) {
-			const { _id, student, calendar, weekday, ts, dur, cn, subject } = req.body.patterns[depth];
+			const { _id, student, calendar, weekday, ts, dur, cn, subject } = req.body[depth];
 			if (_id) {
 				Pattern.findById(_id).then((pattern) => {
 					if (pattern) {
@@ -51,7 +51,8 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 			}
 		}
 	};
-	patternsSave(req.body.patterns.length - 1);
+	patternsSave(req.body.length - 1);
+
 	return res.json({ success: true });
 });
 
@@ -63,14 +64,16 @@ router.get('/student/:id', (req, res) => {
 	Pattern.find({ student: id }) //
 		.then((patterns) =>
 			res.json(
-				patterns.map(({ _id, subject, student, calendar, weekday, hour }) => {
+				patterns.map(({ _id, subject, student, calendar, weekday, ts, dur, cn }) => {
 					return {
 						_id,
 						subject,
 						student,
 						calendar,
 						weekday,
-						hour
+						ts,
+						dur,
+						cn
 					};
 				})
 			)
@@ -86,14 +89,16 @@ router.get('/subject/:id', (req, res) => {
 	Pattern.find({ subject: id }) //
 		.then((patterns) =>
 			res.json(
-				patterns.map(({ _id, subject, student, calendar, weekday, hour }) => {
+				patterns.map(({ _id, subject, student, calendar, weekday, ts, dur, cn }) => {
 					return {
 						_id,
 						subject,
 						student,
 						calendar,
 						weekday,
-						hour
+						ts,
+						dur,
+						cn
 					};
 				})
 			)
@@ -101,16 +106,16 @@ router.get('/subject/:id', (req, res) => {
 		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
 });
 
-// @route   DELETE api/patterns/delete/:id
+// @route   DELETE api/patterns/remove
 // @desc    Delete pattern
 // @access  Private
 // TODO: DELETE: Check Role (Techer, Parent) and binding to supervisored Students only.
-router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-	const { id } = req.params;
+router.post('/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const { id, weekday, ts } = req.body;
 	Pattern.findById(id)
 		.then((pattern) => {
 			if (pattern) {
-				pattern.remove().then(() => res.json({ success: true }));
+				pattern.remove().then(() => res.json({ weekday, ts }));
 			} else {
 				return res.status(404).json({ pattern: 'Pattern not found' });
 			}

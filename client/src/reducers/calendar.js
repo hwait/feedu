@@ -118,6 +118,7 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				...payload,
+				current: payload.calendar ? payload.calendar._id : '',
 				errors: {},
 				loading: false
 			};

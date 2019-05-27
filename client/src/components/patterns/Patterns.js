@@ -11,15 +11,21 @@ import isempty from '../../utils/isempty';
 import moment from 'moment';
 class Patterns extends Component {
 	componentDidMount() {
-		if (this.props.subjects.length === 0) {
-			this.props.init();
+		const { subjects, calendars, uid, init, calendarsGet, patternsGet, isAuthentificated, history } = this.props;
+		if (subjects.length === 0) {
+			init();
 		}
-		if (this.props.calendars.length === 0) {
-			this.props.calendarsGet();
+		if (calendars.length === 0) {
+			calendarsGet();
 		}
-		if (!this.props.isAuthentificated) {
-			this.props.history.push('/');
+		patternsGet(uid);
+		if (!isAuthentificated) {
+			history.push('/');
 		}
+	}
+	componentDidUpdate() {
+		const { errors, patternsGet, uid } = this.props;
+		if (errors && errors.success) patternsGet(uid);
 	}
 	getSubjects = (value) => {
 		this.props.setFilter(value);
@@ -29,11 +35,18 @@ class Patterns extends Component {
 		setFilter(cn);
 		setCurrent(sid);
 	};
-	setDuration = (duration) => {
-		this.props.patternDuration(duration);
+	setDuration = (dur) => {
+		this.props.patternDuration(dur);
+	};
+	save = () => {
+		const { patterns, patternsSave } = this.props;
+		console.log('===========save====================');
+		console.log(patterns);
+		console.log('====================================');
+		patternsSave(patterns);
 	};
 	addPattern = (value, weekday) => {
-		const { curSubject, calendar, classn, uid, duration, patternAdd } = this.props;
+		const { curSubject, calendar, classn, uid, dur, patternAdd } = this.props;
 		if (!isempty(curSubject) && classn > 0)
 			patternAdd({
 				subject: curSubject.id,
@@ -42,14 +55,15 @@ class Patterns extends Component {
 				student: uid,
 				weekday,
 				ts: value,
-				dur: duration
+				dur
 			});
 	};
-	removePattern = (value, weekday) => {
-		this.props.patternRemove({
-			weekday,
-			ts: value
-		});
+	removePattern = (value, weekday, id) => {
+		console.log('==========removePattern===============');
+		console.log(value, weekday, id);
+		console.log('====================================');
+		if (id) this.props.patternRemove({ weekday, ts: value, id });
+		else this.props.patternRemoveImmediate({ weekday, ts: value });
 	};
 	calendarGet = (e, { value }) => {
 		this.props.calendarGet(value);
@@ -63,13 +77,15 @@ class Patterns extends Component {
 		return wd;
 	};
 	renderTables = () => {
+		const { weekdays, calendar } = this.props;
 		const wn = moment.weekdays(true);
-		const wd = this.props.weekdays.map(
+		const wd = weekdays.map(
 			(x, index) =>
 				x > 0 ? (
 					<Pattern
 						key={`patt${index}`}
 						weekday={index}
+						calendar={calendar ? calendar._id : null}
 						addPattern={this.addPattern}
 						removePattern={this.removePattern}
 						name={wn[index]}
@@ -79,7 +95,7 @@ class Patterns extends Component {
 		return wd;
 	};
 	render() {
-		const { subjects, calendars, calendar, loading, setCurrent, duration } = this.props;
+		const { subjects, calendars, calendar, loading, setCurrent, dur } = this.props;
 		const wd = this.renderWeekDays();
 		const patt = this.renderTables();
 		return (
@@ -94,19 +110,19 @@ class Patterns extends Component {
 							onChange={this.calendarGet}
 						/>
 						<Menu compact className="left-spaced">
-							<Menu.Item active={duration === 2} color="blue" onClick={(e, s, c) => this.setDuration(2)}>
+							<Menu.Item active={dur === 2} color="blue" onClick={(e, s, c) => this.setDuration(2)}>
 								40 min
 							</Menu.Item>
-							<Menu.Item active={duration === 3} color="blue" onClick={(e, s, c) => this.setDuration(3)}>
+							<Menu.Item active={dur === 3} color="blue" onClick={(e, s, c) => this.setDuration(3)}>
 								1 hour
 							</Menu.Item>
-							<Menu.Item active={duration === 4} color="blue" onClick={(e, s, c) => this.setDuration(4)}>
+							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(4)}>
 								1 h 20 min
 							</Menu.Item>
-							<Menu.Item active={duration === 5} color="blue" onClick={(e, s, c) => this.setDuration(5)}>
+							<Menu.Item active={dur === 5} color="blue" onClick={(e, s, c) => this.setDuration(5)}>
 								1 h 40 min
 							</Menu.Item>
-							<Menu.Item active={duration === 6} color="blue" onClick={(e, s, c) => this.setDuration(6)}>
+							<Menu.Item active={dur === 6} color="blue" onClick={(e, s, c) => this.setDuration(6)}>
 								2 hours
 							</Menu.Item>
 						</Menu>
@@ -115,6 +131,7 @@ class Patterns extends Component {
 
 					<SubjectsClassesList
 						setSubjectClass={this.setSubjectClass}
+						save={this.save}
 						setSubject={setCurrent}
 						subjects={subjects}
 					/>
@@ -136,11 +153,12 @@ class Patterns extends Component {
 Patterns.propTypes = {
 	uid: PropTypes.string.isRequired,
 	subjects: PropTypes.array.isRequired,
+	patterns: PropTypes.array.isRequired,
 	calendars: PropTypes.array.isRequired,
 	calendar: PropTypes.object.isRequired,
 	curSubject: PropTypes.object.isRequired,
 	classn: PropTypes.number.isRequired,
-	duration: PropTypes.number.isRequired,
+	dur: PropTypes.number.isRequired,
 	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired
@@ -148,6 +166,7 @@ Patterns.propTypes = {
 const mapStateToProps = (state) => ({
 	uid: state.auth.user.id,
 	errors: state.patterns.errors,
+	patterns: state.patterns.patterns,
 	calendar: state.calendar.calendar,
 	calendars: calendarsGet(state),
 	weekdays: calendarDaysInWeeks(state),
@@ -155,7 +174,7 @@ const mapStateToProps = (state) => ({
 	curSubject: state.subjects.current,
 	classn: state.subjects.filter,
 	loading: state.patterns.loading,
-	duration: state.patterns.duration,
+	dur: state.patterns.dur,
 	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, {

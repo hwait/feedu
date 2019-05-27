@@ -27,3 +27,16 @@ function* patternSave(action) {
 export function* patternSaveWatch() {
 	yield takeEvery(patternsTypes.PATTERNS_SAVE, patternSave);
 }
+
+function* patternRemove(action) {
+	const { response, errors } = yield call(PatternsAPI.remove, action.payload);
+	if (response) {
+		yield put({ type: patternsTypes.PATTERN_REMOVE_OK, payload: response });
+	} else {
+		yield put({ type: patternsTypes.PATTERN_FAILURE, payload: errors });
+	}
+}
+
+export function* patternRemoveWatch() {
+	yield takeEvery(patternsTypes.PATTERN_REMOVE, patternRemove);
+}

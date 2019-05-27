@@ -4,7 +4,7 @@ import { watchGetSubjects } from './subjects';
 import { lessonsGetWatch, lessonGetWatch, videoInfoGetWatch, lessonSaveWatch } from './lessons';
 import { booksGetWatch, bookGetWatch, bookSaveWatch } from './books';
 import { calendarsGetWatch, calendarGetWatch, calendarSaveWatch } from './calendar';
-import { patternsGetWatch, patternSaveWatch } from './patterns';
+import { patternsGetWatch, patternSaveWatch, patternRemoveWatch } from './patterns';
 
 export default function* rootSaga() {
 	yield all([
@@ -12,6 +12,7 @@ export default function* rootSaga() {
 		fork(watchSaveUser),
 		fork(watchLoginUser),
 		fork(patternsGetWatch),
+		fork(patternRemoveWatch),
 		fork(patternSaveWatch),
 		fork(calendarsGetWatch),
 		fork(calendarGetWatch),

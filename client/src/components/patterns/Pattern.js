@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Segment, Label, Table } from 'semantic-ui-react';
-import { getPatternsByWeek } from '../../reducers/patterns';
+import { getPatternsByCalendar } from '../../reducers/patterns';
 import isempty from '../../utils/isempty';
 class Pattern extends Component {
 	getGrid = () => {
@@ -18,8 +18,10 @@ class Pattern extends Component {
 			}
 			const cln = `c${i % 3}-${pref}`;
 			let x = patterns.find((x) => x.ts === i);
+
 			let cell = <Table.Cell className={cln} onClick={(e, t, w) => addPattern(i, weekday)} />;
 			if (!isempty(x)) {
+				const id = x._id;
 				cell = (
 					<Table.Cell rowSpan={x.dur} style={{ backgroundColor: x.color, color: '#FFF' }}>
 						{x.name}
@@ -28,7 +30,7 @@ class Pattern extends Component {
 							as="a"
 							color="red"
 							className="left-spaced"
-							onClick={(e, t, w) => removePattern(i, weekday)}
+							onClick={(e, t, w, d) => removePattern(i, weekday, id)}
 						>
 							X
 						</Label>
@@ -77,11 +79,12 @@ class Pattern extends Component {
 Pattern.propTypes = {
 	addPattern: PropTypes.func.isRequired,
 	name: PropTypes.string.isRequired,
+	calendar: PropTypes.string.isRequired,
 	removePattern: PropTypes.func.isRequired,
 	patterns: PropTypes.array.isRequired,
 	weekday: PropTypes.number.isRequired
 };
-const mapStateToProps = (state, ownProps) => ({
-	patterns: getPatternsByWeek(state, ownProps.weekday)
+const mapStateToProps = (state, props) => ({
+	patterns: getPatternsByCalendar(state, props)
 });
 export default connect(mapStateToProps, null)(Pattern);

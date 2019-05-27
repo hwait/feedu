@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Menu, Segment, Select } from 'semantic-ui-react';
+import { Menu, Segment, Select, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import isempty from '../../utils/isempty';
 class SubjectsClassesDropdown extends Component {
@@ -29,7 +29,7 @@ class SubjectsClassesDropdown extends Component {
 	};
 
 	render() {
-		const { subjects, current } = this.props;
+		const { subjects, current, save } = this.props;
 		const sitems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const items = isempty(current) ? null : (
 			<Menu compact className="left-spaced">
@@ -46,6 +46,7 @@ class SubjectsClassesDropdown extends Component {
 					onChange={this.subjectChoose}
 				/>
 				{items}
+				<Button content="Save" icon="save" labelPosition="left" onClick={save} positive />
 			</Segment>
 		);
 	}
@@ -55,6 +56,7 @@ const mapStateToProps = (state) => ({
 	current: state.subjects.current
 });
 SubjectsClassesDropdown.propTypes = {
+	save: PropTypes.func.isRequired,
 	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
 	current: PropTypes.object.isRequired
