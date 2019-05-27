@@ -102,6 +102,18 @@ const getCalendarFilter = (state) => {
 	return state.calendar.current;
 };
 
+const getSubjectFilter = (state) => {
+	return state.subjects.current.id;
+};
+
+const getClassFilter = (state) => {
+	return state.subjects.filter;
+};
+
+const getPatterns = (state) => {
+	return state.patterns.patterns;
+};
+
 export const getPatternsByWeek = (state, props) => {
 	const patterns = state.patterns.patterns.filter((x) => x.weekday === props.weekday).map((x) => {
 		const subj = state.subjects.subjects.find((s) => s.id === x.subject);
@@ -113,5 +125,11 @@ export const getPatternsByCalendar = createSelector(
 	[ getCalendarFilter, getPatternsByWeek ],
 	(calendarFilter, patterns) => {
 		return patterns.filter((x) => x.calendar === calendarFilter);
+	}
+);
+export const getSubjectDays = createSelector(
+	[ getSubjectFilter, getClassFilter, getPatterns ],
+	(sid, classn, patterns) => {
+		return patterns.filter((x) => x.subject === sid && x.cn === classn).reduce((a, b) => a + (b.days || 0), 0);
 	}
 );

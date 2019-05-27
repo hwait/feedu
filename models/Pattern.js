@@ -36,6 +36,11 @@ const PatternSchema = new Schema({
 		//Class Nmb
 		type: Number,
 		required: true
+	},
+	days: {
+		//Days in the calendar
+		type: Number,
+		required: true
 	}
 });
 

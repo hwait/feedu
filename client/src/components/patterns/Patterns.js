@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Menu, Segment, Header, Select, Label } from 'semantic-ui-react';
 import { actions as subjectsActions, getSubjectsByUser } from '../../reducers/subjects';
-import { actions as patternsActions } from '../../reducers/patterns';
+import { actions as patternsActions, getSubjectDays } from '../../reducers/patterns';
 import { actions as calendarsActions, calendarsGet, calendarDaysInWeeks } from '../../reducers/calendar';
 import SubjectsClassesList from '../subjects/SubjectsClassesList';
 import Pattern from './Pattern';
@@ -46,7 +46,7 @@ class Patterns extends Component {
 		patternsSave(patterns);
 	};
 	addPattern = (value, weekday) => {
-		const { curSubject, calendar, classn, uid, dur, patternAdd } = this.props;
+		const { curSubject, calendar, weekdays, classn, uid, dur, patternAdd } = this.props;
 		if (!isempty(curSubject) && classn > 0)
 			patternAdd({
 				subject: curSubject.id,
@@ -55,7 +55,8 @@ class Patterns extends Component {
 				student: uid,
 				weekday,
 				ts: value,
-				dur
+				dur,
+				days: weekdays[weekday]
 			});
 	};
 	removePattern = (value, weekday, id) => {
@@ -95,7 +96,7 @@ class Patterns extends Component {
 		return wd;
 	};
 	render() {
-		const { subjects, calendars, calendar, loading, setCurrent, dur } = this.props;
+		const { subjects, calendars, calendar, loading, setCurrent, dur, days } = this.props;
 		const wd = this.renderWeekDays();
 		const patt = this.renderTables();
 		return (
@@ -134,6 +135,7 @@ class Patterns extends Component {
 						save={this.save}
 						setSubject={setCurrent}
 						subjects={subjects}
+						days={days}
 					/>
 
 					{calendar._id ? (
@@ -169,6 +171,7 @@ const mapStateToProps = (state) => ({
 	patterns: state.patterns.patterns,
 	calendar: state.calendar.calendar,
 	calendars: calendarsGet(state),
+	days: getSubjectDays(state),
 	weekdays: calendarDaysInWeeks(state),
 	subjects: getSubjectsByUser(state),
 	curSubject: state.subjects.current,

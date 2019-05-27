@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Menu, Segment, Select, Button } from 'semantic-ui-react';
+import { Menu, Segment, Select, Button, Label } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import isempty from '../../utils/isempty';
 class SubjectsClassesDropdown extends Component {
@@ -29,7 +29,7 @@ class SubjectsClassesDropdown extends Component {
 	};
 
 	render() {
-		const { subjects, current, save } = this.props;
+		const { subjects, current, save, days } = this.props;
 		const sitems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const items = isempty(current) ? null : (
 			<Menu compact className="left-spaced">
@@ -46,7 +46,18 @@ class SubjectsClassesDropdown extends Component {
 					onChange={this.subjectChoose}
 				/>
 				{items}
-				<Button content="Save" icon="save" labelPosition="left" onClick={save} positive />
+				<Label size="large" className="left-spaced">
+					Total:
+					<Label.Detail>{days}</Label.Detail>
+				</Label>
+				<Button
+					content="Save"
+					icon="save"
+					labelPosition="left"
+					onClick={save}
+					positive
+					className="left-spaced"
+				/>
 			</Segment>
 		);
 	}
@@ -57,6 +68,7 @@ const mapStateToProps = (state) => ({
 });
 SubjectsClassesDropdown.propTypes = {
 	save: PropTypes.func.isRequired,
+	days: PropTypes.number.isRequired,
 	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
 	current: PropTypes.object.isRequired

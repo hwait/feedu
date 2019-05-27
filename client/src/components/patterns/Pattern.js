@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Segment, Label, Table } from 'semantic-ui-react';
+import { Segment, Label, Table, Header } from 'semantic-ui-react';
 import { getPatternsByCalendar } from '../../reducers/patterns';
 import isempty from '../../utils/isempty';
 class Pattern extends Component {
@@ -66,7 +66,9 @@ class Pattern extends Component {
 				<Table celled padded compact="very" size="small">
 					<Table.Header>
 						<Table.Row>
-							<Table.HeaderCell colSpan={2}>{name}</Table.HeaderCell>
+							<Table.HeaderCell colSpan={2}>
+								<Header as="h3">{name}</Header>
+							</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 
