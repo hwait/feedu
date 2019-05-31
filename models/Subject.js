@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 /**
 |--------------------------------------------------
-| Subjects with Lessons links
+| Subjects 
 |--------------------------------------------------
 */
 
@@ -12,21 +12,9 @@ const SubjectSchema = new Schema({
 		type: String,
 		required: true
 	},
-	reshid: {
-		type: Number,
+	icon: {
+		type: String,
 		required: true
-	},
-	classfrom: {
-		type: Number,
-		required: true
-	},
-	classto: {
-		type: Number,
-		required: true
-	},
-	extendable: {
-		type: Boolean,
-		default: false
 	},
 	color: {
 		type: String,

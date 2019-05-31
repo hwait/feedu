@@ -14,8 +14,6 @@ router.post(
 	[
 		check('name').isLength({ min: 2 }),
 		check('author').isLength({ min: 2 }),
-		check('classfrom').isInt({ gt: -1, lt: 13 }),
-		check('classto').isInt({ gt: -1, lt: 13 }),
 		check('type').isInt({ gt: -1, lt: 6 }),
 		check('year').isInt()
 	],
@@ -25,15 +23,13 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: convertError(errors.errors) });
 		}
-		const { _id, name, author, classfrom, classto, type, year, binded, subject } = req.body;
+		const { _id, name, author, type, year, binded, subject } = req.body;
 		if (_id) {
 			Book.findById(_id).then((book) => {
 				if (book) {
 					book.subject = subject;
 					book.name = name;
 					book.author = author;
-					book.classfrom = classfrom;
-					book.classto = classto;
 					book.type = type;
 					book.year = year;
 					if (binded) book.binded = binded;
@@ -50,8 +46,6 @@ router.post(
 				subject,
 				name,
 				author,
-				classfrom,
-				classto,
 				type,
 				year,
 				...(binded && { binded })
@@ -76,12 +70,12 @@ router.get('/:bid', (req, res) => {
 		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
 });
 
-// @route   GET api/books/:sid/:cn
-// @desc    Select all Books by Subject and ClassN
+// @route   GET api/books/:sid
+// @desc    Select all Books by Subject
 // @access  Public
-router.get('/:sid/:cn', (req, res) => {
-	const { sid, cn } = req.params;
-	Book.find({ subject: sid, classfrom: { $lte: cn }, classto: { $gte: cn } }) //
+router.get('/:sid', (req, res) => {
+	const { sid } = req.params;
+	Book.find({ subject: sid }) //
 		.then((books) =>
 			res.json(
 				books.map(({ _id, name, author }) => {

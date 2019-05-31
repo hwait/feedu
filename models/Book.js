@@ -21,14 +21,7 @@ const BookSchema = new Schema({
 		type: String,
 		required: true
 	},
-	classfrom: {
-		type: Number,
-		required: true
-	},
-	classto: {
-		type: Number,
-		required: true
-	},
+
 	year: {
 		type: Number,
 		required: true

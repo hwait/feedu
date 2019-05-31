@@ -26,12 +26,6 @@ const CalendarSchema = new Schema({
 			required: true
 		}
 	],
-	weekends: [
-		{
-			type: Number,
-			required: true
-		}
-	],
 	start: {
 		type: Number,
 		required: true

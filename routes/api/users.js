@@ -48,7 +48,7 @@ router.post(
 				errors: convertErrors(errors.array())
 			});
 		}
-		const { name, email, role, classn, surname, users, subjects } = req.body;
+		const { name, email, role, surname, users } = req.body;
 
 		const avatar = gravatar.url(req.body.email, {
 			s: 200, // Size
@@ -56,7 +56,7 @@ router.post(
 			d: 'mm' // Default image
 		});
 
-		const newUser = new User({ name, surname, email, avatar, role, classn, users, subjects });
+		const newUser = new User({ name, surname, email, avatar, role, users });
 
 		bcrypt.genSalt(10, (err, salt) => {
 			bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -146,9 +146,7 @@ router.post(
 				user.email = email;
 				user.avatar = avatar;
 				user.role = role;
-				user.classn = classn;
 				user.users = users;
-				user.subjects = subjects;
 			}
 			user // Try to save User
 				.save()

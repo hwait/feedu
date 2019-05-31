@@ -7,6 +7,7 @@ const subjects = require('./routes/api/subjects');
 const lessons = require('./routes/api/lessons');
 const patterns = require('./routes/api/patterns');
 const books = require('./routes/api/books');
+const courses = require('./routes/api/courses');
 const calendars = require('./routes/api/calendars');
 
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/calendars', calendars);
 app.use('/api/books', books);
 app.use('/api/patterns', patterns);
 app.use('/api/lessons', lessons);
+app.use('/api/courses', courses);
 
 const port = process.env.PORT || 5000;
 

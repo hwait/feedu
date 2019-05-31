@@ -16,9 +16,9 @@ const PatternSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'calendar'
 	},
-	subject: {
+	course: {
 		type: Schema.Types.ObjectId,
-		ref: 'subject'
+		ref: 'course'
 	},
 	weekday: {
 		type: Number,
@@ -32,11 +32,7 @@ const PatternSchema = new Schema({
 		type: Number,
 		required: true
 	},
-	cn: {
-		//Class Nmb
-		type: Number,
-		required: true
-	},
+
 	days: {
 		//Days in the calendar
 		type: Number,

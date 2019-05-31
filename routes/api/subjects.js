@@ -14,20 +14,15 @@ const Lesson = require('../../models/Lesson');
 // @access  Private
 router.post(
 	'/add',
-	[
-		check('name').isLength({ min: 2, max: 30 }),
-		check('reshid').isInt(),
-		check('classfrom').isInt({ gt: -1, lt: 13 }),
-		check('classto').isInt({ gt: -1, lt: 13 })
-	],
+	[ check('name').isLength({ min: 2, max: 30 }) ],
 	passport.authenticate('jwt', { session: false }),
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: errors.array() });
 		}
-		const { name, reshid, classfrom, classto, extendable } = req.body;
-		const newSubject = new Subject({ name, reshid, classfrom, classto, extendable });
+		const { name, iconmcolor } = req.body;
+		const newSubject = new Subject({ name, icon, color });
 		newSubject // Try to save Subject
 			.save()
 			.then(() => res.json({ success: true }))
@@ -46,10 +41,8 @@ router.get('/', (req, res) => {
 				subjects.map((x) => ({
 					id: x._id,
 					name: x.name,
-					extendable: x.extendable,
-					color: x.color,
-					cf: x.classfrom,
-					ct: x.classto
+					icon: x.icon,
+					color: x.color
 				}))
 			)
 		)

@@ -8,13 +8,9 @@ const Schema = mongoose.Schema;
 */
 
 const LessonSchema = new Schema({
-	subject: {
+	course: {
 		type: Schema.Types.ObjectId,
-		ref: 'subjects'
-	},
-	classn: {
-		type: Number,
-		required: true
+		ref: 'courses'
 	},
 	nmb: {
 		type: Number,
@@ -24,13 +20,9 @@ const LessonSchema = new Schema({
 		type: String,
 		required: true
 	},
-	isextended: {
-		type: Boolean,
-		default: false
-	},
-	reshid: {
+	link: {
 		// Resh link: https://resh.edu.ru/Lesson/lesson/<reshid>/
-		type: Number
+		type: String
 	},
 	videos: [
 		{

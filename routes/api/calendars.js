@@ -18,13 +18,12 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: convertErrors(errors.array()) });
 		}
-		const { _id, name, dates, weekends, start, year, group } = req.body;
+		const { _id, name, dates, start, year, group } = req.body;
 		if (_id) {
 			Calendar.findById(_id).then((calendar) => {
 				if (calendar) {
 					calendar.name = name;
 					calendar.dates = dates;
-					calendar.weekends = weekends;
 					calendar.start = start;
 					calendar.year = year;
 					calendar.group = group;
@@ -40,7 +39,6 @@ router.post(
 			const newCalendar = new Calendar({
 				name,
 				dates,
-				weekends,
 				start,
 				year,
 				group

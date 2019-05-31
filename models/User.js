@@ -42,10 +42,6 @@ const UserSchema = new Schema({
 		type: Number,
 		default: 0
 	},
-	classn: {
-		type: Number,
-		default: 0 // No class
-	},
 	active: {
 		type: Boolean,
 		default: true
@@ -55,13 +51,6 @@ const UserSchema = new Schema({
 		{
 			type: Schema.Types.ObjectId,
 			ref: 'users'
-		}
-	],
-	subjects: [
-		// Teacher is competent with / Student study
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'subjects'
 		}
 	]
 });

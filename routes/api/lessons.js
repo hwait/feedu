@@ -7,8 +7,8 @@ const convertError = require('../../utils/convertError');
 // Load Input validation
 const { check, validationResult } = require('express-validator/check');
 
-// Load Subject model
-const Subject = require('../../models/Subject');
+// Load Course model
+const Course = require('../../models/Course');
 const Lesson = require('../../models/Lesson');
 
 // @route   POST api/lessons/save
@@ -17,28 +17,21 @@ const Lesson = require('../../models/Lesson');
 
 router.post(
 	'/save',
-	[
-		check('name').isLength({ min: 2 }),
-		check('reshid').isInt(),
-		check('classn').isInt({ gt: -1, lt: 13 }),
-		check('nmb').isInt()
-	],
+	[ check('name').isLength({ min: 2 }), check('nmb').isInt() ],
 	passport.authenticate('jwt', { session: false }),
 	(req, res) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: convertErrors(errors.array()) });
 		}
-		const { _id, name, reshid, classn, nmb, subject, isextended, videos, papers, tasks } = req.body;
+		const { _id, name, link, nmb, course, videos, papers, tasks } = req.body;
 		if (_id) {
 			Lesson.findById(_id).then((lesson) => {
 				if (lesson) {
-					lesson.subject = subject;
+					lesson.course = course;
 					lesson.name = name;
-					lesson.reshid = reshid;
-					lesson.classn = classn;
+					lesson.link = link;
 					lesson.nmb = nmb;
-					lesson.isextended = isextended;
 					lesson.videos = videos;
 					lesson.papers = papers;
 					lesson.tasks = tasks;
@@ -52,12 +45,10 @@ router.post(
 			});
 		} else {
 			const newLesson = new Lesson({
-				subject,
+				course,
 				name,
-				reshid,
-				classn: cln,
-				nmb: n,
-				isextended,
+				link,
+				nmb,
 				videos: [],
 				papers: [],
 				tasks: []
@@ -84,12 +75,12 @@ router.get('/video/:yid', (req, res) => {
 		}
 	}).pipe(res);
 });
-// @route   GET api/lessons/:sid/:cn
-// @desc    Select all Lessons by Subject and ClassN
+// @route   GET api/lessons/:sid
+// @desc    Select all Lessons by Course
 // @access  Public
-router.get('/:sid/:cn', (req, res) => {
-	const { sid, cn } = req.params;
-	Lesson.find({ subject: sid, classn: cn }) //
+router.get('/:sid', (req, res) => {
+	const { sid } = req.params;
+	Lesson.find({ course: sid }) //
 		.sort({ nmb: 1 })
 		.then((lessons) =>
 			res.json(
@@ -120,14 +111,12 @@ router.get('/:lid', (req, res) => {
 });
 
 // @route   POST api/lessons/count
-// @desc    Get lessons count for Subject and Class number
+// @desc    Get lessons count for Course and Class number
 // @access  Public
 router.post('/count', (req, res) => {
-	const { subject, classn, isextended } = req.body;
-	Lesson.find({ subject, classn, ...(isextended && { isextended }) }) // isextended is false only for ordinal lessons. For all please omit the parameter
-		.then((results) => res.json({ classn: results.length }))
-		.catch((error) => {
-			res.status(404).json({ error });
-		});
+	const { course } = req.body;
+	Lesson.find({ course }).then((results) => res.json({ count: results.length })).catch((error) => {
+		res.status(404).json({ error });
+	});
 });
 module.exports = router;

@@ -13,17 +13,16 @@ const Pattern = require('../../models/Pattern');
 router.post('/save', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const patternsSave = (depth) => {
 		if (depth >= 0) {
-			const { _id, student, calendar, weekday, ts, dur, cn, subject, days } = req.body[depth];
+			const { _id, student, calendar, weekday, ts, dur, course, days } = req.body[depth];
 			if (_id) {
 				Pattern.findById(_id).then((pattern) => {
 					if (pattern) {
-						pattern.subject = subject;
+						pattern.course = course;
 						pattern.student = student;
 						pattern.calendar = calendar;
 						pattern.weekday = weekday;
 						pattern.ts = ts;
 						pattern.dur = dur;
-						pattern.cn = cn;
 						pattern.days = days;
 						pattern // Try to save Pattern
 							.save()
@@ -35,13 +34,12 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 				});
 			} else {
 				const newPattern = new Pattern({
-					subject,
+					course,
 					student,
 					calendar,
 					weekday,
 					ts,
 					dur,
-					cn,
 					days
 				});
 				newPattern // Try to save Pattern
@@ -66,16 +64,15 @@ router.get('/student/:id', (req, res) => {
 	Pattern.find({ student: id }) //
 		.then((patterns) =>
 			res.json(
-				patterns.map(({ _id, subject, student, calendar, weekday, ts, dur, cn, days }) => {
+				patterns.map(({ _id, course, student, calendar, weekday, ts, dur, days }) => {
 					return {
 						_id,
-						subject,
+						course,
 						student,
 						calendar,
 						weekday,
 						ts,
 						dur,
-						cn,
 						days
 					};
 				})
@@ -84,24 +81,23 @@ router.get('/student/:id', (req, res) => {
 		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
 });
 
-// @route   GET api/patterns/subject/:id
+// @route   GET api/patterns/course/:id
 // @desc    Select Student Patterns by sid
 // @access  Public
-router.get('/subject/:id', (req, res) => {
+router.get('/course/:id', (req, res) => {
 	const { id } = req.params;
-	Pattern.find({ subject: id }) //
+	Pattern.find({ course: id }) //
 		.then((patterns) =>
 			res.json(
-				patterns.map(({ _id, subject, student, calendar, weekday, ts, dur, cn }) => {
+				patterns.map(({ _id, course, student, calendar, weekday, ts, dur }) => {
 					return {
 						_id,
-						subject,
+						course,
 						student,
 						calendar,
 						weekday,
 						ts,
-						dur,
-						cn
+						dur
 					};
 				})
 			)
