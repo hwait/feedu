@@ -5,12 +5,17 @@ import { lessonsGetWatch, lessonGetWatch, videoInfoGetWatch, lessonSaveWatch } f
 import { booksGetWatch, bookGetWatch, bookSaveWatch } from './books';
 import { calendarsGetWatch, calendarGetWatch, calendarSaveWatch } from './calendar';
 import { patternsGetWatch, patternSaveWatch, patternRemoveWatch } from './patterns';
+import { coursesGetWatch, courseGetWatch, courseSaveWatch, courseRemoveWatch } from './courses';
 
 export default function* rootSaga() {
 	yield all([
 		fork(watchRegisterUser),
 		fork(watchSaveUser),
 		fork(watchLoginUser),
+		fork(coursesGetWatch),
+		fork(courseGetWatch),
+		fork(courseRemoveWatch),
+		fork(courseSaveWatch),
 		fork(patternsGetWatch),
 		fork(patternRemoveWatch),
 		fork(patternSaveWatch),

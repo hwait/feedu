@@ -17,7 +17,6 @@ export const types = {
 	TASK_CHANGE: 'LESSON/TASK_CHANGE',
 	TASK_REMOVE: 'LESSON/TASK_REMOVE',
 
-	LESSON_EXTENDED: 'LESSON/LESSON_EXTENDED',
 	LESSON_GET: 'LESSON/LESSON_GET',
 	LESSON_SAVE: 'LESSON/LESSON_SAVE',
 	LESSON_SAVE_OK: 'LESSON/LESSON_SAVE_OK',
@@ -28,11 +27,10 @@ export const types = {
 };
 
 const initialLesson = {
-	subject: '',
-	classn: 0,
+	course: '',
 	nmb: 0,
 	name: '',
-	isextended: false,
+	link: '',
 	videos: [],
 	papers: [],
 	tasks: []
@@ -152,15 +150,10 @@ export default (state = initialState, { type, payload }) => {
 		case types.LESSON_COPY: {
 			return {
 				...state,
-				lesson: { ...state.lesson, ...payload, isextended: true, name: payload.name + '-COPY' }
+				lesson: { ...state.lesson, ...payload, name: payload.name + '-COPY' }
 			};
 		}
-		case types.LESSON_EXTENDED: {
-			return {
-				...state,
-				lesson: { ...state.lesson, isextended: !state.lesson.isextended }
-			};
-		}
+
 		case types.LESSON_GET:
 		case types.LESSON_SAVE: {
 			return {
@@ -216,7 +209,6 @@ export const actions = {
 	youtubeRemove: (index) => ({ type: types.YOUTUBE_REMOVE, payload: index }),
 	lessonGet: (lid) => ({ type: types.LESSON_GET, payload: lid }),
 	lessonSave: (lesson) => ({ type: types.LESSON_SAVE, payload: lesson }),
-	toggleExtended: () => ({ type: types.LESSON_EXTENDED }),
 	lessonNew: (payload) => ({ type: types.LESSON_SET, payload }),
 	lessonCopy: (payload) => ({ type: types.LESSON_COPY, payload })
 };

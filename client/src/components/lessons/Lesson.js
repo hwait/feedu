@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Segment, Form, Label, Button, Icon, Input } from 'semantic-ui-react';
 import { actions as lessonActions } from '../../reducers/lesson';
 import { getNextNmb } from '../../reducers/lessons';
-import { getCurentSubject } from '../../reducers/subjects';
+import { getCurrentSubject } from '../../reducers/subjects';
+import { getCurrentCourse } from '../../reducers/courses';
 import { booksToBindGet } from '../../reducers/books';
 import round from '../../utils/round';
 import Youtube from './Youtube';
@@ -35,8 +36,8 @@ class Lesson extends Component {
 	};
 
 	save = () => {
-		const { lessonSave, lesson, subject } = this.props;
-		lessonSave({ ...lesson, subject: subject.id, classn: subject.filter });
+		const { lessonSave, lesson, course } = this.props;
+		lessonSave({ ...lesson, course: course.id });
 	};
 	cancel = () => {
 		this.props.history.goBack();
@@ -45,8 +46,8 @@ class Lesson extends Component {
 		console.log('remove');
 	};
 	render() {
-		const { subject, toggleExtended, errors, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
-		const { classn, isextended, name, nmb, videos, papers, tasks } = this.props.lesson;
+		const { subject, course, errors, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
+		const { name, nmb, videos, papers, tasks } = this.props.lesson;
 		if (errors) console.log(errors, papers, tasks);
 		return (
 			<div className="dashboard">
@@ -54,7 +55,8 @@ class Lesson extends Component {
 					<Form>
 						<Segment.Inline>
 							<Form.Group inline>
-								<Label horizontal size="big">{`${subject.name} ${classn} класс.`}</Label>
+								<Label horizontal size="big">{`${subject.name} ${subject.icon}.`}</Label>
+								<Label horizontal size="big">{`${course.name}.`}</Label>
 								<Label horizontal size="big">
 									{`Урок № ${nmb}.`}
 								</Label>
@@ -65,12 +67,6 @@ class Lesson extends Component {
 								icon="copy"
 								onClick={this.copyLesson}
 								color="olive"
-								floated="right"
-							/>
-							<Button
-								content={isextended ? 'Дополнительное' : 'Обычное'}
-								onClick={toggleExtended}
-								color={isextended ? 'orange' : 'grey'}
 								floated="right"
 							/>
 						</Segment.Inline>
@@ -128,6 +124,7 @@ class Lesson extends Component {
 }
 Lesson.propTypes = {
 	subject: PropTypes.object.isRequired,
+	course: PropTypes.object.isRequired,
 	lesson: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired
 };
@@ -136,7 +133,8 @@ const mapStateToProps = (state) => ({
 	lesson: state.lesson.lesson,
 	lessonId: state.lessons.current,
 	nextnmb: getNextNmb(state),
-	subject: getCurentSubject(state),
+	subject: getCurrentSubject(state),
+	course: getCurrentCourse(state),
 	booksToBind: booksToBindGet(state)
 });
 export default connect(mapStateToProps, { ...lessonActions })(Lesson);

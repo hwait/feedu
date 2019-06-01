@@ -55,7 +55,7 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	booksGet: (classn, sid) => ({ type: types.BOOKS_GET, payload: { classn, sid } }),
+	booksGet: (sid) => ({ type: types.BOOKS_GET, payload: { sid } }),
 	bookSetCurrent: (payload) => ({ type: types.BOOKS_SET, payload }),
 	bookNew: () => ({ type: types.BOOKS_NEW })
 };

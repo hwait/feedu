@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const root = '/api/books';
+const root = '/api/courses';
 
-export default class BooksAPI {
+export default class PatternsAPI {
 	static getAll(payload) {
 		return axios
-			.get(`${root}/subject/${payload.sid}`)
+			.get(`${root}/subject/${payload}`)
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
@@ -15,9 +15,16 @@ export default class BooksAPI {
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
+
 	static save(payload) {
 		return axios
 			.post(`${root}/save`, payload)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
+	static remove(payload) {
+		return axios
+			.post(`${root}/remove`, payload)
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}

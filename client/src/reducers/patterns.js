@@ -1,5 +1,6 @@
 import Immutable from '../utils/immutable';
 import { createSelector } from 'reselect';
+import { getCurrentCourse, getCourse } from './courses';
 
 export const types = {
 	PATTERNS_GET: 'PATTERNS_GET',
@@ -93,7 +94,6 @@ export const actions = {
 	patternAdd: (item) => ({ type: types.PATTERN_ADD, payload: item }),
 	patternsSave: (patterns) => ({ type: types.PATTERNS_SAVE, payload: patterns }),
 	patternDuration: (dur) => ({ type: types.PATTERN_DURATION, payload: dur }),
-	//patternCurrent: (index, isCurrent) => ({ type: types.PATTERN_CURRENT, payload: { index, item: { isCurrent } } }),
 	patternRemove: (item) => ({ type: types.PATTERN_REMOVE, payload: item }),
 	patternRemoveImmediate: (item) => ({ type: types.PATTERN_REMOVE_OK, payload: item })
 };
@@ -102,34 +102,24 @@ const getCalendarFilter = (state) => {
 	return state.calendar.current;
 };
 
-const getSubjectFilter = (state) => {
-	return state.subjects.current.id;
-};
-
-const getClassFilter = (state) => {
-	return state.subjects.filter;
-};
-
 const getPatterns = (state) => {
 	return state.patterns.patterns;
 };
 
 export const getPatternsByWeek = (state, props) => {
 	const patterns = state.patterns.patterns.filter((x) => x.weekday === props.weekday).map((x) => {
-		const subj = state.subjects.subjects.find((s) => s.id === x.subject);
-		return { ...x, color: `#${subj.color}`, name: `${subj.name}-${x.cn}` };
+		const course = getCourse({ _id: x.course });
+		const subj = state.subjects.subjects.find((s) => s.id === course.subject);
+		return { ...x, color: `#${subj.color}`, icon: `${subj.icon}`, name: `${course.sname}` };
 	});
 	return patterns;
 };
 export const getPatternsByCalendar = createSelector(
-	[ getCalendarFilter, getPatternsByWeek ],
-	(calendarFilter, patterns) => {
+	[ getCalendarFilter, getCurrentCourse, getPatternsByWeek ],
+	(calendarFilter, course, patterns) => {
 		return patterns.filter((x) => x.calendar === calendarFilter);
 	}
 );
-export const getSubjectDays = createSelector(
-	[ getSubjectFilter, getClassFilter, getPatterns ],
-	(sid, classn, patterns) => {
-		return patterns.filter((x) => x.subject === sid && x.cn === classn).reduce((a, b) => a + (b.days || 0), 0);
-	}
-);
+export const getCourseDays = createSelector([ getCurrentCourse, getPatterns ], (course, patterns) => {
+	return patterns.filter((x) => x.course === course._id).reduce((a, b) => a + (b.days || 0), 0);
+});

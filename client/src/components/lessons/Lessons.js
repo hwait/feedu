@@ -8,6 +8,7 @@ import { actions as lessonsActions } from '../../reducers/lessons';
 import { actions as booksActions } from '../../reducers/books';
 import { getSubjectsByClass } from '../../reducers/subjects';
 import SubjectsList from '../subjects/SubjectsList';
+import CoursesList from '../courses/CoursesList';
 import LessonsList from './LessonsList';
 import isempty from '../../utils/isempty';
 const classes = getClasses();
@@ -21,39 +22,28 @@ class Lessons extends Component {
 			this.props.history.push('/');
 		}
 	}
-	getSubjects = (value) => {
-		this.props.setFilter(value);
-	};
+
 	setLesson = (value) => {
 		this.props.lessonSetCurrent(value);
 		this.props.history.push('/lesson');
 	};
 	setSubject = (value) => {
-		const { filter, lessonsGet, booksGet } = this.props;
-		lessonsGet(filter, value);
-		booksGet(filter, value);
+		const { setCurrent } = this.props;
+		setCurrent(value);
+	};
+	setCourse = (value) => {
+		const { lessonsGet, booksGet } = this.props;
+		lessonsGet(value);
+		booksGet(value);
 	};
 	render() {
-		const { curSubject, subjects, filter, loading } = this.props;
-		const classitems = classes.map(({ text, value }) => (
-			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
-				{text}
-			</Menu.Item>
-		));
+		const { curSubject, curCourse, subjects, loading } = this.props;
+
 		return (
 			<div className="dashboard">
 				<Segment.Group horizontal>
-					<Menu compact vertical>
-						{classitems}
-					</Menu>
-					<Segment placeholder={filter === 0} textAlign={filter === 0 ? 'center' : 'left'}>
-						{filter > 0 ? (
-							<SubjectsList setSubject={this.setSubject} subjects={subjects} />
-						) : (
-							<Header as="h1" disabled>
-								Subjects
-							</Header>
-						)}
+					<Segment textAlign="left">
+						<SubjectsList setSubject={this.setSubject} subjects={subjects} />
 					</Segment>
 					<Segment
 						placeholder={isempty(curSubject)}
@@ -61,6 +51,19 @@ class Lessons extends Component {
 						loading={loading}
 					>
 						{!isempty(curSubject) ? (
+							<CoursesList setCourse={this.setCourse} />
+						) : (
+							<Header as="h1" disabled>
+								Courses
+							</Header>
+						)}
+					</Segment>
+					<Segment
+						placeholder={isempty(curCourse)}
+						textAlign={!isempty(curCourse) ? 'left' : 'center'}
+						loading={loading}
+					>
+						{!isempty(curCourse) ? (
 							<LessonsList setLesson={this.setLesson} />
 						) : (
 							<Header as="h1" disabled>
@@ -74,9 +77,9 @@ class Lessons extends Component {
 	}
 }
 Lessons.propTypes = {
-	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
 	curSubject: PropTypes.object.isRequired,
+	curCourse: PropTypes.object.isRequired,
 	curLesson: PropTypes.string.isRequired,
 	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
@@ -85,8 +88,8 @@ Lessons.propTypes = {
 const mapStateToProps = (state) => ({
 	errors: state.lessons.errors,
 	subjects: getSubjectsByClass(state),
-	filter: state.subjects.filter,
 	curSubject: state.subjects.current,
+	curCourse: state.course.course,
 	curLesson: state.lessons.current,
 	loading: state.lessons.loading,
 	isAuthentificated: state.auth.isAuthentificated

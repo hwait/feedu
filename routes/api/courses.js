@@ -85,16 +85,6 @@ router.get('/:cid', (req, res) => {
 		});
 });
 
-// @route   POST api/courses/count
-// @desc    Get courses count for Course and Class number
-// @access  Public
-router.post('/count', (req, res) => {
-	const { course } = req.body;
-	Course.find({ course }).then((results) => res.json({ count: results.length })).catch((error) => {
-		res.status(404).json({ error });
-	});
-});
-
 // @route   DELETE api/courses/delete/:cid
 // @desc    Delete Course
 // @access  Private

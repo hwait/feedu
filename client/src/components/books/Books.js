@@ -36,26 +36,12 @@ class Books extends Component {
 		this.props.history.push('/book');
 	};
 	render() {
-		const { curSubject, filter, loading, subjects } = this.props;
-		const classitems = classes.map(({ text, value }) => (
-			<Menu.Item active={filter === value} color="red" key={value} onClick={(e, d) => this.getSubjects(value)}>
-				{text}
-			</Menu.Item>
-		));
+		const { curSubject, loading, subjects } = this.props;
 		return (
 			<div className="dashboard">
 				<Segment.Group horizontal>
-					<Menu compact vertical>
-						{classitems}
-					</Menu>
-					<Segment placeholder={filter === 0} textAlign={filter === 0 ? 'center' : 'left'}>
-						{filter > 0 ? (
-							<SubjectsList setSubject={this.setSubject} subjects={subjects} />
-						) : (
-							<Header as="h1" disabled>
-								Subjects
-							</Header>
-						)}
+					<Segment textAlign="left">
+						<SubjectsList setSubject={this.setSubject} subjects={subjects} />
 					</Segment>
 					<Segment
 						placeholder={isempty(curSubject)}
@@ -81,7 +67,6 @@ class Books extends Component {
 	}
 }
 Books.propTypes = {
-	filter: PropTypes.number.isRequired,
 	subjects: PropTypes.array.isRequired,
 	curSubject: PropTypes.object.isRequired,
 	curBook: PropTypes.string.isRequired,
@@ -92,7 +77,6 @@ Books.propTypes = {
 const mapStateToProps = (state) => ({
 	errors: state.books.errors,
 	subjects: getSubjectsByClass(state),
-	filter: state.subjects.filter,
 	curSubject: state.subjects.current,
 	curBook: state.books.current,
 	loading: state.books.loading,

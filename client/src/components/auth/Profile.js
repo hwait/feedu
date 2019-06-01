@@ -33,9 +33,6 @@ class Profile extends Component {
 		this.props.fc('role', value);
 	};
 
-	getSubjects = (e, { value }) => {
-		this.props.fc('classn', value);
-	};
 	/**
 	|--------------------------------------------------
 	| // TODO: protected call 
@@ -43,7 +40,7 @@ class Profile extends Component {
 	|--------------------------------------------------
 	*/
 	render() {
-		const { errors, filter, user } = this.props;
+		const { errors, user } = this.props;
 		return (
 			<ProfileForm
 				butname="Save"
@@ -53,7 +50,6 @@ class Profile extends Component {
 				setRole={this.setRole}
 				getSubjects={this.getSubjects}
 				submitUser={this.submitUser}
-				filter={filter}
 			/>
 		);
 	}
@@ -62,7 +58,6 @@ Profile.propTypes = {
 	fc: PropTypes.func.isRequired,
 	save: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
-	filter: PropTypes.number.isRequired,
 	path: PropTypes.string.isRequired,
 	errors: PropTypes.object.isRequired
 };
@@ -70,7 +65,6 @@ const mapStateToProps = (state) => ({
 	path: state.auth.path,
 	user: state.auth.user,
 	errors: state.auth.errors,
-	subjects: state.subjects.subjects,
-	filter: state.subjects.filter
+	subjects: state.subjects.subjects
 });
 export default connect(mapStateToProps, { ...authActions, ...subjectsActions })(Profile);

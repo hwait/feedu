@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Menu, Segment, Header, Select, Label } from 'semantic-ui-react';
 import { actions as subjectsActions, getSubjectsByUser } from '../../reducers/subjects';
+import { actions as coursesActions, getCoursesBySubject } from '../../reducers/courses';
 import { actions as patternsActions, getSubjectDays } from '../../reducers/patterns';
 import { actions as calendarsActions, calendarsGet, calendarDaysInWeeks } from '../../reducers/calendar';
 import SubjectsClassesList from '../subjects/SubjectsClassesList';
+import CoursesList from '../courses/CoursesList';
 import Pattern from './Pattern';
 import isempty from '../../utils/isempty';
 import moment from 'moment';
@@ -27,31 +29,19 @@ class Patterns extends Component {
 		const { errors, patternsGet, uid } = this.props;
 		if (errors && errors.success) patternsGet(uid);
 	}
-	getSubjects = (value) => {
-		this.props.setFilter(value);
-	};
-	setSubjectClass = (sid, cn) => {
-		const { setFilter, setCurrent } = this.props;
-		setFilter(cn);
-		setCurrent(sid);
-	};
 	setDuration = (dur) => {
 		this.props.patternDuration(dur);
 	};
 	save = () => {
 		const { patterns, patternsSave } = this.props;
-		console.log('===========save====================');
-		console.log(patterns);
-		console.log('====================================');
 		patternsSave(patterns);
 	};
 	addPattern = (value, weekday) => {
-		const { curSubject, calendar, weekdays, classn, uid, dur, patternAdd } = this.props;
-		if (!isempty(curSubject) && classn > 0)
+		const { curCourse, calendar, weekdays, uid, dur, patternAdd } = this.props;
+		if (!isempty(curCourse))
 			patternAdd({
-				subject: curSubject.id,
+				course: curCourse._id,
 				calendar: calendar._id,
-				cn: classn,
 				student: uid,
 				weekday,
 				ts: value,
@@ -60,9 +50,6 @@ class Patterns extends Component {
 			});
 	};
 	removePattern = (value, weekday, id) => {
-		console.log('==========removePattern===============');
-		console.log(value, weekday, id);
-		console.log('====================================');
 		if (id) this.props.patternRemove({ weekday, ts: value, id });
 		else this.props.patternRemoveImmediate({ weekday, ts: value });
 	};
@@ -96,7 +83,7 @@ class Patterns extends Component {
 		return wd;
 	};
 	render() {
-		const { subjects, calendars, calendar, loading, setCurrent, dur, days } = this.props;
+		const { subjects, courses, calendars, calendar, loading, setCurrent, courseChoose, dur, days } = this.props;
 		const wd = this.renderWeekDays();
 		const patt = this.renderTables();
 		return (
@@ -130,14 +117,8 @@ class Patterns extends Component {
 						{wd}
 					</Segment>
 
-					<SubjectsClassesList
-						setSubjectClass={this.setSubjectClass}
-						save={this.save}
-						setSubject={setCurrent}
-						subjects={subjects}
-						days={days}
-					/>
-
+					<SubjectsClassesList save={this.save} setSubject={setCurrent} subjects={subjects} days={days} />
+					<CoursesList setCourse={courseChoose} />
 					{calendar._id ? (
 						<Segment.Group horizontal>{patt}</Segment.Group>
 					) : (
@@ -155,11 +136,12 @@ class Patterns extends Component {
 Patterns.propTypes = {
 	uid: PropTypes.string.isRequired,
 	subjects: PropTypes.array.isRequired,
+	courses: PropTypes.array.isRequired,
 	patterns: PropTypes.array.isRequired,
 	calendars: PropTypes.array.isRequired,
 	calendar: PropTypes.object.isRequired,
 	curSubject: PropTypes.object.isRequired,
-	classn: PropTypes.number.isRequired,
+	curCourse: PropTypes.object.isRequired,
 	dur: PropTypes.number.isRequired,
 	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
@@ -174,14 +156,16 @@ const mapStateToProps = (state) => ({
 	days: getSubjectDays(state),
 	weekdays: calendarDaysInWeeks(state),
 	subjects: getSubjectsByUser(state),
+	courses: getCoursesBySubject(state),
 	curSubject: state.subjects.current,
-	classn: state.subjects.filter,
+	curCourse: state.course.course,
 	loading: state.patterns.loading,
 	dur: state.patterns.dur,
 	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, {
 	...subjectsActions,
+	...coursesActions,
 	...patternsActions,
 	...calendarsActions
 })(Patterns);

@@ -26,10 +26,7 @@ class Calendar extends Component {
 		const { name, value } = e.target;
 		this.props.fc(name, value);
 	};
-	weekendToggle = (value) => {
-		const { weekendToggle } = this.props;
-		weekendToggle(value);
-	};
+
 	save = () => {
 		const { calendarSave, calendar } = this.props;
 		calendarSave(calendar);
@@ -43,9 +40,9 @@ class Calendar extends Component {
 	};
 	render() {
 		const { days, loading, calendars, current } = this.props;
-		const { start, weekends, name, group, year } = this.props.calendar;
+		const { start, name, group, year } = this.props.calendar;
 		const selections = calendars.map(({ _id, name }) => ({ key: _id, value: _id, text: name }));
-		const workWeeks = weekends.length < 7 ? Math.round(days / (7 - weekends.length)) : 0;
+		const workWeeks = Math.round(days / 7);
 		const workRate = Math.round(days / 365 * 100);
 		let dt = moment({ year: 2019, month: start, day: 1 });
 		const mm = [];
@@ -125,41 +122,6 @@ class Calendar extends Component {
 								value={start}
 								onChange={this.startSet}
 								width={5}
-							/>
-							<Form.Checkbox
-								label="ПН"
-								checked={weekends.includes(1)}
-								onChange={(e) => this.weekendToggle(1)}
-							/>
-							<Form.Checkbox
-								label="ВТ"
-								checked={weekends.includes(2)}
-								onChange={(e) => this.weekendToggle(2)}
-							/>
-							<Form.Checkbox
-								label="СР"
-								checked={weekends.includes(3)}
-								onChange={(e) => this.weekendToggle(3)}
-							/>
-							<Form.Checkbox
-								label="ЧТ"
-								checked={weekends.includes(4)}
-								onChange={(e) => this.weekendToggle(4)}
-							/>
-							<Form.Checkbox
-								label="ПТ"
-								checked={weekends.includes(5)}
-								onChange={(e) => this.weekendToggle(5)}
-							/>
-							<Form.Checkbox
-								label="СБ"
-								checked={weekends.includes(6)}
-								onChange={(e) => this.weekendToggle(6)}
-							/>
-							<Form.Checkbox
-								label="ВС"
-								checked={weekends.includes(7)}
-								onChange={(e) => this.weekendToggle(7)}
 							/>
 						</Form.Group>
 						<Grid stackable padded columns={4}>

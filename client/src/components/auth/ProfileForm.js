@@ -19,15 +19,14 @@ class ProfileForm extends Component {
 
 	submitUser = (e) => {
 		e.preventDefault();
-		const { name, email, password, password2, surname, role, subjects } = this.props;
+		const { name, email, password, password2, surname, role } = this.props;
 		const newUser = {
 			name,
 			email,
 			password,
 			password2,
 			surname,
-			role,
-			subjects
+			role
 		};
 
 		this.props.signup(newUser);
@@ -43,8 +42,8 @@ class ProfileForm extends Component {
 
 	render() {
 		console.log(this.props);
-		const { role, classn, name, surname, email, password, password2 } = this.props.user;
-		const { errors, filter, onChange, submitUser, getSubjects, setRole, butname } = this.props;
+		const { role, name, surname, email, password, password2 } = this.props.user;
+		const { errors, onChange, submitUser, getSubjects, setRole, butname } = this.props;
 
 		return (
 			<div className="dark-overlay landing-inner">
@@ -107,18 +106,7 @@ class ProfileForm extends Component {
 										value={role}
 										onChange={setRole}
 									/>
-									{role < 2 && (
-										<Form.Select
-											fluid
-											label="Class"
-											options={classes}
-											placeholder="Class"
-											value={classn}
-											onChange={getSubjects}
-										/>
-									)}
 								</Grid.Column>
-								{filter > 0 && role < 2 && <SubjectsCheckboxes />}
 							</Grid.Row>
 
 							<Grid.Row>

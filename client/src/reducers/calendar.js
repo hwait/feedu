@@ -4,7 +4,6 @@ moment.locale('ru');
 export const types = {
 	FC: 'CALENDAR/FC',
 	START_SET: 'CALENDAR/START_SET',
-	WEEKEND_TOGGLE: 'CALENDAR/WEEKEND_TOGGLE',
 	DATE_TOGGLE: 'CALENDAR/DATE_TOGGLE',
 	DATES_TOGGLE: 'CALENDAR/DATES_TOGGLE',
 	CALENDAR_SAVE: 'CALENDAR/CALENDAR_SAVE',
@@ -21,8 +20,7 @@ const initialCalendar = {
 	year: 2019,
 	dates: [],
 	name: '',
-	start: 8,
-	weekends: [ 6, 7 ]
+	start: 8
 };
 
 const initialState = {
@@ -73,18 +71,7 @@ export default (state = initialState, { type, payload }) => {
 				calendar: initialCalendar
 			};
 		}
-		case types.WEEKEND_TOGGLE: {
-			return {
-				...state,
-				calendar: {
-					...state.calendar,
-					weekends: state.calendar.weekends.includes(payload)
-						? Immutable.removeItem(state.calendar.weekends, payload)
-						: Immutable.addItem(state.calendar.weekends, payload),
-					dates: []
-				}
-			};
-		}
+
 		case types.DATES_TOGGLE: {
 			const patt = payload.substr(0, 7);
 			const dates = state.calendar.dates.filter((x) => x.includes(patt));
@@ -95,7 +82,7 @@ export default (state = initialState, { type, payload }) => {
 					dates:
 						dates.length > 0
 							? state.calendar.dates.filter((x) => !x.includes(patt))
-							: [ ...state.calendar.dates, ...fillMonth(payload, state.calendar.weekends) ]
+							: [ ...state.calendar.dates, ...fillMonth(payload) ]
 				}
 			};
 		}
@@ -137,12 +124,12 @@ export default (state = initialState, { type, payload }) => {
 	}
 };
 
-const fillMonth = (initialDate, weekends) => {
+const fillMonth = (initialDate) => {
 	const arr = [];
 	let dt = moment(initialDate);
 	const month = dt.month();
 	while (dt.month() === month) {
-		if (!weekends.includes(dt.isoWeekday())) arr.push(dt.format('YYYY-MM-DD'));
+		arr.push(dt.format('YYYY-MM-DD'));
 		dt = dt.add(1, 'day');
 	}
 	return arr;
@@ -151,7 +138,6 @@ const fillMonth = (initialDate, weekends) => {
 export const actions = {
 	fc: (field, value) => ({ type: types.FC, payload: { field, value } }),
 	dateToggle: (date) => ({ type: types.DATE_TOGGLE, payload: date }),
-	weekendToggle: (day) => ({ type: types.WEEKEND_TOGGLE, payload: day }),
 	startSet: (month) => ({ type: types.START_SET, payload: month }),
 	monthToggle: (initialDate) => ({ type: types.DATES_TOGGLE, payload: initialDate }),
 	calendarsGet: () => ({ type: types.CALENDARS_GET }),

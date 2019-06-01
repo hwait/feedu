@@ -15,8 +15,6 @@ const initialBook = {
 	subject: '',
 	name: '',
 	author: '',
-	classfrom: 0,
-	classto: 0,
 	type: 0,
 	year: 0,
 	binded: ''

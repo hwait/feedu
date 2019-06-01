@@ -46,7 +46,7 @@ class Book extends Component {
 	};
 	render() {
 		const { subject, errors, loading, booksToBind } = this.props;
-		const { name, author, classfrom, classto, type, year, binded } = this.props.book;
+		const { name, author, type, year, binded } = this.props.book;
 		if (errors) console.log(errors);
 
 		const hdr = `${subject.name}, класс(ы):`;
@@ -60,22 +60,6 @@ class Book extends Component {
 							<Label horizontal size="big">
 								{hdr}
 							</Label>
-							<Form.Field
-								value={classfrom ? classfrom : subject.classn}
-								control={Input}
-								onChange={this.onChange}
-								name="classfrom"
-								size="big"
-								width={2}
-							/>
-							<Form.Field
-								value={classto ? classto : subject.classn}
-								control={Input}
-								onChange={this.onChange}
-								name="classto"
-								size="big"
-								width={2}
-							/>
 						</Form.Group>
 						<Form.Field
 							value={author}

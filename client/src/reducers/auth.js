@@ -2,8 +2,6 @@ import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 export const types = {
 	SIGNUP_FC: 'AUTH/SIGNUP_FC', // Field changed
-	SIGNUP_SUBJECT: 'AUTH/SIGNUP_SUBJECT',
-	SIGNUP_SUBJECTS: 'AUTH/SIGNUP_SUBJECTS',
 	SIGNUP_REQUEST: 'AUTH/SIGNUP_REQUEST',
 	SIGNUP_SUCCESS: 'AUTH/SIGNUP_SUCCESS',
 	SIGNUP_FAILURE: 'AUTH/SIGNUP_FAILURE',
@@ -24,8 +22,7 @@ const initialUser = {
 	password2: '',
 	surname: '',
 	classn: 0,
-	role: 0,
-	subjects: []
+	role: 0
 };
 
 const initialState = {
@@ -59,28 +56,11 @@ export default (state = initialState, { type, payload }) => {
 			if (payload.field === 'role' && payload.value === 2)
 				return {
 					...state,
-					user: { ...state.user, [payload.field]: payload.value, subjects: [] }
+					user: { ...state.user, [payload.field]: payload.value }
 				};
 			return {
 				...state,
 				user: { ...state.user, [payload.field]: payload.value }
-			};
-		}
-		case types.SIGNUP_SUBJECT: {
-			let arr = state.user.subjects.slice();
-			const subject = arr.find((x) => x === payload);
-			if (subject) arr = arr.filter((x) => x !== payload);
-			else arr.splice(0, 0, payload);
-			return {
-				...state,
-				user: { ...state.user, subjects: arr }
-			};
-		}
-		case types.SIGNUP_SUBJECTS: {
-			const arr = payload.flag ? payload.arr : {};
-			return {
-				...state,
-				user: { ...state.user, subjects: arr }
 			};
 		}
 		case types.SIGNUP_REQUEST:
@@ -156,8 +136,6 @@ const logout = (state) => {
 export const actions = {
 	fc: (field, value) => ({ type: types.SIGNUP_FC, payload: { field, value } }),
 	pathChange: (payload) => ({ type: types.PATH_CHANGED, payload }),
-	changeSubject: (payload) => ({ type: types.SIGNUP_SUBJECT, payload }),
-	changeSubjects: (arr, flag) => ({ type: types.SIGNUP_SUBJECTS, payload: { arr, flag } }),
 	signup: (payload) => ({ type: types.SIGNUP_REQUEST, payload }),
 	save: (payload) => ({ type: types.SAVE_REQUEST, payload }),
 	login: (email, password) => ({ type: types.LOGIN_REQUEST, payload: { email, password } }),

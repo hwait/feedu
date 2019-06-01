@@ -73,7 +73,7 @@ router.get('/:bid', (req, res) => {
 // @route   GET api/books/:sid
 // @desc    Select all Books by Subject
 // @access  Public
-router.get('/:sid', (req, res) => {
+router.get('/subject/:sid', (req, res) => {
 	const { sid } = req.params;
 	Book.find({ subject: sid }) //
 		.then((books) =>
