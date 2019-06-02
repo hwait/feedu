@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Form, Label, Button, Input } from 'semantic-ui-react';
+import { Segment, Form, Label, Button, Input, Icon } from 'semantic-ui-react';
 import { actions as bookActions } from '../../reducers/book';
-import { getCurentSubject } from '../../reducers/subjects';
+import { getCurrentSubject } from '../../reducers/subjects';
 import { booksToBindGet } from '../../reducers/books';
-
+import SubjectLabel from '../subjects/SubjectLabel';
 const types = [
 	{ key: 0, text: 'Text book', value: 0 },
 	{ key: 1, text: 'Task book', value: 1 },
@@ -49,31 +49,27 @@ class Book extends Component {
 		const { name, author, type, year, binded } = this.props.book;
 		if (errors) console.log(errors);
 
-		const hdr = `${subject.name}, класс(ы):`;
 		//TODO: Not refresh after history.push here
-		//TODO: Probably more than one binded book
 		return (
 			<div className="dashboard">
 				<Segment loading={loading}>
 					<Form>
-						<Form.Group>
-							<Label horizontal size="big">
-								{hdr}
-							</Label>
+						<Form.Group widths="equal">
+							<SubjectLabel subject={subject} />
+							<Form.Field
+								value={author}
+								control={Input}
+								onChange={this.onChange}
+								name="author"
+								placeholder="Author"
+								size="big"
+							/>
 						</Form.Group>
-						<Form.Field
-							value={author}
-							control={Input}
-							onChange={this.onChange}
-							label="Author"
-							name="author"
-							placeholder="Author"
-							size="big"
-						/>
 						<Form.TextArea
 							className="largetext"
 							name="name"
 							value={name}
+							placeholder="Title"
 							onChange={this.onChange}
 							size="big"
 						/>
@@ -132,7 +128,7 @@ const mapStateToProps = (state) => ({
 	errors: state.book.errors,
 	book: state.book.book,
 	bookId: state.books.current,
-	subject: getCurentSubject(state),
+	subject: getCurrentSubject(state),
 	booksToBind: booksToBindGet(state)
 });
 export default connect(mapStateToProps, { ...bookActions })(Book);

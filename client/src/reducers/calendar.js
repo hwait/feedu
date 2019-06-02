@@ -20,7 +20,7 @@ const initialCalendar = {
 	year: 2019,
 	dates: [],
 	name: '',
-	start: 8
+	start: 5
 };
 
 const initialState = {

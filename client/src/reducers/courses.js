@@ -98,7 +98,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.COURSE_CHOOSE: {
 			return {
 				...state,
-				course: state.course.find((x) => x._id === payload)
+				course: state.courses.find((x) => x._id === payload)
 			};
 		}
 
@@ -125,8 +125,8 @@ export const actions = {
 	courseRemove: (id) => ({ type: types.COURSE_REMOVE, payload: id })
 };
 
-const getCourses = (state) => {
-	return state.curses.curses.map((x) => ({
+export const getCourses = (state) => {
+	return state.courses.courses.map((x) => ({
 		key: x._id,
 		value: x._id,
 		text: x.sname
@@ -136,8 +136,8 @@ export const getCurrentCourse = (state) => {
 	return state.courses.course;
 };
 export const getCourse = (state, props) => {
+	console.log('===========getCourse==================');
+	console.log(props);
+	console.log('====================================');
 	return state.courses.courses.find((x) => x._id === props._id);
 };
-export const getCoursesBySubject = createSelector([ getCurrentSubject, getCourses ], (subject, courses) => {
-	return courses.filter((x) => x.subject === subject);
-});

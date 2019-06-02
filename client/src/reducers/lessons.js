@@ -50,7 +50,7 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	lessonsGet: (classn, sid) => ({ type: types.LESSONS_GET, payload: { classn, sid } }),
+	lessonsGet: (cid) => ({ type: types.LESSONS_GET, payload: cid }),
 	lessonSetCurrent: (payload) => ({ type: types.LESSONS_SET, payload })
 };
 

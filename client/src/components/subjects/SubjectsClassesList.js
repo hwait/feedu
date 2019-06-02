@@ -13,16 +13,11 @@ class SubjectsClassesDropdown extends Component {
 		setSubjectClass(sid, cn);
 	};
 	classitems = (sid, cls, cle) => {
-		const { filter, current } = this.props;
+		const { current } = this.props;
 		const curid = isempty(current) ? null : current.id;
 		const classes = Array.from(Array(cle + 1).keys()).slice(cls);
 		return classes.map((x) => (
-			<Menu.Item
-				active={curid === sid && filter === x}
-				color="red"
-				key={`${sid}${x}`}
-				onClick={(e, s, c) => this.choose(sid, x)}
-			>
+			<Menu.Item active={curid === sid} color="red" key={`${sid}${x}`} onClick={(e, s, c) => this.choose(sid, x)}>
 				{x}
 			</Menu.Item>
 		));
@@ -33,7 +28,7 @@ class SubjectsClassesDropdown extends Component {
 		const sitems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const items = isempty(current) ? null : (
 			<Menu compact className="left-spaced">
-				{this.classitems(current.id, current.cf, current.ct)}
+				{this.classitems(current.id)}
 			</Menu>
 		);
 		return (
@@ -63,7 +58,6 @@ class SubjectsClassesDropdown extends Component {
 	}
 }
 const mapStateToProps = (state) => ({
-	filter: state.subjects.filter,
 	current: state.subjects.current
 });
 SubjectsClassesDropdown.propTypes = {

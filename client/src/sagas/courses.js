@@ -31,14 +31,14 @@ export function* courseGetWatch() {
 function* courseSave(action) {
 	const { response, errors } = yield call(CoursesAPI.save, action.payload);
 	if (response) {
-		yield put({ type: coursesTypes.COURSES_SAVE_OK, payload: response });
+		yield put({ type: coursesTypes.COURSE_SAVE_OK, payload: response });
 	} else {
 		yield put({ type: coursesTypes.COURSE_FAILURE, payload: errors });
 	}
 }
 
 export function* courseSaveWatch() {
-	yield takeEvery(coursesTypes.COURSES_SAVE, courseSave);
+	yield takeEvery(coursesTypes.COURSE_SAVE, courseSave);
 }
 
 function* courseRemove(action) {

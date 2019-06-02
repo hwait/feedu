@@ -62,7 +62,7 @@ class Pattern extends Component {
 		const { name } = this.props;
 		const tt = this.getGrid();
 		return (
-			<Segment>
+			<Table.Cell width={2}>
 				<Table celled padded compact="very" size="small">
 					<Table.Header>
 						<Table.Row>
@@ -74,7 +74,7 @@ class Pattern extends Component {
 
 					<Table.Body>{tt}</Table.Body>
 				</Table>
-			</Segment>
+			</Table.Cell>
 		);
 	}
 }

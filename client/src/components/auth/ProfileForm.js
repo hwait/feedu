@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { Form, Button, Segment, Grid, Message } from 'semantic-ui-react';
 
-import SubjectsCheckboxes from '../subjects/SubjectsCheckboxes';
 import InputField from '../misc/InputField';
-import getClasses from '../../utils/getClasses';
 
 const options = [
 	{ key: 0, text: 'Student', value: 0 },
 	{ key: 1, text: 'Teacher', value: 1 },
 	{ key: 2, text: 'Parent', value: 2 }
 ];
-const classes = getClasses();
 class ProfileForm extends Component {
 	onChange = (e) => {
 		const { name, value } = e.target;
@@ -43,7 +40,7 @@ class ProfileForm extends Component {
 	render() {
 		console.log(this.props);
 		const { role, name, surname, email, password, password2 } = this.props.user;
-		const { errors, onChange, submitUser, getSubjects, setRole, butname } = this.props;
+		const { errors, onChange, submitUser, setRole, butname } = this.props;
 
 		return (
 			<div className="dark-overlay landing-inner">

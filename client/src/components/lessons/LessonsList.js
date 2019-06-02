@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { List } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 class LessonsList extends Component {
 	render() {
 		const { lessons, setLesson, current } = this.props;
+
 		const items = lessons.map(({ _id, nmb, name }) => {
 			return (
 				<List.Item
@@ -23,12 +23,8 @@ class LessonsList extends Component {
 		);
 	}
 }
-const mapStateToProps = (state) => ({
-	lessons: state.lessons.lessons,
-	current: state.lessons.current
-});
 LessonsList.propTypes = {
 	lessons: PropTypes.array.isRequired,
 	current: PropTypes.string.isRequired
 };
-export default connect(mapStateToProps, null)(LessonsList);
+export default LessonsList;

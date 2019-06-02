@@ -11,7 +11,7 @@ import round from '../../utils/round';
 import Youtube from './Youtube';
 import Paper from './Paper';
 import Task from './Task';
-
+import SubjectLabel from '../subjects/SubjectLabel';
 class Lesson extends Component {
 	componentDidMount() {
 		const { lessonId, lessonGet } = this.props;
@@ -55,20 +55,20 @@ class Lesson extends Component {
 					<Form>
 						<Segment.Inline>
 							<Form.Group inline>
-								<Label horizontal size="big">{`${subject.name} ${subject.icon}.`}</Label>
+								<SubjectLabel subject={subject} />
 								<Label horizontal size="big">{`${course.name}.`}</Label>
 								<Label horizontal size="big">
 									{`Урок № ${nmb}.`}
 								</Label>
 								<Form.Field value={nmb} control={Input} onChange={this.onChange} name="nmb" width={1} />
+								<Button
+									content="Copy"
+									icon="copy"
+									onClick={this.copyLesson}
+									color="olive"
+									floated="right"
+								/>
 							</Form.Group>
-							<Button
-								content="Copy"
-								icon="copy"
-								onClick={this.copyLesson}
-								color="olive"
-								floated="right"
-							/>
 						</Segment.Inline>
 						<Form.TextArea
 							className="largetext"

@@ -75,12 +75,12 @@ router.get('/video/:yid', (req, res) => {
 		}
 	}).pipe(res);
 });
-// @route   GET api/lessons/:sid
+// @route   GET api/lessons/course/:cid
 // @desc    Select all Lessons by Course
 // @access  Public
-router.get('/:sid', (req, res) => {
-	const { sid } = req.params;
-	Lesson.find({ course: sid }) //
+router.get('/course/:cid', (req, res) => {
+	const { cid } = req.params;
+	Lesson.find({ course: cid }) //
 		.sort({ nmb: 1 })
 		.then((lessons) =>
 			res.json(

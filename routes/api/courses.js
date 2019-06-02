@@ -59,11 +59,12 @@ router.get('/subject/:sid', (req, res) => {
 	Course.find({ subjects: sid }) //
 		.then((courses) =>
 			res.json(
-				courses.map(({ _id, name, sname }) => {
+				courses.map(({ _id, subject, name, sname }) => {
 					return {
 						_id,
-						name,
-						sname
+						subject,
+						sname,
+						name
 					};
 				})
 			)

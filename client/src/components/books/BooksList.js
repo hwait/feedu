@@ -6,16 +6,19 @@ import PropTypes from 'prop-types';
 class BooksList extends Component {
 	render() {
 		const { books, setBook, current } = this.props;
-		const items = books.map(({ _id, author, name }) => {
-			return (
-				<List.Item
-					as="a"
-					active={current === _id}
-					key={_id}
-					onClick={(e, d) => setBook(_id)}
-				>{`${author}. ${name}`}</List.Item>
-			);
-		});
+		const items =
+			books.length > 0
+				? books.map(({ _id, author, name }) => {
+						return (
+							<List.Item
+								as="a"
+								active={current === _id}
+								key={`book${_id}`}
+								onClick={(e, d) => setBook(_id)}
+							>{`${author}. ${name}`}</List.Item>
+						);
+					})
+				: null;
 		return (
 			<List selection verticalAlign="middle" size="large">
 				{items}

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Menu, Segment, Header, Select, Label } from 'semantic-ui-react';
-import { actions as subjectsActions, getSubjectsByUser } from '../../reducers/subjects';
-import { actions as coursesActions, getCoursesBySubject } from '../../reducers/courses';
-import { actions as patternsActions, getSubjectDays } from '../../reducers/patterns';
+import { Menu, Segment, Header, Select, Label, Button, Table } from 'semantic-ui-react';
+import { actions as subjectsActions, getSubjects } from '../../reducers/subjects';
+import { actions as coursesActions, getCourses } from '../../reducers/courses';
+import { actions as patternsActions, getCourseDays } from '../../reducers/patterns';
 import { actions as calendarsActions, calendarsGet, calendarDaysInWeeks } from '../../reducers/calendar';
-import SubjectsClassesList from '../subjects/SubjectsClassesList';
 import CoursesList from '../courses/CoursesList';
 import Pattern from './Pattern';
 import isempty from '../../utils/isempty';
@@ -14,6 +13,7 @@ import moment from 'moment';
 class Patterns extends Component {
 	componentDidMount() {
 		const { subjects, calendars, uid, init, calendarsGet, patternsGet, isAuthentificated, history } = this.props;
+
 		if (subjects.length === 0) {
 			init();
 		}
@@ -29,6 +29,15 @@ class Patterns extends Component {
 		const { errors, patternsGet, uid } = this.props;
 		if (errors && errors.success) patternsGet(uid);
 	}
+	setSubject = (e, { value }) => {
+		const { setCurrent, coursesGet } = this.props;
+		setCurrent(value);
+		coursesGet(value);
+	};
+	setCourse = (e, { value }) => {
+		const { courseChoose } = this.props;
+		courseChoose(value);
+	};
 	setDuration = (dur) => {
 		this.props.patternDuration(dur);
 	};
@@ -83,7 +92,19 @@ class Patterns extends Component {
 		return wd;
 	};
 	render() {
-		const { subjects, courses, calendars, calendar, loading, setCurrent, courseChoose, dur, days } = this.props;
+		const {
+			subjects,
+			curSubject,
+			curCourse,
+			courses,
+			calendars,
+			calendar,
+			loading,
+			courseChoose,
+			dur,
+			days
+		} = this.props;
+		const subjItems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const wd = this.renderWeekDays();
 		const patt = this.renderTables();
 		return (
@@ -116,15 +137,48 @@ class Patterns extends Component {
 						</Menu>
 						{wd}
 					</Segment>
+					<Segment>
+						<Select
+							label="Subjects"
+							options={subjItems}
+							placeholder="Subjects"
+							value={isempty(curSubject) ? null : curSubject.id}
+							onChange={this.setSubject}
+						/>
+						<Select
+							label="Courses"
+							options={courses}
+							placeholder="Courses"
+							value={isempty(curCourse) ? null : curCourse._id}
+							onChange={this.setCourse}
+							className="left-spaced"
+						/>
+						<Label size="large" className="left-spaced">
+							Total:
+							<Label.Detail>{days}</Label.Detail>
+						</Label>
+						<Button
+							content="Save"
+							icon="save"
+							labelPosition="left"
+							onClick={this.save}
+							positive
+							className="left-spaced"
+						/>
+					</Segment>
 
-					<SubjectsClassesList save={this.save} setSubject={setCurrent} subjects={subjects} days={days} />
-					<CoursesList setCourse={courseChoose} />
 					{calendar._id ? (
-						<Segment.Group horizontal>{patt}</Segment.Group>
+						<Segment.Group horizontal compact>
+							<Table celled compact="very">
+								<Table.Body>
+									<Table.Row>{patt}</Table.Row>
+								</Table.Body>
+							</Table>
+						</Segment.Group>
 					) : (
 						<Segment placeholder textAlign="center" loading={loading}>
 							<Header as="h1" disabled>
-								Books curSubject
+								Course Patterns
 							</Header>
 						</Segment>
 					)}
@@ -135,15 +189,15 @@ class Patterns extends Component {
 }
 Patterns.propTypes = {
 	uid: PropTypes.string.isRequired,
+	errors: PropTypes.object.isRequired,
+	patterns: PropTypes.array.isRequired,
+	calendar: PropTypes.object.isRequired,
+	calendars: PropTypes.array.isRequired,
 	subjects: PropTypes.array.isRequired,
 	courses: PropTypes.array.isRequired,
-	patterns: PropTypes.array.isRequired,
-	calendars: PropTypes.array.isRequired,
-	calendar: PropTypes.object.isRequired,
 	curSubject: PropTypes.object.isRequired,
 	curCourse: PropTypes.object.isRequired,
 	dur: PropTypes.number.isRequired,
-	errors: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired
 };
@@ -153,14 +207,14 @@ const mapStateToProps = (state) => ({
 	patterns: state.patterns.patterns,
 	calendar: state.calendar.calendar,
 	calendars: calendarsGet(state),
-	days: getSubjectDays(state),
+	days: getCourseDays(state),
 	weekdays: calendarDaysInWeeks(state),
-	subjects: getSubjectsByUser(state),
-	courses: getCoursesBySubject(state),
+	subjects: getSubjects(state),
+	courses: getCourses(state),
 	curSubject: state.subjects.current,
-	curCourse: state.course.course,
-	loading: state.patterns.loading,
+	curCourse: state.courses.course,
 	dur: state.patterns.dur,
+	loading: state.patterns.loading,
 	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, {

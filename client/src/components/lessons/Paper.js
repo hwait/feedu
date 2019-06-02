@@ -35,7 +35,7 @@ class Paper extends Component {
 						onChange={this.onChange}
 						name="paragraph"
 						label="Paragraph"
-						width={1}
+						width={2}
 					/>
 				</Form.Group>
 			</Segment>

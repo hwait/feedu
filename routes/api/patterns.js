@@ -82,7 +82,7 @@ router.get('/student/:id', (req, res) => {
 });
 
 // @route   GET api/patterns/course/:id
-// @desc    Select Student Patterns by sid
+// @desc    Select Student Patterns by сid
 // @access  Public
 router.get('/course/:id', (req, res) => {
 	const { id } = req.params;

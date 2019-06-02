@@ -105,11 +105,18 @@ const getCalendarFilter = (state) => {
 const getPatterns = (state) => {
 	return state.patterns.patterns;
 };
-
+/**
+ * TODO: Problem with const course = getCourse(state, { _id: x.course });
+ * Среди списка курсов только те, которые на текущий предмет. В Паттернах же разные предметы, поэтому не добраться так просто до курсов. 
+ * Мы должны название курса и цвет предмета выдавать вместе с паттерном из сервера.
+ */
 export const getPatternsByWeek = (state, props) => {
 	const patterns = state.patterns.patterns.filter((x) => x.weekday === props.weekday).map((x) => {
-		const course = getCourse({ _id: x.course });
+		const course = getCourse(state, { _id: x.course });
 		const subj = state.subjects.subjects.find((s) => s.id === course.subject);
+		console.log('==========getPatternsByWeek=============');
+		console.log(course, subj);
+		console.log('====================================');
 		return { ...x, color: `#${subj.color}`, icon: `${subj.icon}`, name: `${course.sname}` };
 	});
 	return patterns;

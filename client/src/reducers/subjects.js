@@ -77,28 +77,12 @@ export const actions = {
 	setCurrent: (payload) => ({ type: types.SUBJECTS_SET, payload })
 };
 
-export const getSubjectsByClassByUser = (state) => {
-	const arr = state.auth.user.subjects;
-	return state.subjects.subjects
-		.map((x) => ({
-			id: x.id,
-			name: x.name,
-			checked: arr.findIndex((s) => s === x.id) > -1
-		}))
-		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-};
-export const getSubjectsByClass = (state) => {
+export const getSubjects = (state) => {
 	return state.subjects.subjects
 		.map((x) => ({
 			id: x.id,
 			name: x.name
 		}))
-		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-};
-export const getSubjectsByUser = (state) => {
-	const arr = state.auth.user.subjects;
-	return state.subjects.subjects
-		.filter((x) => arr.findIndex((s) => s === x.id) > -1)
 		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 };
 export const getCurrentSubject = (state) => {

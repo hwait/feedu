@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Menu, Segment, Header, Label, Icon } from 'semantic-ui-react';
-import getClasses from '../../utils/getClasses';
+import { Segment, Header, Label, Icon } from 'semantic-ui-react';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as booksActions } from '../../reducers/books';
-import { getSubjectsByClass } from '../../reducers/subjects';
+import { getSubjects } from '../../reducers/subjects';
 import SubjectsList from '../subjects/SubjectsList';
 import BooksList from './BooksList';
 import isempty from '../../utils/isempty';
-const classes = getClasses();
 
 class Books extends Component {
 	componentDidMount() {
@@ -28,8 +26,8 @@ class Books extends Component {
 		this.props.history.push('/book');
 	};
 	setSubject = (value) => {
-		const { filter, booksGet } = this.props;
-		booksGet(filter, value);
+		const { booksGet } = this.props;
+		booksGet(value);
 	};
 	addBook = () => {
 		this.props.bookNew();
@@ -51,7 +49,7 @@ class Books extends Component {
 						{!isempty(curSubject) ? (
 							[
 								<BooksList setBook={this.setBook} />,
-								<Label as="a" attached="bottom right" onClick={this.addBook} color="blue">
+								<Label as="a" attached="top right" onClick={this.addBook} color="blue">
 									<Icon name="add" />
 								</Label>
 							]
@@ -76,7 +74,7 @@ Books.propTypes = {
 };
 const mapStateToProps = (state) => ({
 	errors: state.books.errors,
-	subjects: getSubjectsByClass(state),
+	subjects: getSubjects(state),
 	curSubject: state.subjects.current,
 	curBook: state.books.current,
 	loading: state.books.loading,

@@ -124,7 +124,7 @@ class Calendar extends Component {
 								width={5}
 							/>
 						</Form.Group>
-						<Grid stackable padded columns={4}>
+						<Grid stackable padded columns={3}>
 							{mm}
 						</Grid>
 						<Segment>

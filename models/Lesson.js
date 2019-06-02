@@ -43,7 +43,7 @@ const LessonSchema = new Schema({
 				ref: 'books'
 			},
 			paragraph: {
-				type: Number,
+				type: String,
 				required: true
 			}
 		}
