@@ -11,6 +11,9 @@ class Navbar extends Component {
 
 	render() {
 		const { isAuthentificated, path, logout, user } = this.props;
+		console.log('====================================');
+		console.log(path);
+		console.log('====================================');
 		const linkHome = (
 			<Menu.Item
 				as={Link}
@@ -50,7 +53,7 @@ class Navbar extends Component {
 				onClick={this.handleItemClick}
 			>
 				<Icon name="calendar" />
-				Board
+				Calendar
 			</Menu.Item>
 		);
 		const linkPatterns = (
@@ -63,7 +66,7 @@ class Navbar extends Component {
 				active={path === 'patterns'}
 				onClick={this.handleItemClick}
 			>
-				<Icon name="paste" />
+				<Icon name="th" />
 				Pattern
 			</Menu.Item>
 		);
@@ -123,6 +126,20 @@ class Navbar extends Component {
 				Profile
 			</Menu.Item>
 		);
+		const linkCourse = (
+			<Menu.Item
+				className="menu-item"
+				as={Link}
+				key="course"
+				name="course"
+				to="/course"
+				active={path === 'course'}
+				onClick={this.handleItemClick}
+			>
+				<Icon name="paw" />
+				Course
+			</Menu.Item>
+		);
 		const linkLogout = (
 			<Menu.Item as={Link} key="logout" name="logout" to="/" onClick={logout} className="menu-item">
 				<Icon name="log out" />
@@ -130,7 +147,7 @@ class Navbar extends Component {
 			</Menu.Item>
 		);
 		const menuItems = isAuthentificated
-			? [ linkDashboard, linkBooks, linkLessons, linkPatterns, linkCalendar, linkProfile, linkLogout ]
+			? [ linkDashboard, linkBooks, linkCourse, linkLessons, linkPatterns, linkCalendar, linkProfile, linkLogout ]
 			: [ linkHome, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">

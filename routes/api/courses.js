@@ -42,12 +42,12 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 			link,
 			lessonsn,
 			description,
-			books: [],
+			books,
 			subjects
 		});
 		newCourse // Try to save Course
 			.save()
-			.then(() => res.json({ success: true, id: newCourse._id }))
+			.then(() => res.json({ success: true, _id: newCourse._id }))
 			.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
 	}
 });
@@ -59,10 +59,10 @@ router.get('/subject/:sid', (req, res) => {
 	Course.find({ subjects: sid }) //
 		.then((courses) =>
 			res.json(
-				courses.map(({ _id, subject, name, sname }) => {
+				courses.map(({ _id, subjects, name, sname }) => {
 					return {
 						_id,
-						subject,
+						subjects,
 						sname,
 						name
 					};

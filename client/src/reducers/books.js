@@ -59,6 +59,11 @@ export const actions = {
 	bookSetCurrent: (payload) => ({ type: types.BOOKS_SET, payload }),
 	bookNew: () => ({ type: types.BOOKS_NEW })
 };
+
+export const getBooks = (state) => {
+	return state.books.books;
+};
+
 export const booksToBindGet = (state) => {
 	return state.books.books
 		.filter((x) => x._id !== state.books.current)

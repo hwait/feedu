@@ -1,7 +1,6 @@
 import Immutable from '../utils/immutable';
 import { createSelector } from 'reselect';
-import { getCurrentSubject } from './subjects';
-
+import { getBooks } from './books';
 export const types = {
 	COURSE_FC: 'COURSE_FC',
 	COURSES_GET: 'COURSES_GET',
@@ -12,16 +11,13 @@ export const types = {
 	COURSE_SAVE: 'COURSE_SAVE',
 	COURSE_SAVE_OK: 'COURSE_SAVE_OK',
 	COURSE_FAILURE: 'COURSE_FAILURE',
+	PAPER_ADD: 'COURSE_PAPER_ADD',
+	PAPER_CHANGE: 'COURSE_PAPER_CHANGE',
+	PAPER_REMOVE: 'COURSE_PAPER_REMOVE',
 	COURSE_ADD: 'COURSE_ADD',
+	COURSE_CANCEL: 'COURSE_CANCEL',
 	COURSE_REMOVE: 'COURSE_REMOVE',
 	COURSE_REMOVE_OK: 'COURSE_REMOVE_OK'
-};
-
-const initialState = {
-	courses: [],
-	course: {},
-	errors: {},
-	loading: false
 };
 
 const initialCourse = {
@@ -34,6 +30,12 @@ const initialCourse = {
 	books: []
 };
 
+const initialState = {
+	courses: [],
+	course: initialCourse,
+	errors: {},
+	loading: false
+};
 export default (state = initialState, { type, payload }) => {
 	state = { ...state, errors: {} };
 	switch (type) {
@@ -72,6 +74,7 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				...payload,
+
 				errors: {},
 				loading: false
 			};
@@ -95,17 +98,38 @@ export default (state = initialState, { type, payload }) => {
 				course: initialCourse
 			};
 		}
+		case types.COURSE_CANCEL: {
+			return {
+				...state,
+				courses: [],
+				course: initialCourse
+			};
+		}
 		case types.COURSE_CHOOSE: {
 			return {
 				...state,
 				course: state.courses.find((x) => x._id === payload)
 			};
 		}
-
-		case types.COURSE_DURATION: {
+		case types.PAPER_ADD: {
 			return {
 				...state,
-				dur: payload
+				course: {
+					...state.course,
+					books: Immutable.addItem(state.course.books, '')
+				}
+			};
+		}
+		case types.PAPER_CHANGE: {
+			return {
+				...state,
+				course: { ...state.course, books: Immutable.updateStringInArray(state.course.books, payload) }
+			};
+		}
+		case types.PAPER_REMOVE: {
+			return {
+				...state,
+				course: { ...state.course, books: Immutable.removeIndex(state.course.books, payload) }
 			};
 		}
 
@@ -121,8 +145,12 @@ export const actions = {
 	courseGet: (id) => ({ type: types.COURSE_GET, payload: id }),
 	courseChoose: (id) => ({ type: types.COURSE_CHOOSE, payload: id }),
 	courseAdd: (item) => ({ type: types.COURSE_ADD, payload: item }),
+	courseCancel: () => ({ type: types.COURSE_CANCEL }),
 	courseSave: (courses) => ({ type: types.COURSE_SAVE, payload: courses }),
-	courseRemove: (id) => ({ type: types.COURSE_REMOVE, payload: id })
+	courseRemove: (id) => ({ type: types.COURSE_REMOVE, payload: id }),
+	paperAdd: () => ({ type: types.PAPER_ADD }),
+	paperChange: (index, value) => ({ type: types.PAPER_CHANGE, payload: { index, item: value } }),
+	paperRemove: (index) => ({ type: types.PAPER_REMOVE, payload: index })
 };
 
 export const getCourses = (state) => {
@@ -135,9 +163,23 @@ export const getCourses = (state) => {
 export const getCurrentCourse = (state) => {
 	return state.courses.course;
 };
+export const getExtendedCourse = (state) => {
+	return {
+		...state.courses.course,
+		books: state.courses.course.books.map((x) => ({
+			book: x,
+			paragraph: 0
+		}))
+	};
+};
+
+// export const getExtendedCourse = createSelector([ getCurrentCourse, getBooks ], (course, books) => {
+// 	const books = course.books.map((x) => {
+// 		const book = books.find((b) => b._id === x._id);
+// 		return { ...x, color: `#${subj.color}`, icon: `${subj.icon}`, name: `${x.course.sname}` };
+// 	});
+// });
+
 export const getCourse = (state, props) => {
-	console.log('===========getCourse==================');
-	console.log(props);
-	console.log('====================================');
 	return state.courses.courses.find((x) => x._id === props._id);
 };

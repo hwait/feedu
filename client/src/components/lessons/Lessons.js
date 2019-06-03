@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Header } from 'semantic-ui-react';
 import { actions as subjectsActions } from '../../reducers/subjects';
-import { actions as coursesActions, getCoursesBySubject } from '../../reducers/courses';
+import { actions as coursesActions } from '../../reducers/courses';
 import { actions as lessonsActions } from '../../reducers/lessons';
 import { actions as booksActions } from '../../reducers/books';
 import { getSubjects } from '../../reducers/subjects';

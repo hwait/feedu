@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Segment, Label, Table, Header } from 'semantic-ui-react';
+import { Segment, Label, Table, Header, Icon } from 'semantic-ui-react';
 import { getPatternsByCalendar } from '../../reducers/patterns';
 import isempty from '../../utils/isempty';
 class Pattern extends Component {
@@ -24,6 +24,7 @@ class Pattern extends Component {
 				const id = x._id;
 				cell = (
 					<Table.Cell rowSpan={x.dur} style={{ backgroundColor: x.color, color: '#FFF' }}>
+						<Icon className={`sf-icon-${x.icon}`} />
 						{x.name}
 						<Label
 							size="mini"
@@ -31,9 +32,7 @@ class Pattern extends Component {
 							color="red"
 							className="left-spaced"
 							onClick={(e, t, w, d) => removePattern(i, weekday, id)}
-						>
-							X
-						</Label>
+						/>
 					</Table.Cell>
 				);
 				max = x.ts + x.dur;
@@ -62,7 +61,7 @@ class Pattern extends Component {
 		const { name } = this.props;
 		const tt = this.getGrid();
 		return (
-			<Table.Cell width={2}>
+			<Segment style={{ display: 'flex', alignItems: 'top' }}>
 				<Table celled padded compact="very" size="small">
 					<Table.Header>
 						<Table.Row>
@@ -74,7 +73,7 @@ class Pattern extends Component {
 
 					<Table.Body>{tt}</Table.Body>
 				</Table>
-			</Table.Cell>
+			</Segment>
 		);
 	}
 }

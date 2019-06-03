@@ -6,7 +6,7 @@ import { actions as lessonActions } from '../../reducers/lesson';
 import { getNextNmb } from '../../reducers/lessons';
 import { getCurrentSubject } from '../../reducers/subjects';
 import { getCurrentCourse } from '../../reducers/courses';
-import { booksToBindGet } from '../../reducers/books';
+import { actions as booksActions, booksToBindGet } from '../../reducers/books';
 import round from '../../utils/round';
 import Youtube from './Youtube';
 import Paper from './Paper';
@@ -45,6 +45,14 @@ class Lesson extends Component {
 	remove = () => {
 		console.log('remove');
 	};
+
+	paperRemove = (index) => {
+		this.props.paperRemove(index);
+	};
+	paperChange = (index, name, value) => {
+		this.props.paperChange(index, name, value);
+	};
+
 	render() {
 		const { subject, course, errors, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
 		const { name, nmb, videos, papers, tasks } = this.props.lesson;
@@ -92,7 +100,7 @@ class Lesson extends Component {
 								<Icon name="add" />
 							</Label>
 							{papers.map((paper, index) => (
-								<Paper key={`paper${index}`} paper={paper} index={index} books={booksToBind} />
+								<Paper key={`paper${index}`} paper={paper} index={index} books={booksToBind} paperRemove={this.paperRemove} paperChange={this.paperChange} isParagraph={true} />
 							))}
 						</Segment>
 						<Segment>

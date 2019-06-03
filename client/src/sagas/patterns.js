@@ -7,7 +7,7 @@ function* patternsGet(action) {
 	if (response) {
 		yield put({ type: patternsTypes.PATTERNS_GET_OK, payload: { patterns: response } });
 	} else {
-		yield put({ type: patternsTypes.PATTERN_FAILURE, payload: errors });
+		yield put({ type: patternsTypes.PATTERNS_FAILURE, payload: errors });
 	}
 }
 
@@ -20,7 +20,7 @@ function* patternSave(action) {
 	if (response) {
 		yield put({ type: patternsTypes.PATTERNS_SAVE_OK, payload: response });
 	} else {
-		yield put({ type: patternsTypes.PATTERN_FAILURE, payload: errors });
+		yield put({ type: patternsTypes.PATTERNS_FAILURE, payload: errors });
 	}
 }
 
@@ -33,7 +33,7 @@ function* patternRemove(action) {
 	if (response) {
 		yield put({ type: patternsTypes.PATTERN_REMOVE_OK, payload: response });
 	} else {
-		yield put({ type: patternsTypes.PATTERN_FAILURE, payload: errors });
+		yield put({ type: patternsTypes.PATTERNS_FAILURE, payload: errors });
 	}
 }
 

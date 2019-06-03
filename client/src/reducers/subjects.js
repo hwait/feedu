@@ -79,9 +79,12 @@ export const actions = {
 
 export const getSubjects = (state) => {
 	return state.subjects.subjects
-		.map((x) => ({
-			id: x.id,
-			name: x.name
+		.map(({ id, name }) => ({
+			id,
+			name,
+			key: id,
+			text: name,
+			value: id
 		}))
 		.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 };

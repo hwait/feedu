@@ -11,8 +11,14 @@ export default class PatternsAPI {
 	}
 
 	static save(payload) {
+		const data = payload.map((x) => {
+			return {
+				...x,
+				course: x.course._id
+			};
+		});
 		return axios
-			.post(`${root}/save`, payload)
+			.post(`${root}/save`, data)
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}

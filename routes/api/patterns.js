@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const request = require('request');
 const convertError = require('../../utils/convertError');
-const { check, validationResult } = require('express-validator/check');
 const Pattern = require('../../models/Pattern');
-
+const Course = require('../../models/Course');
 // @route   POST api/patterns/save
 // @desc    Add Patterns (Recursive)
 // @access  Private
@@ -62,23 +60,10 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 router.get('/student/:id', (req, res) => {
 	const { id } = req.params;
 	Pattern.find({ student: id }) //
-		.then((patterns) =>
-			res.json(
-				patterns.map(({ _id, course, student, calendar, weekday, ts, dur, days }) => {
-					return {
-						_id,
-						course,
-						student,
-						calendar,
-						weekday,
-						ts,
-						dur,
-						days
-					};
-				})
-			)
-		)
-		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
+		.populate('course', 'sname subjects', Course)
+		.then((patterns) => res.json(patterns))
+		//.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
+		.catch((errors) => res.status(404).json({ errors: errors }));
 });
 
 // @route   GET api/patterns/course/:id

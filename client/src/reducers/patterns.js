@@ -1,6 +1,6 @@
 import Immutable from '../utils/immutable';
 import { createSelector } from 'reselect';
-import { getCurrentCourse, getCourse } from './courses';
+import { getCurrentCourse } from './courses';
 
 export const types = {
 	PATTERNS_GET: 'PATTERNS_GET',
@@ -63,7 +63,12 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.PATTERN_ADD: {
-			if (state.patterns.some((x) => x.ts - payload.ts < payload.dur && x.ts - payload.ts > 0)) return state;
+			if (
+				state.patterns.some(
+					(x) => x.ts - payload.ts < payload.dur && x.ts - payload.ts > 0 && x.weekday === payload.weekday
+				)
+			)
+				return state;
 			return {
 				...state,
 				patterns: Immutable.addItem(state.patterns, payload)
@@ -112,12 +117,9 @@ const getPatterns = (state) => {
  */
 export const getPatternsByWeek = (state, props) => {
 	const patterns = state.patterns.patterns.filter((x) => x.weekday === props.weekday).map((x) => {
-		const course = getCourse(state, { _id: x.course });
-		const subj = state.subjects.subjects.find((s) => s.id === course.subject);
-		console.log('==========getPatternsByWeek=============');
-		console.log(course, subj);
-		console.log('====================================');
-		return { ...x, color: `#${subj.color}`, icon: `${subj.icon}`, name: `${course.sname}` };
+		//const course = getCourse(state, { _id: x.course });
+		const subj = state.subjects.subjects.find((s) => s.id === x.course.subjects[0]);
+		return { ...x, color: `#${subj.color}`, icon: `${subj.icon}`, name: `${x.course.sname}` };
 	});
 	return patterns;
 };

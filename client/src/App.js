@@ -17,6 +17,7 @@ import Books from './components/books/Books';
 import Book from './components/books/Book';
 import Calendar from './components/calendar/Calendar';
 import Patterns from './components/patterns/Patterns';
+import Course from './components/courses/Course';
 
 class App extends Component {
 	render() {
@@ -36,6 +37,7 @@ class App extends Component {
 							<Route exact path="/calendar" component={Calendar} />
 							<Route exact path="/lessons" component={Lessons} />
 							<Route exact path="/lesson" component={Lesson} />
+							<Route exact path="/course" component={Course} />
 						</div>
 						<Footer />
 					</div>

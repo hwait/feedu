@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Menu, Segment, Header, Select, Label, Button, Table } from 'semantic-ui-react';
+import { Menu, Segment, Header, Select, Label, Button } from 'semantic-ui-react';
 import { actions as subjectsActions, getSubjects } from '../../reducers/subjects';
 import { actions as coursesActions, getCourses } from '../../reducers/courses';
 import { actions as patternsActions, getCourseDays } from '../../reducers/patterns';
 import { actions as calendarsActions, calendarsGet, calendarDaysInWeeks } from '../../reducers/calendar';
-import CoursesList from '../courses/CoursesList';
 import Pattern from './Pattern';
 import isempty from '../../utils/isempty';
 import moment from 'moment';
+
 class Patterns extends Component {
 	componentDidMount() {
 		const { subjects, calendars, uid, init, calendarsGet, patternsGet, isAuthentificated, history } = this.props;
@@ -49,7 +49,7 @@ class Patterns extends Component {
 		const { curCourse, calendar, weekdays, uid, dur, patternAdd } = this.props;
 		if (!isempty(curCourse))
 			patternAdd({
-				course: curCourse._id,
+				course: curCourse,
 				calendar: calendar._id,
 				student: uid,
 				weekday,
@@ -63,7 +63,9 @@ class Patterns extends Component {
 		else this.props.patternRemoveImmediate({ weekday, ts: value });
 	};
 	calendarGet = (e, { value }) => {
-		this.props.calendarGet(value);
+		const { patterns, patternsGet, calendarGet, uid } = this.props;
+		if (patterns.length === 0) patternsGet(uid);
+		calendarGet(value);
 	};
 	renderWeekDays = () => {
 		const wd = this.props.weekdays.map((x, index) => (
@@ -92,18 +94,7 @@ class Patterns extends Component {
 		return wd;
 	};
 	render() {
-		const {
-			subjects,
-			curSubject,
-			curCourse,
-			courses,
-			calendars,
-			calendar,
-			loading,
-			courseChoose,
-			dur,
-			days
-		} = this.props;
+		const { subjects, curSubject, curCourse, courses, calendars, calendar, loading, dur, days } = this.props;
 		const subjItems = subjects.map(({ id, name }) => ({ key: id, text: name, value: id }));
 		const wd = this.renderWeekDays();
 		const patt = this.renderTables();
@@ -140,7 +131,7 @@ class Patterns extends Component {
 					<Segment>
 						<Select
 							label="Subjects"
-							options={subjItems}
+							options={subjects}
 							placeholder="Subjects"
 							value={isempty(curSubject) ? null : curSubject.id}
 							onChange={this.setSubject}
@@ -169,11 +160,7 @@ class Patterns extends Component {
 
 					{calendar._id ? (
 						<Segment.Group horizontal compact>
-							<Table celled compact="very">
-								<Table.Body>
-									<Table.Row>{patt}</Table.Row>
-								</Table.Body>
-							</Table>
+							{patt}
 						</Segment.Group>
 					) : (
 						<Segment placeholder textAlign="center" loading={loading}>

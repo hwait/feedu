@@ -7,9 +7,9 @@ class SubjectLabel extends Component {
 		const { color, name, icon } = this.props.subject;
 
 		return (
-			<Label horizontal size="big" style={{ color: 'white', background: `#${color}`, whiteSpace: 'nowrap' }}>
+			<Label size="big" style={{ color: 'white', background: `#${color}`, whiteSpace: 'nowrap' }}>
 				<Icon className={`sf-icon-${icon}`} size="large" />
-				{name}
+				<Label.Detail className="menu-item">{name}</Label.Detail>
 			</Label>
 		);
 	}

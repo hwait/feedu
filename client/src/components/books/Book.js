@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Form, Label, Button, Input, Icon } from 'semantic-ui-react';
+import { Segment, Form, Button, Input } from 'semantic-ui-react';
 import { actions as bookActions } from '../../reducers/book';
 import { getCurrentSubject } from '../../reducers/subjects';
 import { booksToBindGet } from '../../reducers/books';
