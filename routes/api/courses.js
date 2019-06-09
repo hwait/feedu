@@ -59,14 +59,16 @@ router.get('/subject/:sid', (req, res) => {
 	Course.find({ subjects: sid }) //
 		.then((courses) =>
 			res.json(
-				courses.map(({ _id, subjects, name, sname }) => {
-					return {
-						_id,
-						subjects,
-						sname,
-						name
-					};
-				})
+				courses
+					.map(({ _id, subjects, name, sname }) => {
+						return {
+							_id,
+							subjects,
+							sname,
+							name
+						};
+					})
+					.sort((a, b) => (a.sname > b.sname ? 1 : b.sname > a.sname ? -1 : 0))
 			)
 		)
 		.catch((error) => {

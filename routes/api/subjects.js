@@ -21,7 +21,7 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ errors: errors.array() });
 		}
-		const { name, iconmcolor } = req.body;
+		const { name, icon, color } = req.body;
 		const newSubject = new Subject({ name, icon, color });
 		newSubject // Try to save Subject
 			.save()
@@ -34,7 +34,7 @@ router.post(
 // @desc    Select all active subjects
 // @access  Public
 router.get('/', (req, res) => {
-	Subject.find() //
+	Subject.find({ status: true }) //
 		.sort({ name: 1 })
 		.then((subjects) =>
 			res.json(

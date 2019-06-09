@@ -53,6 +53,27 @@ router.post(
 	}
 );
 
+// @route   GET api/calendars/group/:id
+// @desc    Select all Calendars by Group Id in one
+// @access  Public
+router.get('/group/:id', (req, res) => {
+	const { id } = req.params;
+	Calendar.find({ group: id }) //
+		.then((calendars) =>
+			res.json(
+				calendars.map(({ _id, name, group, dates }) => {
+					return {
+						_id,
+						name: `[${group}]: ${name}`,
+						dates,
+						group
+					};
+				})
+			)
+		)
+		.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
+});
+
 // @route   GET api/calendar/:bid
 // @desc    Select Calendar by Id
 // @access  Public
@@ -70,9 +91,11 @@ router.get('/', (req, res) => {
 	Calendar.find({}) //
 		.then((calendars) =>
 			res.json(
-				calendars.map(({ _id, name, group }) => {
+				calendars.map(({ _id, name, group, year }) => {
 					return {
 						_id,
+						group,
+						year,
 						name: `[${group}]: ${name}`
 					};
 				})

@@ -12,6 +12,7 @@ import Paper from '../lessons/Paper';
 class Course extends Component {
 	componentDidMount() {
 		const { subjects, courses, coursesGet, init } = this.props;
+
 		if (subjects.length === 0) init();
 		if (courses.length === 0) coursesGet();
 	}

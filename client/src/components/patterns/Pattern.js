@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Segment, Label, Table, Header, Icon } from 'semantic-ui-react';
-import { getPatternsByCalendar } from '../../reducers/patterns';
+import { getPatternsByDate } from '../../reducers/patterns';
 import isempty from '../../utils/isempty';
 class Pattern extends Component {
 	getGrid = () => {
-		const { weekday, patterns, addPattern, removePattern } = this.props;
+		const { date, patterns, addPattern, removePattern } = this.props;
+		console.log('=======getGrid==========');
+		console.log(patterns, date);
+		console.log('====================================');
 		let ts = moment('0800', 'Hmm');
 		let pref = '',
 			max = 0;
@@ -17,13 +20,14 @@ class Pattern extends Component {
 				pref = pref === 'odd' ? 'even' : 'odd';
 			}
 			const cln = `c${i % 3}-${pref}`;
-			let x = patterns.find((x) => x.ts === i);
+			let x = patterns.find((x) => x.dates.some((d) => d.includes(ts.format('HH:mm:ss'))));
 
-			let cell = <Table.Cell className={cln} onClick={(e, t, w) => addPattern(i, weekday)} />;
+			let cell = <Table.Cell className={cln} onClick={(e, t, w) => addPattern(i, date)} />;
 			if (!isempty(x)) {
 				const id = x._id;
+				const cid = x.course;
 				cell = (
-					<Table.Cell rowSpan={x.dur} style={{ backgroundColor: x.color, color: '#FFF' }}>
+					<Table.Cell rowSpan={x.dur / 20} style={{ backgroundColor: x.color, color: '#FFF' }}>
 						<Icon className={`sf-icon-${x.icon}`} />
 						{x.name}
 						<Label
@@ -31,7 +35,7 @@ class Pattern extends Component {
 							as="a"
 							color="red"
 							className="left-spaced"
-							onClick={(e, t, w, d) => removePattern(i, weekday, id)}
+							onClick={(e, t, w, c, d) => removePattern(i, date, cid, id)}
 						/>
 					</Table.Cell>
 				);
@@ -58,7 +62,7 @@ class Pattern extends Component {
 		return tt;
 	};
 	render() {
-		const { name } = this.props;
+		const { date } = this.props;
 		const tt = this.getGrid();
 		return (
 			<Segment style={{ display: 'flex', alignItems: 'top' }}>
@@ -66,7 +70,7 @@ class Pattern extends Component {
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell colSpan={2}>
-								<Header as="h3">{name}</Header>
+								<Header as="h3">{date.format('ddd, DD')}</Header>
 							</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
@@ -79,13 +83,11 @@ class Pattern extends Component {
 }
 Pattern.propTypes = {
 	addPattern: PropTypes.func.isRequired,
-	name: PropTypes.string.isRequired,
-	calendar: PropTypes.string.isRequired,
 	removePattern: PropTypes.func.isRequired,
 	patterns: PropTypes.array.isRequired,
-	weekday: PropTypes.number.isRequired
+	date: PropTypes.object.isRequired
 };
 const mapStateToProps = (state, props) => ({
-	patterns: getPatternsByCalendar(state, props)
+	patterns: getPatternsByDate(state, props)
 });
 export default connect(mapStateToProps, null)(Pattern);

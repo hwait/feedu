@@ -12,6 +12,21 @@ export default class Immutable {
 			};
 		});
 	}
+	static toggleObjectsInArray(array, action) {
+		// Action should be {id,field}
+		return array.map((item) => {
+			if (item._id === action.id) {
+				return { ...item, [action.field]: item[action.field] ? false : true };
+			}
+			return item;
+		});
+	}
+	static updateObjectsInArray(array, items) {
+		return array.map((item) => {
+			const found = items.find((x) => x._id === item._id);
+			return found ? found : item;
+		});
+	}
 	static updateStringInArray(array, action) {
 		return array.map((item, index) => {
 			if (index !== action.index) {
@@ -45,15 +60,15 @@ export default class Immutable {
 		newArray.splice(action.index, 0, action.item);
 		return newArray;
 	}
+	static addItems(array, items) {
+		return [ ...new Set([].concat.apply(array, items)) ];
+	}
 	static addItem(array, item) {
 		let newArray = array.slice();
 		newArray.splice(array.length, 0, item);
 		return newArray;
 	}
 	static addObject(array, item) {
-		console.log('==============addObject=================');
-		console.log(array, item);
-		console.log('====================================');
 		let newArray = array.slice();
 		newArray.splice(array.length, 0, item);
 		return newArray;

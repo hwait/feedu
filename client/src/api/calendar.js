@@ -15,6 +15,12 @@ export default class CalendarAPI {
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
+	static getGroup(payload) {
+		return axios
+			.get(`${root}/group/${payload}`)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
 	static save(payload) {
 		return axios
 			.post(`${root}/save`, payload)

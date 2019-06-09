@@ -4,6 +4,7 @@ const passport = require('passport');
 const convertError = require('../../utils/convertError');
 const Pattern = require('../../models/Pattern');
 const Course = require('../../models/Course');
+
 // @route   POST api/patterns/save
 // @desc    Add Patterns (Recursive)
 // @access  Private
@@ -11,17 +12,15 @@ const Course = require('../../models/Course');
 router.post('/save', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const patternsSave = (depth) => {
 		if (depth >= 0) {
-			const { _id, student, calendar, weekday, ts, dur, course, days } = req.body[depth];
+			const { _id, student, ts, dur, course, dates } = req.body[depth];
 			if (_id) {
 				Pattern.findById(_id).then((pattern) => {
 					if (pattern) {
 						pattern.course = course;
 						pattern.student = student;
-						pattern.calendar = calendar;
-						pattern.weekday = weekday;
 						pattern.ts = ts;
 						pattern.dur = dur;
-						pattern.days = days;
+						pattern.dates = dates;
 						pattern // Try to save Pattern
 							.save()
 							.then(patternsSave(depth - 1))
@@ -34,11 +33,9 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 				const newPattern = new Pattern({
 					course,
 					student,
-					calendar,
-					weekday,
 					ts,
 					dur,
-					days
+					dates
 				});
 				newPattern // Try to save Pattern
 					.save()
@@ -74,13 +71,12 @@ router.get('/course/:id', (req, res) => {
 	Pattern.find({ course: id }) //
 		.then((patterns) =>
 			res.json(
-				patterns.map(({ _id, course, student, calendar, weekday, ts, dur }) => {
+				patterns.map(({ _id, course, student, dates, ts, dur }) => {
 					return {
 						_id,
 						course,
 						student,
-						calendar,
-						weekday,
+						dates,
 						ts,
 						dur
 					};
@@ -95,11 +91,11 @@ router.get('/course/:id', (req, res) => {
 // @access  Private
 // TODO: DELETE: Check Role (Techer, Parent) and binding to supervisored Students only.
 router.post('/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
-	const { id, weekday, ts } = req.body;
+	const { cid, uid, id } = req.body;
 	Pattern.findById(id)
 		.then((pattern) => {
 			if (pattern) {
-				pattern.remove().then(() => res.json({ weekday, ts }));
+				pattern.remove().then(() => res.json({ cid, uid, id })); // To remove locally wee have to send this to a client
 			} else {
 				return res.status(404).json({ pattern: 'Pattern not found' });
 			}

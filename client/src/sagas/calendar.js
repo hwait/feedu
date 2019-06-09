@@ -15,6 +15,19 @@ export function* calendarsGetWatch() {
 	yield takeEvery(calendarTypes.CALENDARS_GET, calendarsGet);
 }
 
+function* calendarsGroupGet(action) {
+	const { response, errors } = yield call(CalendarAPI.getGroup, action.payload);
+	if (response) {
+		yield put({ type: calendarTypes.CALENDARS_GROUP_OK, payload: { calendars: response } });
+	} else {
+		yield put({ type: calendarTypes.CALENDAR_FAILURE, payload: errors });
+	}
+}
+
+export function* calendarsGroupGetWatch() {
+	yield takeEvery(calendarTypes.CALENDARS_GROUP, calendarsGroupGet);
+}
+
 function* calendarGet(action) {
 	const { response, errors } = yield call(CalendarAPI.getOne, action.payload);
 	if (response) {
