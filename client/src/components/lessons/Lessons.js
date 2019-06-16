@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Segment, Header } from 'semantic-ui-react';
+import { Segment, Header, Label, Icon } from 'semantic-ui-react';
 import { actions as subjectsActions } from '../../reducers/subjects';
 import { actions as coursesActions } from '../../reducers/courses';
 import { actions as lessonsActions } from '../../reducers/lessons';
@@ -21,7 +21,13 @@ class Lessons extends Component {
 			this.props.history.push('/');
 		}
 	}
-
+	componentDidUpdate() {
+		const { errors, curCourse, curSubject } = this.props;
+		console.log('========componentDidUpdate=============');
+		console.log(curCourse._id, curSubject);
+		console.log('====================================');
+		if (errors && errors.success) this.setCourse(curCourse._id);
+	}
 	setLesson = (value) => {
 		this.props.lessonSetCurrent(value);
 		this.props.history.push('/lesson');
@@ -36,6 +42,15 @@ class Lessons extends Component {
 		courseChoose(value);
 		lessonsGet(value);
 		booksGet(curSubject.id);
+	};
+	addLesson = () => {
+		this.props.lessonNew();
+		this.props.history.push('/lesson');
+	};
+	incLesson = (value) => {
+		console.log('incLesson', value);
+		const { lessonsInc, curCourse } = this.props;
+		lessonsInc({ cid: curCourse._id, nstart: value });
 	};
 	render() {
 		const { curSubject, courses, curCourse, lessons, curLesson, subjects, loading } = this.props;
@@ -59,12 +74,22 @@ class Lessons extends Component {
 						)}
 					</Segment>
 					<Segment
-						placeholder={isempty(curCourse)}
-						textAlign={!isempty(curCourse) ? 'left' : 'center'}
+						placeholder={!curCourse._id}
+						textAlign={curCourse._id ? 'left' : 'center'}
 						loading={loading}
 					>
-						{!isempty(curCourse) ? (
-							<LessonsList setLesson={this.setLesson} current={curLesson} lessons={lessons} />
+						{curCourse._id ? (
+							[
+								<LessonsList
+									setLesson={this.setLesson}
+									incLesson={this.incLesson}
+									current={curLesson}
+									lessons={lessons}
+								/>,
+								<Label as="a" attached="top right" onClick={this.addLesson} color="blue">
+									<Icon name="add" />
+								</Label>
+							]
 						) : (
 							<Header as="h1" disabled>
 								Lessons

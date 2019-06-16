@@ -1,3 +1,4 @@
+import { types as lessonsTypes } from '../reducers/lessons';
 import Immutable from '../utils/immutable';
 // TODO: Add, Change and Remove
 export const types = {
@@ -28,7 +29,7 @@ export const types = {
 
 const initialLesson = {
 	course: '',
-	nmb: 0,
+	nmb: 1,
 	name: '',
 	link: '',
 	videos: [],
@@ -80,9 +81,7 @@ export default (state = initialState, { type, payload }) => {
 					videos: Immutable.addItem(state.lesson.videos, {
 						link: '',
 						name: '',
-						dur: '',
-						errors: {},
-						loading: false
+						dur: ''
 					})
 				}
 			};
@@ -95,9 +94,7 @@ export default (state = initialState, { type, payload }) => {
 					...state.lesson,
 					papers: Immutable.addItem(state.lesson.papers, {
 						book: '',
-						paragraph: 0,
-						errors: {},
-						loading: false
+						paragraph: 0
 					})
 				}
 			};
@@ -122,9 +119,7 @@ export default (state = initialState, { type, payload }) => {
 					tasks: Immutable.addItem(state.lesson.tasks, {
 						book: '',
 						nmb: 0,
-						difficulty: 1,
-						errors: {},
-						loading: false
+						difficulty: 1
 					})
 				}
 			};
@@ -147,10 +142,16 @@ export default (state = initialState, { type, payload }) => {
 				lesson: { ...state.lesson, ...payload }
 			};
 		}
+		case lessonsTypes.LESSONS_INC_OK: {
+			return {
+				...state,
+				lesson: { ...initialLesson, ...payload }
+			};
+		}
 		case types.LESSON_COPY: {
 			return {
 				...state,
-				lesson: { ...state.lesson, ...payload, name: payload.name + '-COPY' }
+				lesson: { ...state.lesson, ...payload, name: payload.name + '-COPY', _id: undefined }
 			};
 		}
 
@@ -162,9 +163,11 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.LESSON_SAVE_OK: {
+			const nmb = state.lesson.nmb * 1 + 1;
+			const name = state.lesson.name === 'Решение задач' ? '' : 'Решение задач';
 			return {
 				...state,
-				errors: { success: true },
+				lesson: { ...initialLesson, nmb, name },
 				loading: false
 			};
 		}
@@ -181,6 +184,12 @@ export default (state = initialState, { type, payload }) => {
 				...state,
 				errors: payload,
 				loading: false
+			};
+		}
+		case lessonsTypes.LESSONS_NEW: {
+			return {
+				...state,
+				lesson: initialLesson
 			};
 		}
 		default: {
@@ -210,5 +219,6 @@ export const actions = {
 	lessonGet: (lid) => ({ type: types.LESSON_GET, payload: lid }),
 	lessonSave: (lesson) => ({ type: types.LESSON_SAVE, payload: lesson }),
 	lessonNew: (payload) => ({ type: types.LESSON_SET, payload }),
-	lessonCopy: (payload) => ({ type: types.LESSON_COPY, payload })
+	lessonCopy: (payload) => ({ type: types.LESSON_COPY, payload }),
+	lessonInc: (payload) => ({ type: lessonsTypes.LESSONS_INC, payload })
 };

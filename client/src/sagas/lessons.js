@@ -42,6 +42,19 @@ export function* lessonSaveWatch() {
 	yield takeEvery(lessonTypes.LESSON_SAVE, lessonSave);
 }
 
+function* lessonInc(action) {
+	const { response, errors } = yield call(LessonsAPI.lessonInc, action.payload);
+	if (response) {
+		yield put({ type: lessonsTypes.LESSONS_INC_OK, payload: response });
+	} else {
+		yield put({ type: lessonsTypes.LESSONS_FAILURE, payload: errors });
+	}
+}
+
+export function* lessonIncWatch() {
+	yield takeEvery(lessonsTypes.LESSONS_INC, lessonInc);
+}
+
 function* lessonsGet(action) {
 	const { response, errors } = yield call(LessonsAPI.get, action.payload);
 	if (response) {

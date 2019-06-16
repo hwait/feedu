@@ -8,7 +8,9 @@ class CoursesList extends Component {
 		const items = courses.map(({ _id, name }) => {
 			return (
 				<List.Item active={_id === current._id} key={_id} onClick={(e, d) => setCourse(_id)}>
-					{name}
+					<List.Content>
+						<List.Description>{name}</List.Description>
+					</List.Content>
 				</List.Item>
 			);
 		});

@@ -15,6 +15,7 @@ import SubjectLabel from '../subjects/SubjectLabel';
 class Lesson extends Component {
 	componentDidMount() {
 		const { lessonId, lessonGet } = this.props;
+
 		if (lessonId !== '') {
 			lessonGet(lessonId);
 		} else {
@@ -22,8 +23,11 @@ class Lesson extends Component {
 		}
 	}
 	componentDidUpdate() {
-		const { errors } = this.props;
-		if (errors && errors.success) this.props.history.push('/lessons');
+		const { isAuthentificated } = this.props;
+		if (!isAuthentificated) {
+			this.props.history.push('/');
+		}
+		//if (errors && errors.success) this.props.history.push('/lessons');
 	}
 	onChange = (e) => {
 		const { name, value } = e.target;
@@ -34,10 +38,14 @@ class Lesson extends Component {
 		const { lessonCopy, lesson, nextnmb } = this.props;
 		lessonCopy({ ...lesson, nmb: round((lesson.nmb + nextnmb) / 2) });
 	};
-
+	incLesson = () => {
+		console.log('incLesson');
+		const { lessonInc, lesson, course } = this.props;
+		lessonInc({ cid: course._id, nstart: lesson.nmb });
+	};
 	save = () => {
 		const { lessonSave, lesson, course } = this.props;
-		lessonSave({ ...lesson, course: course.id });
+		lessonSave({ ...lesson, course: course._id });
 	};
 	cancel = () => {
 		this.props.history.goBack();
@@ -76,6 +84,13 @@ class Lesson extends Component {
 									color="olive"
 									floated="right"
 								/>
+								<Button
+									content="Inc"
+									icon="plus"
+									onClick={this.incLesson}
+									color="teal"
+									floated="right"
+								/>
 							</Form.Group>
 						</Segment.Inline>
 						<Form.TextArea
@@ -100,7 +115,15 @@ class Lesson extends Component {
 								<Icon name="add" />
 							</Label>
 							{papers.map((paper, index) => (
-								<Paper key={`paper${index}`} paper={paper} index={index} books={booksToBind} paperRemove={this.paperRemove} paperChange={this.paperChange} isParagraph={true} />
+								<Paper
+									key={`paper${index}`}
+									paper={paper}
+									index={index}
+									books={booksToBind}
+									paperRemove={this.paperRemove}
+									paperChange={this.paperChange}
+									isParagraph={true}
+								/>
 							))}
 						</Segment>
 						<Segment>
@@ -143,6 +166,7 @@ const mapStateToProps = (state) => ({
 	nextnmb: getNextNmb(state),
 	subject: getCurrentSubject(state),
 	course: getCurrentCourse(state),
-	booksToBind: booksToBindGet(state)
+	booksToBind: booksToBindGet(state),
+	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, { ...lessonActions })(Lesson);

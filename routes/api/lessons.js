@@ -17,7 +17,7 @@ const Lesson = require('../../models/Lesson');
 
 router.post(
 	'/save',
-	[ check('name').isLength({ min: 2 }), check('nmb').isInt() ],
+	[ check('name').isLength({ min: 2 }), check('nmb').isDecimal() ],
 	passport.authenticate('jwt', { session: false }),
 	(req, res) => {
 		const errors = validationResult(req);
@@ -49,9 +49,9 @@ router.post(
 				name,
 				link,
 				nmb,
-				videos: [],
-				papers: [],
-				tasks: []
+				videos: videos,
+				papers: papers,
+				tasks: tasks
 			});
 			newLesson // Try to save Lesson
 				.save()
@@ -105,6 +105,18 @@ router.get('/:lid', (req, res) => {
 	const { lid } = req.params;
 	Lesson.findOne({ _id: lid }) //
 		.then((lesson) => res.json(lesson))
+		.catch((error) => {
+			res.status(404).json({ error });
+		});
+});
+
+// @route   GET api/lessons/gap/:cid/:nstart
+// @desc    Make a gap after the lesson in course cid
+// @access  Private
+router.get('/gap/:cid/:nstart', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const { cid, nstart } = req.params;
+	Lesson.updateMany({ course: cid, nmb: { $gt: nstart } }, { $inc: { nmb: 1 } }) //
+		.then(() => res.json({ nmb: nstart }))
 		.catch((error) => {
 			res.status(404).json({ error });
 		});

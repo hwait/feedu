@@ -1,7 +1,7 @@
 import { fork, all } from 'redux-saga/effects';
 import { watchRegisterUser, watchLoginUser, watchSaveUser } from './auth';
 import { watchGetSubjects } from './subjects';
-import { lessonsGetWatch, lessonGetWatch, videoInfoGetWatch, lessonSaveWatch } from './lessons';
+import { lessonsGetWatch, lessonGetWatch, videoInfoGetWatch, lessonSaveWatch, lessonIncWatch } from './lessons';
 import { booksGetWatch, bookGetWatch, bookSaveWatch } from './books';
 import { calendarsGetWatch, calendarsGroupGetWatch, calendarGetWatch, calendarSaveWatch } from './calendar';
 import { patternsGetWatch, patternSaveWatch, patternRemoveWatch } from './patterns';
@@ -29,6 +29,7 @@ export default function* rootSaga() {
 		fork(lessonsGetWatch),
 		fork(lessonGetWatch),
 		fork(lessonSaveWatch),
+		fork(lessonIncWatch),
 		fork(videoInfoGetWatch),
 		fork(watchGetSubjects)
 	]);

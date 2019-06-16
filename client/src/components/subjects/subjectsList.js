@@ -10,7 +10,9 @@ class SubjectsList extends Component {
 		const items = subjects.map(({ id, name }) => {
 			return (
 				<List.Item active={id === current.id} key={id} onClick={(e, d) => setSubject(id)}>
-					{name}
+					<List.Content>
+						<List.Description>{name}</List.Description>
+					</List.Content>
 				</List.Item>
 			);
 		});

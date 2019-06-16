@@ -11,10 +11,15 @@ import Paper from '../lessons/Paper';
 
 class Course extends Component {
 	componentDidMount() {
-		const { subjects, courses, coursesGet, init } = this.props;
-
+		const { subjects, courses, coursesGet, init, isAuthentificated } = this.props;
 		if (subjects.length === 0) init();
-		if (courses.length === 0) coursesGet();
+		//if (courses.length === 0) coursesGet();
+		console.log('======componentDidMount=================');
+		console.log(isAuthentificated);
+		console.log('====================================');
+		if (!isAuthentificated) {
+			this.props.history.push('/');
+		}
 	}
 	componentDidUpdate() {
 		const { errors, courseCancel } = this.props;
@@ -37,9 +42,6 @@ class Course extends Component {
 
 	save = () => {
 		const { courseSave, curCourse, curSubject } = this.props;
-		console.log('====================================');
-		console.log(curCourse.books, curCourse.books.map(({ book }) => book));
-		console.log('====================================');
 		courseSave({
 			...curCourse,
 			subjects: [ curSubject.id ],
@@ -185,6 +187,7 @@ const mapStateToProps = (state) => ({
 	courses: getCourses(state),
 	curSubject: state.subjects.current,
 	curCourse: getExtendedCourse(state),
-	booksToBind: booksToBindGet(state)
+	booksToBind: booksToBindGet(state),
+	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, { ...subjectsActions, ...courseActions, ...booksActions })(Course);

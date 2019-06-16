@@ -16,7 +16,10 @@ const types = [
 ];
 class Book extends Component {
 	componentDidMount() {
-		const { bookId, bookGet } = this.props;
+		const { bookId, bookGet, isAuthentificated } = this.props;
+		if (!isAuthentificated) {
+			this.props.history.push('/');
+		}
 		if (bookId === '') this.props.history.push('/books');
 		else if (bookId !== 'NEW') bookGet(bookId);
 	}
@@ -129,6 +132,7 @@ const mapStateToProps = (state) => ({
 	book: state.book.book,
 	bookId: state.books.current,
 	subject: getCurrentSubject(state),
-	booksToBind: booksToBindGet(state)
+	booksToBind: booksToBindGet(state),
+	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, { ...bookActions })(Book);

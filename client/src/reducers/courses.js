@@ -166,10 +166,12 @@ export const getCurrentCourse = (state) => {
 export const getExtendedCourse = (state) => {
 	return {
 		...state.courses.course,
-		books: state.courses.course.books.map((x) => ({
-			book: x,
-			paragraph: 0
-		}))
+		books: state.courses.course.books
+			? state.courses.course.books.map((x) => ({
+					book: x,
+					paragraph: 0
+				}))
+			: []
 	};
 };
 
