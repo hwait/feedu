@@ -5,6 +5,7 @@ import { Menu, Segment, Header, Select, Label, Button, List, Checkbox } from 'se
 import { actions as subjectsActions, getSubjects } from '../../reducers/subjects';
 import { actions as coursesActions, getCourses } from '../../reducers/courses';
 import { actions as patternsActions, getCourseDays } from '../../reducers/patterns';
+import { actions as schedulesActions } from '../../reducers/schedules';
 import {
 	actions as calendarsActions,
 	getCalendarsByGroup,
@@ -56,6 +57,10 @@ class Patterns extends Component {
 	save = () => {
 		const { patterns, patternsSave } = this.props;
 		patternsSave(patterns);
+	};
+	generate = () => {
+		const { patterns, schedulesGenerate } = this.props;
+		schedulesGenerate(patterns);
 	};
 	addPattern = (value, date) => {
 		const { curCourse, spread, uid, dur, patternAdd, dates } = this.props;
@@ -217,12 +222,6 @@ class Patterns extends Component {
 							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(4)}>
 								1 h 20 min
 							</Menu.Item>
-							<Menu.Item active={dur === 5} color="blue" onClick={(e, s, c) => this.setDuration(5)}>
-								1 h 40 min
-							</Menu.Item>
-							<Menu.Item active={dur === 6} color="blue" onClick={(e, s, c) => this.setDuration(6)}>
-								2 hours
-							</Menu.Item>
 						</Menu>
 						<Button
 							content="Save"
@@ -230,6 +229,14 @@ class Patterns extends Component {
 							labelPosition="left"
 							onClick={this.save}
 							positive
+							className="left-spaced"
+						/>
+						<Button
+							content="Sched"
+							icon="calendar"
+							labelPosition="left"
+							onClick={this.generate}
+							color="blue"
 							className="left-spaced"
 						/>
 					</Segment>
@@ -296,5 +303,6 @@ export default connect(mapStateToProps, {
 	...subjectsActions,
 	...coursesActions,
 	...patternsActions,
-	...calendarsActions
+	...calendarsActions,
+	...schedulesActions
 })(Patterns);

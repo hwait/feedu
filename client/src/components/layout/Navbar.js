@@ -33,9 +33,6 @@ class Navbar extends Component {
 
 	render() {
 		const { isAuthentificated, path } = this.props;
-		console.log('====================================');
-		console.log(path);
-		console.log('====================================');
 		const linkHome = this.getItem('home', 'Home', path, 'home');
 		const linkDashboard = this.getItem('dashboard', 'Board', path, 'lab');
 		const linkCalendar = this.getItem('calendar', 'Calendar', path, 'calendar');

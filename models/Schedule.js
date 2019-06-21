@@ -16,7 +16,14 @@ const ScheduleSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'lessons'
 	},
-	date: {
+	course: {
+		type: Schema.Types.ObjectId,
+		ref: 'courses'
+	},
+	ts: {
+		type: Date
+	},
+	dur: {
 		type: Number,
 		required: true
 	},
@@ -26,36 +33,22 @@ const ScheduleSchema = new Schema({
         | 0 - Scheduled
         | 1 - Active
         | 2 - Finished
-        | 3 - Suspended
-        | 4 - Cancelled
         |--------------------------------------------------
         */
 		type: Number,
 		required: true
 	},
-	tasks: [
+	scores: [
 		{
-			book: {
-				type: Schema.Types.ObjectId,
-				ref: 'books'
-			},
-			nmb: {
-				type: String,
-				required: true
-			},
-			mark: {
-				/**
+			/**
                 |--------------------------------------------------
-                | 0 - Not completed
-                | 1 - Done with errors
-                | 2 - Correct
+                | 0 - Not completed			|
+                | 0.5 - Done with errors	 > * Difficulty (from Lesson)
+                | 1 - Correct				|
                 |--------------------------------------------------
                 */
-				type: Number
-			},
-			comment: {
-				type: String
-			}
+			type: Number,
+			required: true
 		}
 	]
 });

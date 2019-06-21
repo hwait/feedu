@@ -5,6 +5,7 @@ import { lessonsGetWatch, lessonGetWatch, videoInfoGetWatch, lessonSaveWatch, le
 import { booksGetWatch, bookGetWatch, bookSaveWatch } from './books';
 import { calendarsGetWatch, calendarsGroupGetWatch, calendarGetWatch, calendarSaveWatch } from './calendar';
 import { patternsGetWatch, patternSaveWatch, patternRemoveWatch } from './patterns';
+import { schedulesGenerateWatch, schedulesGetWatch } from './schedules';
 import { coursesGetWatch, courseGetWatch, courseSaveWatch, courseRemoveWatch } from './courses';
 
 export default function* rootSaga() {
@@ -16,6 +17,8 @@ export default function* rootSaga() {
 		fork(courseGetWatch),
 		fork(courseRemoveWatch),
 		fork(courseSaveWatch),
+		fork(schedulesGenerateWatch),
+		fork(schedulesGetWatch),
 		fork(patternsGetWatch),
 		fork(patternRemoveWatch),
 		fork(patternSaveWatch),
