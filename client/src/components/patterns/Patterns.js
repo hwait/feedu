@@ -101,7 +101,7 @@ class Patterns extends Component {
 		}
 	};
 	calendarsGet = (e, { value }) => {
-		const { calendarsGroupsGet, weekSet } = this.props;
+		const { calendarsGroupsGet } = this.props;
 		calendarsGroupsGet(value);
 		//weekSet(1);
 		//if (patterns.length === 0) patternsGet(uid);
@@ -116,7 +116,7 @@ class Patterns extends Component {
 		return wd;
 	};
 	renderTables = () => {
-		const { curWeek, curCourse } = this.props;
+		const { curWeek } = this.props;
 		const wd = [];
 		for (let i = 0; i < 7; i++) {
 			wd.push(

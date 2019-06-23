@@ -1,5 +1,5 @@
-import { saveAs, readFileSync } from 'file-saver';
-import { Document, Packer, Paragraph, Styles, ParagraphProperties } from 'docx';
+import { saveAs } from 'file-saver';
+import { Document, Packer } from 'docx';
 import moment from 'moment';
 import 'moment/locale/ru';
 

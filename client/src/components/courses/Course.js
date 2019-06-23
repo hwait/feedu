@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actions as courseActions, getCourses, getStats, getExtendedCourse } from '../../reducers/courses';
+import { actions as courseActions, getCourses, getExtendedCourse } from '../../reducers/courses';
 import { actions as subjectsActions, getSubjects } from '../../reducers/subjects';
-import { Segment, Form, Label, Grid, Button, Input, Select, Icon } from 'semantic-ui-react';
+import { Segment, Form, Label, Button, Input, Select, Icon } from 'semantic-ui-react';
 import isempty from '../../utils/isempty';
 import SubjectLabel from '../subjects/SubjectLabel';
 import { actions as booksActions, booksToBindGet } from '../../reducers/books';
@@ -11,7 +11,7 @@ import Paper from '../lessons/Paper';
 
 class Course extends Component {
 	componentDidMount() {
-		const { subjects, courses, coursesGet, init, isAuthentificated } = this.props;
+		const { subjects, init, isAuthentificated } = this.props;
 		if (subjects.length === 0) init();
 		//if (courses.length === 0) coursesGet();
 		console.log('======componentDidMount=================');

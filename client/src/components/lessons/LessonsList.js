@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Icon, Label } from 'semantic-ui-react';
+import { List, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 class LessonsList extends Component {

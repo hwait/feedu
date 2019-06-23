@@ -1,6 +1,4 @@
 import Immutable from '../utils/immutable';
-import { createSelector } from 'reselect';
-import { getBooks } from './books';
 import { types as schedulesTypes } from '../reducers/schedules';
 export const types = {
 	COURSE_FC: 'COURSE_FC',

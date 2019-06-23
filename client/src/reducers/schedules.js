@@ -1,6 +1,3 @@
-import Immutable from '../utils/immutable';
-import { createSelector } from 'reselect';
-
 export const types = {
 	SCHEDULES_GET: 'SCHEDULES_GET',
 	SCHEDULES_GET_OK: 'SCHEDULES_GET_OK',
@@ -69,34 +66,4 @@ export const actions = {
 	schedulesGet: (uid, ds, de) => ({ type: types.SCHEDULES_GET, payload: { uid, ds, de } }),
 	syllabusGet: (uid, cid) => ({ type: types.SYLLABUS_GET, payload: { uid, cid } }),
 	schedulesGenerate: (schedules) => ({ type: types.SCHEDULES_GENERATE, payload: schedules })
-};
-
-const getCalendarFilter = (state) => {
-	return state.calendar.current;
-};
-
-const getSchedules = (state) => {
-	return state.schedules.schedules;
-};
-const getSchedulesDates = (state) => {
-	return state.schedules.schedules.reduce((a, { dates }) => a.concat(dates), []);
-};
-export const getSchedulesByDate = (state, props) => {
-	// const ds = props.date;
-	// const de = props.date.add(1, 'd');
-
-	const ds = props.date.format('YYYY-MM-DD');
-	const schedules = state.schedules.schedules.filter((x) => x.dates.some((d) => d.includes(ds)));
-	const conv = schedules.map((c) => {
-		const subj = state.subjects.subjects.find((s) => s.id === c.course.subjects[0]);
-		return {
-			...c,
-			dates: c.dates.filter((e) => e.includes(ds)),
-			color: `#${subj.color}`,
-			icon: `${subj.icon}`,
-			name: `${c.course.sname}`
-		};
-	});
-
-	return conv;
 };

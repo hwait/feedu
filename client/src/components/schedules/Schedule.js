@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Segment, Label, Table, Header, Icon } from 'semantic-ui-react';
+import { Segment, Table, Header, Icon } from 'semantic-ui-react';
 class Schedule extends Component {
 	sublists = (l, i, icon, text) => {
 		return (

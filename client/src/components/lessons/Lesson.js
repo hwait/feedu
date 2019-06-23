@@ -6,7 +6,7 @@ import { actions as lessonActions } from '../../reducers/lesson';
 import { getNextNmb } from '../../reducers/lessons';
 import { getCurrentSubject } from '../../reducers/subjects';
 import { getCurrentCourse } from '../../reducers/courses';
-import { actions as booksActions, booksToBindGet } from '../../reducers/books';
+import { booksToBindGet } from '../../reducers/books';
 import round from '../../utils/round';
 import Youtube from './Youtube';
 import Paper from './Paper';

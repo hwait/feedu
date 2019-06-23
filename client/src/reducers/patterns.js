@@ -1,7 +1,6 @@
 import Immutable from '../utils/immutable';
 import { createSelector } from 'reselect';
 import { getCurrentCourse } from './courses';
-import { getDatesSelected } from './calendar';
 
 export const types = {
 	PATTERNS_GET: 'PATTERNS_GET',
@@ -150,15 +149,8 @@ export const actions = {
 	patternRemoveImmediate: (item) => ({ type: types.PATTERN_REMOVE_OK, payload: item })
 };
 
-const getCalendarFilter = (state) => {
-	return state.calendar.current;
-};
-
 const getPatterns = (state) => {
 	return state.patterns.patterns;
-};
-const getPatternsDates = (state) => {
-	return state.patterns.patterns.reduce((a, { dates }) => a.concat(dates), []);
 };
 export const getPatternsByDate = (state, props) => {
 	// const ds = props.date;

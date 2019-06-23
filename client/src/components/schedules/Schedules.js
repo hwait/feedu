@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { actions as subjectsActions, getSubjects } from '../../reducers/subjects';
 import { actions as calendarsActions } from '../../reducers/calendar';
-import { Menu, Segment, Header, Icon, Label, Button, List, Checkbox } from 'semantic-ui-react';
+import { Segment, Header, Icon, Label } from 'semantic-ui-react';
 
 import { actions as schedulesActions } from '../../reducers/schedules';
 import Schedule from './Schedule';

@@ -16,7 +16,7 @@ class Login extends Component {
 	// 	if (isAuthentificated && path === 'login') this.props.history.push('/');
 	// }
 	componentDidUpdate() {
-		const { isAuthentificated, path } = this.props;
+		const { isAuthentificated } = this.props;
 		if (isAuthentificated) this.props.history.push('/');
 	}
 	submitUser = (e) => {
