@@ -36,6 +36,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 	const patternsSave = (depth) => {
 		if (depth >= 0) {
 			const { student, dur, dates, course } = req.body[depth];
+			dates.sort((a, b) => a.localeCompare(b));
 			console.log('============ ', depth, course);
 
 			getLessonsPromise(course) //
@@ -107,8 +108,8 @@ router.post('/course', (req, res) => {
 // @desc    Select Day Schedule
 // @access  Public
 router.post('/date', (req, res) => {
-	const { uid, datefrom, dateto } = req.body;
-	Schedule.find({ student: uid, ts: { $gte: datefrom, $lte: dateto } }) //
+	const { uid, ds, de } = req.body;
+	Schedule.find({ student: uid, ts: { $gte: ds, $lte: de } }) //
 		.populate({
 			path: 'lesson',
 			model: Lesson,
@@ -126,7 +127,20 @@ router.post('/date', (req, res) => {
 				}
 			]
 		})
-		.then((schedules) => res.json(schedules))
+		.then((schedules) =>
+			res.json(
+				schedules.map(({ _id, lesson, ts, dur, status, scores }) => {
+					return {
+						_id,
+						lesson,
+						ts,
+						dur,
+						status,
+						scores
+					};
+				})
+			)
+		)
 		.catch((errors) => res.status(404).json({ errors: errors }));
 });
 

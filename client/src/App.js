@@ -10,7 +10,7 @@ import Footer from './components/layout/Footer';
 import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Profile from './components/auth/Profile';
-import Login from './components/auth/Login';
+//import Login from './components/auth/Login';
 import Lessons from './components/lessons/Lessons';
 import Lesson from './components/lessons/Lesson';
 import Books from './components/books/Books';
@@ -28,10 +28,10 @@ class App extends Component {
 					<div className="App">
 						<Navbar />
 						<div className="main-container">
-							<Route exact path="/" component={Landing} />
+							<Route exact path="/" component={Schedules} />
 							<Route exact path="/register" component={Register} />
 							<Route exact path="/profile" component={Profile} />
-							<Route exact path="/login" component={Login} />
+							<Route exact path="/login" component={Landing} />
 							<Route exact path="/books" component={Books} />
 							<Route exact path="/book" component={Book} />
 							<Route exact path="/dashboard" component={Schedules} />

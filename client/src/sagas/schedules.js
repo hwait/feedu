@@ -15,6 +15,19 @@ export function* schedulesGetWatch() {
 	yield takeEvery(schedulesTypes.SCHEDULES_GET, schedulesGet);
 }
 
+function* syllabusGet(action) {
+	const { response, errors } = yield call(SchedulesAPI.getSyllabus, action.payload);
+	if (response) {
+		yield put({ type: schedulesTypes.SYLLABUS_GET_OK, payload: { schedules: response } });
+	} else {
+		yield put({ type: schedulesTypes.SCHEDULES_FAILURE, payload: errors });
+	}
+}
+
+export function* syllabusGetWatch() {
+	yield takeEvery(schedulesTypes.SYLLABUS_GET, syllabusGet);
+}
+
 function* schedulesGenerate(action) {
 	const { response, errors } = yield call(SchedulesAPI.generate, action.payload);
 	if (response) {

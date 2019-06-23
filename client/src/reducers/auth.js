@@ -128,7 +128,7 @@ const logout = (state) => {
 	return {
 		...state,
 		isAuthentificated: false,
-		path: 'home',
+		path: 'logout',
 		user: initialUser
 	};
 };

@@ -1,6 +1,7 @@
 import Immutable from '../utils/immutable';
 import { createSelector } from 'reselect';
 import { getBooks } from './books';
+import { types as schedulesTypes } from '../reducers/schedules';
 export const types = {
 	COURSE_FC: 'COURSE_FC',
 	COURSES_GET: 'COURSES_GET',
@@ -66,6 +67,14 @@ export default (state = initialState, { type, payload }) => {
 			return {
 				...state,
 				...payload,
+				errors: {},
+				loading: false
+			};
+		}
+		case schedulesTypes.SYLLABUS_GET_OK: {
+			return {
+				...state,
+				...payload.course,
 				errors: {},
 				loading: false
 			};

@@ -6,6 +6,8 @@ export const types = {
 	SCHEDULES_GET_OK: 'SCHEDULES_GET_OK',
 	SCHEDULES_GENERATE: 'SCHEDULES_GENERATE',
 	SCHEDULES_GENERATE_OK: 'SCHEDULES_GENERATE_OK',
+	SYLLABUS_GET: 'SYLLABUS_GET',
+	SYLLABUS_GET_OK: 'SYLLABUS_GET_OK',
 	SCHEDULES_FAILURE: 'SCHEDULES_FAILURE'
 };
 
@@ -19,6 +21,7 @@ export default (state = initialState, { type, payload }) => {
 	state = { ...state, errors: {} };
 	switch (type) {
 		case types.SCHEDULES_GET:
+		case types.SYLLABUS_GET:
 		case types.SCHEDULES_GENERATE: {
 			return {
 				...state,
@@ -40,6 +43,14 @@ export default (state = initialState, { type, payload }) => {
 				loading: false
 			};
 		}
+		case types.SYLLABUS_GET_OK: {
+			return {
+				...state,
+				...payload.schedules,
+				errors: {},
+				loading: false
+			};
+		}
 		case types.SCHEDULE_FAILURE: {
 			return {
 				...state,
@@ -55,7 +66,8 @@ export default (state = initialState, { type, payload }) => {
 };
 
 export const actions = {
-	schedulesGet: (uid) => ({ type: types.SCHEDULES_GET, payload: uid }),
+	schedulesGet: (uid, ds, de) => ({ type: types.SCHEDULES_GET, payload: { uid, ds, de } }),
+	syllabusGet: (uid, cid) => ({ type: types.SYLLABUS_GET, payload: { uid, cid } }),
 	schedulesGenerate: (schedules) => ({ type: types.SCHEDULES_GENERATE, payload: schedules })
 };
 

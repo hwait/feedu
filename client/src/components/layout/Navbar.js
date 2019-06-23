@@ -5,6 +5,19 @@ import { connect } from 'react-redux';
 import { actions as authActions } from '../../reducers/auth';
 import PropTypes from 'prop-types';
 class Navbar extends Component {
+	// componentDidMount() {
+	// 	const { isAuthentificated, path, pathChange } = this.props;
+	// 	pathChange('home');
+	// 	if (isAuthentificated && path === 'logout') this.props.history.push('/login');
+	// }
+	componentDidUpdate() {
+		const { isAuthentificated, path, pathChange } = this.props;
+		//pathChange('home');
+		if (!isAuthentificated && path === 'logout') {
+			pathChange('home');
+			this.props.history.push('/login');
+		}
+	}
 	handleItemClick = (e, { name }) => {
 		const { pathChange, logout } = this.props;
 		name === 'logout' ? logout() : pathChange(name);
@@ -33,11 +46,10 @@ class Navbar extends Component {
 
 	render() {
 		const { isAuthentificated, path } = this.props;
-		const linkHome = this.getItem('home', 'Home', path, 'home');
-		const linkDashboard = this.getItem('dashboard', 'Board', path, 'lab');
+		const linkLogin = this.getItem('home', 'Sign In', path, 'sign in');
+		const linkDashboard = this.getItem('home', 'Board', path, 'lab');
 		const linkCalendar = this.getItem('calendar', 'Calendar', path, 'calendar');
 		const linkPatterns = this.getItem('patterns', 'Pattern', path, 'th');
-
 		const linkLessons = this.getItem('lessons', 'Lesson', path, 'flipboard');
 		const linkBooks = this.getItem('books', 'Books', path, 'book');
 		const linkSignup = this.getItem('register', 'Sign Up', path, 'signup');
@@ -47,7 +59,7 @@ class Navbar extends Component {
 
 		const menuItems = isAuthentificated
 			? [ linkDashboard, linkBooks, linkCourse, linkLessons, linkPatterns, linkCalendar, linkProfile, linkLogout ]
-			: [ linkHome, linkSignup ];
+			: [ linkLogin, linkSignup ];
 		return (
 			<Sidebar as={Menu} icon="labeled" inverted vertical visible width="very thin">
 				{menuItems}

@@ -11,7 +11,14 @@ class Login extends Component {
 		email: '',
 		password: ''
 	};
-
+	// componentDidMount() {
+	// 	const { isAuthentificated, path } = this.props;
+	// 	if (isAuthentificated && path === 'login') this.props.history.push('/');
+	// }
+	componentDidUpdate() {
+		const { isAuthentificated, path } = this.props;
+		if (isAuthentificated) this.props.history.push('/');
+	}
 	submitUser = (e) => {
 		e.preventDefault();
 		const { email, password } = this.state;
@@ -53,11 +60,13 @@ class Login extends Component {
 Login.propTypes = {
 	login: PropTypes.func.isRequired,
 	isAuthentificated: PropTypes.bool.isRequired,
+	path: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired
 };
 const mapStateToProps = (state) => ({
 	user: state.auth.user,
+	path: state.auth.path,
 	isAuthentificated: state.auth.isAuthentificated,
 	errors: state.auth.errors
 });

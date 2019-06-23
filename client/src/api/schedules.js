@@ -5,7 +5,13 @@ const root = '/api/schedules';
 export default class ScheduleAPI {
 	static getAll(payload) {
 		return axios
-			.get(`${root}/student/${payload}`)
+			.post(`${root}/date`, payload)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
+	static getSyllabus(payload) {
+		return axios
+			.post(`${root}/course`, payload)
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
