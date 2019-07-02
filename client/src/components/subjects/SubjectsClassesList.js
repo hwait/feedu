@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Menu, Segment, Select, Button, Label } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import isempty from '../../utils/isempty';
+
 class SubjectsClassesDropdown extends Component {
 	subjectChoose = (e, { value }) => {
 		const { setSubject } = this.props;

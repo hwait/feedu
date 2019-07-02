@@ -23,9 +23,11 @@ class SubjectsList extends Component {
 		);
 	}
 }
+
 const mapStateToProps = (state) => ({
 	current: state.subjects.current
 });
+
 SubjectsList.propTypes = {
 	subjects: PropTypes.array.isRequired,
 	current: PropTypes.object.isRequired
