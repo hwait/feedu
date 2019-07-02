@@ -77,5 +77,5 @@ export const actions = {
 export const getNextNmb = (state) => {
 	const cn = state.lesson.lesson.nmb;
 	const nn = state.lessons.lessons.find((x) => x.nmb > cn);
-	return nn ? nn.nmb : cn + 1;
+	return state.lessons.current === 'NEW' ? state.lessons.lessons.length * 1 + 1 : nn ? nn.nmb : cn + 1;
 };

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import moment from 'moment';
 const root = '/api/lessons';
 
 export default class LessonsAPI {
@@ -24,9 +24,9 @@ export default class LessonsAPI {
 						index: payload.index,
 						item: {
 							name: response.data.items[0].snippet.title,
-							dur: response.data.items[0].contentDetails.duration
-								.replace(/PT|S/g, '')
-								.replace(/H|M/g, ':'),
+							dur: parseInt(moment.duration(response.data.items[0].contentDetails.duration).asMinutes()),
+							// .replace(/PT|S/g, '')
+							// .replace(/H|M/g, ':'),
 							loading: false
 						}
 					}

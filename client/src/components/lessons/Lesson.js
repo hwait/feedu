@@ -14,10 +14,11 @@ import Task from './Task';
 import SubjectLabel from '../subjects/SubjectLabel';
 class Lesson extends Component {
 	componentDidMount() {
-		const { lessonId, lessonGet } = this.props;
+		const { lessonId, lessonGet, fc, nextnmb } = this.props;
 
 		if (lessonId !== '') {
-			lessonGet(lessonId);
+			if (lessonId === 'NEW') fc('nmb', nextnmb);
+			else if (lessonId !== 'NEW') lessonGet(lessonId);
 		} else {
 			this.props.history.push('/lessons');
 		}
@@ -62,9 +63,8 @@ class Lesson extends Component {
 	};
 
 	render() {
-		const { subject, course, errors, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
-		const { name, nmb, videos, papers, tasks } = this.props.lesson;
-		if (errors) console.log(errors, papers, tasks);
+		const { subject, course, loading, youtubeAdd, paperAdd, taskAdd, booksToBind } = this.props;
+		const { name, nmb, videos, papers, tasks, link } = this.props.lesson;
 		return (
 			<div className="dashboard">
 				<Segment loading={loading}>
@@ -99,6 +99,14 @@ class Lesson extends Component {
 							value={name}
 							onChange={this.onChange}
 							size="big"
+						/>
+						<Form.Field
+							value={link}
+							control={Input}
+							onChange={this.onChange}
+							name="link"
+							width={16}
+							label="Link"
 						/>
 						<Segment>
 							<Label attached="top">Youtube</Label>

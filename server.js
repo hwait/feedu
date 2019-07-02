@@ -19,6 +19,8 @@ const schedules = require('./routes/api/schedules');
 const books = require('./routes/api/books');
 const courses = require('./routes/api/courses');
 const calendars = require('./routes/api/calendars');
+const path = require('path');
+const bot = require('./routes/bot/bot');
 
 const app = express();
 
@@ -39,6 +41,14 @@ app.use('/api/schedules', schedules);
 app.use('/api/patterns', patterns);
 app.use('/api/lessons', lessons);
 app.use('/api/courses', courses);
+app.use('/bot', bot);
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('client/build'));
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	});
+}
 
 const port = process.env.PORT || 5000;
 

@@ -20,19 +20,17 @@ class Schedule extends Component {
 		const { lesson, ts, dur } = schedule;
 		const from = moment(ts);
 		const { name, nmb, link, course } = lesson;
+		const vl = lesson.videos.length;
+		const pl = lesson.papers.length;
+		const tl = lesson.tasks.length;
 		const videos = lesson.videos.map((x, index) => {
-			return this.sublists(lesson.videos.length, index, 'youtube', `${x.link} (${x.dur} мин.)`);
+			return this.sublists(vl, index, 'youtube', `${x.link} (${x.dur} мин.)`);
 		});
 		const papers = lesson.papers.map((x, index) => {
-			return this.sublists(
-				lesson.papers.length,
-				index,
-				'book',
-				`[${x.paragraph}] ${x.book.author} ${x.book.name}`
-			);
+			return this.sublists(pl, index, 'book', `[${x.paragraph}] ${x.book.author} ${x.book.name}`);
 		});
 		const tasks = lesson.tasks.map((x, index) => {
-			return this.sublists(lesson.tasks.length, index, 'task', `#[${x.nmb}] ${x.book.author} ${x.book.name}`);
+			return this.sublists(tl, index, 'task', `#[${x.nmb}] ${x.book.author} ${x.book.name}`);
 		});
 		return (
 			<Table compact="very" size="small" key={`lesson${date}${i}`}>
@@ -62,9 +60,9 @@ class Schedule extends Component {
 							</Table.Cell>
 						</Table.Row>
 					)}
-					{lesson.papers.length > 0 && papers}
-					{lesson.videos.length > 0 && videos}
-					{lesson.tasks.length > 0 && tasks}
+					{pl > 0 && papers}
+					{vl > 0 && videos}
+					{tl > 0 && tasks}
 				</Table.Body>
 			</Table>
 		);

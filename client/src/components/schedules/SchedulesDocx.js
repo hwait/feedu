@@ -70,7 +70,7 @@ const SchedulesDocx = (schedules, ds) => {
 					});
 				if (videos.length > 0)
 					videos.forEach((video) => {
-						doc.createParagraph(`► [${video.dur} мин.] ${video.bink}`).bullet();
+						doc.createParagraph(`► [${video.dur} мин.] ${video.link}`).bullet();
 					});
 				if (tasks.length > 0)
 					tasks.forEach((task) => {

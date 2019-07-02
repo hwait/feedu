@@ -15,9 +15,6 @@ class Paper extends Component {
 	render() {
 		const { books, paper, isParagraph } = this.props;
 		const { book, paragraph, loading } = paper;
-		console.log('====================================');
-		console.log(book, paper, books);
-		console.log('====================================');
 		return (
 			<Segment loading={loading}>
 				<Label as="a" corner="right" icon="remove" onClick={this.paperRemove} color="red" size="tiny" />

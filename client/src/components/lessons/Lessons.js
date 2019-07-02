@@ -22,10 +22,7 @@ class Lessons extends Component {
 		}
 	}
 	componentDidUpdate() {
-		const { errors, curCourse, curSubject } = this.props;
-		console.log('========componentDidUpdate=============');
-		console.log(curCourse._id, curSubject);
-		console.log('====================================');
+		const { errors, curCourse } = this.props;
 		if (errors && errors.success) this.setCourse(curCourse._id);
 	}
 	setLesson = (value) => {
@@ -81,12 +78,13 @@ class Lessons extends Component {
 						{curCourse._id ? (
 							[
 								<LessonsList
+									key="key1"
 									setLesson={this.setLesson}
 									incLesson={this.incLesson}
 									current={curLesson}
 									lessons={lessons}
 								/>,
-								<Label as="a" attached="top right" onClick={this.addLesson} color="blue">
+								<Label as="a" attached="top right" onClick={this.addLesson} color="blue" key="key2">
 									<Icon name="add" />
 								</Label>
 							]

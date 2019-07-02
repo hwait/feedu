@@ -1,5 +1,7 @@
 /node_modules
 client/node_modules
+client/build
 /config/keys.js
 /docs/todo.txt
+
 package-lock.json
