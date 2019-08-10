@@ -27,6 +27,9 @@ const UserSchema = new Schema({
 	avatar: {
 		type: String
 	},
+	tid: {
+		type: String
+	},
 	date: {
 		type: Date,
 		default: Date.now

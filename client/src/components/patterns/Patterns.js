@@ -67,7 +67,7 @@ class Patterns extends Component {
 		const ts = moment(date).add(8, 'h').add(value * 20, 'm');
 		const dd = spread
 			? dates
-					.filter((d) => moment(d).weekday() === ts.weekday())
+					.filter((d) => moment(d).weekday() === ts.weekday() && moment(d) >= moment(date))
 					.map((x) => moment(x).add(8, 'h').add(value * 20, 'm').format())
 			: [ ts.format() ];
 		if (!isempty(curCourse))
@@ -79,9 +79,6 @@ class Patterns extends Component {
 			});
 	};
 	removePattern = (id) => {
-		console.log('==========removePattern================');
-		console.log(id);
-		console.log('====================================');
 		this.props.patternRemove(id);
 		// if (id) this.props.patternRemove({ weekday, ts: value, id });
 		// else this.props.patternRemoveImmediate({ weekday, ts: value });

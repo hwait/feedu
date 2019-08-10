@@ -163,13 +163,23 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.LESSON_SAVE_OK: {
-			const nmb = state.lesson.nmb * 1 + 1;
-			const name = state.lesson.name === 'Решение задач' ? '' : 'Решение задач';
-			return {
-				...state,
-				lesson: { ...initialLesson, nmb, name },
-				loading: false
-			};
+			if (payload.success) {
+				// const nmb = state.lesson.nmb * 1 + 1;
+				// const name = state.lesson.name === 'Решение задач' ? '' : 'Решение задач';
+				// return {
+				// 	...state,
+				// 	lesson: { ...initialLesson, nmb, name },
+				// 	loading: false
+				// };
+				return state;
+			} else {
+				return {
+					...state,
+					lesson: payload,
+					errors: {},
+					loading: false
+				};
+			}
 		}
 		case types.LESSON_SUCCESS: {
 			return {

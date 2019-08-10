@@ -40,8 +40,8 @@ class Schedules extends Component {
 		schedulesGet(uid, moment(ds), moment(ds).add(7, 'd'));
 	};
 	saveToDocx = () => {
-		const { schedules, curWeek } = this.props;
-		SchedulesDocx(schedules, curWeek.ds);
+		const { schedules, curWeek, user } = this.props;
+		SchedulesDocx(schedules, curWeek.ds, user);
 	};
 	schedulesHtml = () => {
 		let ss = [],
@@ -107,6 +107,7 @@ class Schedules extends Component {
 }
 Schedules.propTypes = {
 	uid: PropTypes.string.isRequired,
+	user: PropTypes.string.isRequired,
 	schedules: PropTypes.array.isRequired,
 	weeks: PropTypes.array.isRequired,
 	curWeek: PropTypes.object.isRequired,
@@ -117,6 +118,7 @@ Schedules.propTypes = {
 };
 const mapStateToProps = (state) => ({
 	uid: state.auth.user.id,
+	user: `${state.auth.user.name} ${state.auth.user.surname}`,
 	schedules: state.schedules.schedules,
 	calendars: state.calendar.calendars,
 	subjects: getSubjects(state),

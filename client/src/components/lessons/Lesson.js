@@ -36,8 +36,8 @@ class Lesson extends Component {
 	};
 	copyLesson = () => {
 		console.log('lessonCopy');
-		const { lessonCopy, lesson, nextnmb } = this.props;
-		lessonCopy({ ...lesson, nmb: round((lesson.nmb + nextnmb) / 2) });
+		const { lessonCopy, lesson } = this.props;
+		lessonCopy({ ...lesson, nmb: lesson.nmb * 1 + 1 });
 	};
 	incLesson = () => {
 		console.log('incLesson');
@@ -171,7 +171,6 @@ const mapStateToProps = (state) => ({
 	errors: state.lesson.errors,
 	lesson: state.lesson.lesson,
 	lessonId: state.lessons.current,
-	nextnmb: getNextNmb(state),
 	subject: getCurrentSubject(state),
 	course: getCurrentCourse(state),
 	booksToBind: booksToBindGet(state),

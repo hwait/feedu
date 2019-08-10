@@ -127,6 +127,7 @@ router.post('/date', (req, res) => {
 				}
 			]
 		})
+		.sort({ ts: 1 })
 		.then((schedules) =>
 			res.json(
 				schedules.map(({ _id, lesson, ts, dur, status, scores }) => {

@@ -37,26 +37,34 @@ router.post(
 					lesson.tasks = tasks;
 					lesson // Try to save Book
 						.save()
-						.then(() => res.json({ success: true }))
+						.then(() =>
+							Lesson.findOne({ course, nmb: nmb + 1 }) //
+								.then((l) => res.json(l))
+								.catch(() => res.json({ success: true }))
+						)
 						.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
 				} else {
 					console.log('404');
 				}
 			});
 		} else {
-			const newLesson = new Lesson({
-				course,
-				name,
-				link,
-				nmb,
-				videos: videos,
-				papers: papers,
-				tasks: tasks
-			});
-			newLesson // Try to save Lesson
-				.save()
-				.then(() => res.json({ success: true }))
-				.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
+			Lesson.findOne({ course, name, nmb }) //
+				.then((lesson) => res.json({ id: lesson._id }))
+				.catch(() => {
+					const newLesson = new Lesson({
+						course,
+						name,
+						link,
+						nmb,
+						videos: videos,
+						papers: papers,
+						tasks: tasks
+					});
+					newLesson // Try to save Lesson
+						.save()
+						.then(() => res.json({ success: true }))
+						.catch((errors) => res.status(400).json({ errors: convertError(errors.errors) }));
+				});
 		}
 	}
 );

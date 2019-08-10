@@ -181,6 +181,8 @@ router.post('/login', [ check('email').isEmail(), check('password').isLength({ m
 							// const payload = { id: user.id, name: user.name, avatar: user.avatar };
 							const { password, _id, ...payload } = user.toObject();
 							payload.id = user.id;
+							console.log(user, payload);
+
 							jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
 								return res.json({
 									success: true,
