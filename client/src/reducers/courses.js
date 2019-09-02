@@ -72,7 +72,7 @@ export default (state = initialState, { type, payload }) => {
 		case schedulesTypes.SYLLABUS_GET_OK: {
 			return {
 				...state,
-				...payload.course,
+				course: payload.course,
 				errors: {},
 				loading: false
 			};
@@ -149,6 +149,7 @@ export default (state = initialState, { type, payload }) => {
 export const actions = {
 	fc: (field, value) => ({ type: types.COURSE_FC, payload: { field, value } }),
 	coursesGet: (sid) => ({ type: types.COURSES_GET, payload: sid }),
+	syllabusGet: (uid, cid) => ({ type: schedulesTypes.SYLLABUS_GET, payload: { uid, cid } }),
 	courseGet: (id) => ({ type: types.COURSE_GET, payload: id }),
 	courseChoose: (id) => ({ type: types.COURSE_CHOOSE, payload: id }),
 	courseAdd: (item) => ({ type: types.COURSE_ADD, payload: item }),

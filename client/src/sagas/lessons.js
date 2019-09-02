@@ -54,6 +54,18 @@ function* lessonInc(action) {
 export function* lessonIncWatch() {
 	yield takeEvery(lessonsTypes.LESSONS_INC, lessonInc);
 }
+function* lessonRemove(action) {
+	const { response, errors } = yield call(LessonsAPI.lessonRemove, action.payload);
+	if (response) {
+		yield put({ type: lessonsTypes.LESSONS_REMOVE_OK, payload: response });
+	} else {
+		yield put({ type: lessonsTypes.LESSONS_FAILURE, payload: errors });
+	}
+}
+
+export function* lessonRemoveWatch() {
+	yield takeEvery(lessonsTypes.LESSONS_REMOVE, lessonRemove);
+}
 
 function* lessonsGet(action) {
 	const { response, errors } = yield call(LessonsAPI.get, action.payload);

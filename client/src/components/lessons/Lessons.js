@@ -49,6 +49,11 @@ class Lessons extends Component {
 		const { lessonsInc, curCourse } = this.props;
 		lessonsInc({ cid: curCourse._id, nstart: value });
 	};
+	remLesson = (value) => {
+		console.log('remLesson', value);
+		const { lessonsRem, curCourse } = this.props;
+		lessonsRem({ cid: curCourse._id, nstart: value });
+	};
 	render() {
 		const { curSubject, courses, curCourse, lessons, curLesson, subjects, loading } = this.props;
 		return (
@@ -81,6 +86,7 @@ class Lessons extends Component {
 									key="key1"
 									setLesson={this.setLesson}
 									incLesson={this.incLesson}
+									remLesson={this.remLesson}
 									current={curLesson}
 									lessons={lessons}
 								/>,

@@ -20,6 +20,7 @@ const getDetailedSchedule = require('./getDetailedSchedule');
 router.post('/', (req, res) => {
 	const message = req.body.message;
 	//let uid = '5c84ae30078bcd02fcc0181f';
+
 	let uid = '';
 	if (message) {
 		const from = message.from.id;

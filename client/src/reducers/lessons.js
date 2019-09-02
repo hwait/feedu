@@ -5,7 +5,9 @@ export const types = {
 	LESSONS_NEW: 'LESSONS_NEW',
 	LESSONS_SET: 'LESSONS_SET',
 	LESSONS_INC_OK: 'LESSONS/LESSONS_INC_OK',
-	LESSONS_INC: 'LESSONS/LESSONS_INC'
+	LESSONS_INC: 'LESSONS/LESSONS_INC',
+	LESSONS_REMOVE_OK: 'LESSONS/LESSONS_REMOVE_OK',
+	LESSONS_REMOVE: 'LESSONS/LESSONS_REMOVE'
 };
 
 const initialState = {
@@ -54,7 +56,8 @@ export default (state = initialState, { type, payload }) => {
 				loading: false
 			};
 		}
-		case types.LESSONS_INC_OK: {
+		case types.LESSONS_INC_OK:
+		case types.LESSONS_REMOVE_OK: {
 			return {
 				...state,
 				errors: { success: true },
@@ -71,7 +74,8 @@ export const actions = {
 	lessonsGet: (cid) => ({ type: types.LESSONS_GET, payload: cid }),
 	lessonSetCurrent: (payload) => ({ type: types.LESSONS_SET, payload }),
 	lessonNew: () => ({ type: types.LESSONS_NEW }),
-	lessonsInc: (payload) => ({ type: types.LESSONS_INC, payload })
+	lessonsInc: (payload) => ({ type: types.LESSONS_INC, payload }),
+	lessonsRem: (payload) => ({ type: types.LESSONS_REMOVE, payload })
 };
 
 export const getNextNmb = (state) => {

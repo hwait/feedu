@@ -149,9 +149,13 @@ export default (state = initialState, { type, payload }) => {
 			};
 		}
 		case types.LESSON_COPY: {
+			const words = payload.name.split(' ');
+			const n = parseInt(words.slice(-1));
+			const newName =
+				n > 0 ? words.slice(0, words.length - 1).join(' ') + ' ' + (n + 1) : payload.name + '-ПРАКТ';
 			return {
 				...state,
-				lesson: { ...state.lesson, ...payload, name: payload.name + '-COPY', _id: undefined }
+				lesson: { ...state.lesson, ...payload, name: newName, _id: undefined }
 			};
 		}
 

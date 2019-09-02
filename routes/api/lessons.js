@@ -130,6 +130,20 @@ router.get('/gap/:cid/:nstart', passport.authenticate('jwt', { session: false })
 		});
 });
 
+// @route   GET api/lessons/remove/:cid/:nstart
+// @desc    Removes the lesson in course cid
+// @access  Private
+router.get('/remove/:cid/:nstart', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const { cid, nstart } = req.params;
+	Lesson.deleteOne({ course: cid, nmb: nstart }).then(
+		Lesson.updateMany({ course: cid, nmb: { $gt: nstart } }, { $inc: { nmb: -1 } }) //
+			.then(() => res.json({ nmb: nstart }))
+			.catch((error) => {
+				res.status(404).json({ error });
+			})
+	);
+});
+
 // @route   POST api/lessons/count
 // @desc    Get lessons count for Course and Class number
 // @access  Public

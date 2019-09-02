@@ -53,4 +53,10 @@ export default class LessonsAPI {
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
+	static lessonRemove(payload) {
+		return axios
+			.get(`${root}/remove/${payload.cid}/${payload.nstart}`)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
 }

@@ -95,7 +95,7 @@ class Schedules extends Component {
 			<div className="dashboard">
 				<Segment>
 					{weeknItems}
-					<Label attached="bottom right" as="a" onClick={this.saveToDocx} color="green">
+					<Label attached="bottom right" as="a" onClick={this.saveToDocx} color="yellow">
 						<Icon name="download" />
 						docx
 					</Label>

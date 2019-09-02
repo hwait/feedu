@@ -8,7 +8,7 @@ import isempty from '../../utils/isempty';
 import SubjectLabel from '../subjects/SubjectLabel';
 import { actions as booksActions, booksToBindGet } from '../../reducers/books';
 import Paper from '../lessons/Paper';
-
+import SyllabusDocx from './SyllabusDocx';
 class Course extends Component {
 	componentDidMount() {
 		const { subjects, init, isAuthentificated } = this.props;
@@ -32,14 +32,21 @@ class Course extends Component {
 		coursesGet(value);
 	};
 	setCourse = (e, { value }) => {
-		const { courseGet } = this.props;
-		courseGet(value);
+		const { syllabusGet, uid } = this.props;
+		syllabusGet(uid, value);
 	};
+	// setCourse = (e, { value }) => {
+	// 	const { courseGet } = this.props;
+	// 	courseGet(value);
+	// };
 	onChange = (e) => {
 		const { name, value } = e.target;
 		this.props.fc(name, value);
 	};
-
+	saveToDocx = () => {
+		const { curCourse, schedules, user } = this.props;
+		SyllabusDocx(curCourse, schedules, user);
+	};
 	save = () => {
 		const { courseSave, curCourse, curSubject } = this.props;
 		courseSave({
@@ -84,6 +91,14 @@ class Course extends Component {
 								placeholder="Courses"
 								value={isempty(curCourse) ? null : curCourse._id}
 								onChange={this.setCourse}
+								className="left-spaced"
+							/>
+							<Button
+								content="docx"
+								icon="download"
+								labelPosition="left"
+								onClick={this.saveToDocx}
+								color="yellow"
 								className="left-spaced"
 							/>
 						</Form.Group>
@@ -181,6 +196,9 @@ Course.propTypes = {
 	curCourse: PropTypes.object.isRequired
 };
 const mapStateToProps = (state) => ({
+	uid: state.auth.user.id,
+	user: `${state.auth.user.name} ${state.auth.user.surname}`,
+	schedules: state.schedules.schedules,
 	errors: state.courses.errors,
 	loading: state.courses.loading,
 	subjects: getSubjects(state),

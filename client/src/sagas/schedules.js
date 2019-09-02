@@ -18,7 +18,7 @@ export function* schedulesGetWatch() {
 function* syllabusGet(action) {
 	const { response, errors } = yield call(SchedulesAPI.getSyllabus, action.payload);
 	if (response) {
-		yield put({ type: schedulesTypes.SYLLABUS_GET_OK, payload: { schedules: response } });
+		yield put({ type: schedulesTypes.SYLLABUS_GET_OK, payload: response });
 	} else {
 		yield put({ type: schedulesTypes.SCHEDULES_FAILURE, payload: errors });
 	}

@@ -28,6 +28,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 	let getLessonsPromise = (course) => {
 		return new Promise((resolve, reject) => {
 			Lesson.find({ course }) //
+				.sort({ nmb: 1 })
 				.then((data) => resolve(data))
 				.catch((err) => reject(err));
 		});
@@ -63,8 +64,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 				.catch((errors) => console.log(errors));
 		}
 	};
-	patternsSave(req.body.length - 1);
-
+	Schedule.deleteMany({ student: req.user.id }).then(patternsSave(req.body.length - 1));
 	return res.json({ success: true });
 });
 
@@ -77,15 +77,33 @@ router.post('/course', (req, res) => {
 		.populate({
 			path: 'lesson',
 			model: Lesson,
-			select: 'name nmb tasks link videos papers'
-		})
-		.then((schedules) => {
-			Course.findById(cid)
-				.populate({
-					path: 'books',
+			select: 'name nmb tasks link videos papers',
+			populate: [
+				{
+					path: 'papers.book',
 					model: Book,
 					select: 'name author year'
-				})
+				},
+				{
+					path: 'tasks.book',
+					model: Book,
+					select: 'name author year'
+				},
+				{
+					path: 'course',
+					model: Course,
+					select: 'name sname subjects'
+				}
+			]
+		})
+		.sort({ ts: 1 })
+		.then((schedules) => {
+			Course.findById(cid)
+				// .populate({
+				// 	path: 'books',
+				// 	model: Book,
+				// 	select: 'name author year'
+				// })
 				.then((course) => {
 					return res.json({
 						course: course,
@@ -117,6 +135,11 @@ router.post('/date', (req, res) => {
 			populate: [
 				{
 					path: 'papers.book',
+					model: Book,
+					select: 'name author year'
+				},
+				{
+					path: 'tasks.book',
 					model: Book,
 					select: 'name author year'
 				},

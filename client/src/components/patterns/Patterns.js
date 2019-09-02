@@ -13,6 +13,7 @@ import {
 	calendarsGroupsGet,
 	getDatesSelected
 } from '../../reducers/calendar';
+import PatternsDocx from './PatternsDocx';
 import Pattern from './Pattern';
 import isempty from '../../utils/isempty';
 import moment from 'moment';
@@ -64,18 +65,18 @@ class Patterns extends Component {
 	};
 	addPattern = (value, date) => {
 		const { curCourse, spread, uid, dur, patternAdd, dates } = this.props;
-		const ts = moment(date).add(8, 'h').add(value * 20, 'm');
+		const ts = moment(date).add(9, 'h').add(value * 10, 'm');
 		const dd = spread
 			? dates
 					.filter((d) => moment(d).weekday() === ts.weekday() && moment(d) >= moment(date))
-					.map((x) => moment(x).add(8, 'h').add(value * 20, 'm').format())
+					.map((x) => moment(x).add(8, 'h').add(value * 10, 'm').format())
 			: [ ts.format() ];
 		if (!isempty(curCourse))
 			patternAdd({
 				course: curCourse,
 				student: uid,
 				dates: dd,
-				dur: dur * 20
+				dur: dur * 10
 			});
 	};
 	removePattern = (id) => {
@@ -89,7 +90,7 @@ class Patterns extends Component {
 			if (id) patternRemove({ cid: course._id, uid, id });
 			else patternRemoveImmediate({ cid: course._id, uid });
 		} else {
-			const ts = moment(date).add(8, 'h').add(value * 20, 'm');
+			const ts = moment(date).add(9, 'h').add(value * 10, 'm');
 			patternDateRemove({
 				course,
 				student: uid,
@@ -103,6 +104,10 @@ class Patterns extends Component {
 		//weekSet(1);
 		//if (patterns.length === 0) patternsGet(uid);
 		//calendarGet(value);
+	};
+	saveToDocx = () => {
+		const { schedules, curWeek, user } = this.props;
+		PatternsDocx(schedules, curWeek.ds, user);
 	};
 	renderWeekDays = () => {
 		const wd = this.props.weekdays.map((x, index) => (
@@ -210,14 +215,11 @@ class Patterns extends Component {
 							onClick={spreadToggle}
 						/>
 						<Menu compact className="left-spaced">
-							<Menu.Item active={dur === 2} color="blue" onClick={(e, s, c) => this.setDuration(2)}>
+							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(2)}>
 								40 min
 							</Menu.Item>
-							<Menu.Item active={dur === 3} color="blue" onClick={(e, s, c) => this.setDuration(3)}>
+							<Menu.Item active={dur === 6} color="blue" onClick={(e, s, c) => this.setDuration(3)}>
 								1 hour
-							</Menu.Item>
-							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(4)}>
-								1 h 20 min
 							</Menu.Item>
 						</Menu>
 						<Button
@@ -234,6 +236,14 @@ class Patterns extends Component {
 							labelPosition="left"
 							onClick={this.generate}
 							color="blue"
+							className="left-spaced"
+						/>
+						<Button
+							content="docx"
+							icon="download"
+							labelPosition="left"
+							onClick={this.saveToDocx}
+							color="yellow"
 							className="left-spaced"
 						/>
 					</Segment>
@@ -294,6 +304,7 @@ const mapStateToProps = (state) => ({
 	curCourse: state.courses.course,
 	dur: state.patterns.dur,
 	loading: state.patterns.loading,
+	user: `${state.auth.user.name} ${state.auth.user.surname}`,
 	isAuthentificated: state.auth.isAuthentificated
 });
 export default connect(mapStateToProps, {

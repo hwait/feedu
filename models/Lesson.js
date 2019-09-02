@@ -26,6 +26,10 @@ const LessonSchema = new Schema({
 	},
 	videos: [
 		{
+			name: {
+				type: String,
+				required: false
+			},
 			link: {
 				type: String,
 				required: true

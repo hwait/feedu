@@ -19,7 +19,7 @@ export const types = {
 
 const initialState = {
 	patterns: [],
-	dur: 2,
+	dur: 4,
 	spread: false,
 	pattern: {},
 	errors: {},
@@ -158,9 +158,6 @@ export const getPatternsByDate = (state, props) => {
 
 	const ds = props.date.format('YYYY-MM-DD');
 	const patterns = state.patterns.patterns.filter((x) => x.dates.some((d) => d.includes(ds)));
-	console.log('====================================');
-	console.log(patterns, state.patterns, ds);
-	console.log('====================================');
 	const conv = patterns.map((c) => {
 		const subj = state.subjects.subjects.find((s) => s.id === c.course.subjects[0]);
 		return {

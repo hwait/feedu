@@ -43,7 +43,7 @@ export default (state = initialState, { type, payload }) => {
 		case types.SYLLABUS_GET_OK: {
 			return {
 				...state,
-				...payload.schedules,
+				schedules: payload.schedules,
 				errors: {},
 				loading: false
 			};

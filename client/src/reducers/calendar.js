@@ -29,9 +29,9 @@ const initialCalendar = {
 	start: 5
 };
 const getWeeks = (startYear) => {
-	const st = moment().set({ year: startYear, month: 8, day: 0 }).startOf('isoWeek');
+	const st = moment({ year: startYear, month: 7, day: 0 }).startOf('isoWeek');
 	const weeks = [];
-	for (let i = 1; i < 53; i++) {
+	for (let i = 1; i < 54; i++) {
 		const dstr = st.format('YYYY-MM-DD');
 		st.add(1, 'w');
 		if (moment() <= st)
@@ -48,8 +48,8 @@ const initialState = {
 	current: '',
 	group: '',
 
-	weeks: getWeeks(moment().month() > 7 ? moment().year() : moment().year() - 1),
-	week: getWeeks(moment().month() > 7 ? moment().year() : moment().year() - 1)[0],
+	weeks: getWeeks(moment().month() >= 7 ? moment().year() : moment().year() - 1),
+	week: getWeeks(moment().month() >= 7 ? moment().year() : moment().year() - 1)[0],
 	errors: {},
 	loading: false
 };

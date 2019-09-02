@@ -8,18 +8,15 @@ import isempty from '../../utils/isempty';
 class Pattern extends Component {
 	getGrid = () => {
 		const { date, patterns, addPattern, removePattern } = this.props;
-		console.log('=======getGrid==========');
-		console.log(patterns, date);
-		console.log('====================================');
-		let ts = moment('0800', 'Hmm');
+		let ts = moment('0900', 'Hmm');
 		let pref = '',
 			max = 0;
 		const tt = [];
-		for (let i = 0; i <= 41; i++) {
-			if (i % 3 === 0) {
+		for (let i = 0; i <= 71; i++) {
+			if (i % 6 === 0) {
 				pref = pref === 'odd' ? 'even' : 'odd';
 			}
-			const cln = `c${i % 3}-${pref}`;
+			const cln = `c${i % 6}-${pref}`;
 			let x = patterns.find((x) => x.dates.some((d) => d.includes(ts.format('HH:mm:ss'))));
 
 			let cell = <Table.Cell className={cln} onClick={(e, t, w) => addPattern(i, date)} />;
@@ -27,7 +24,7 @@ class Pattern extends Component {
 				const id = x._id;
 				const cid = x.course;
 				cell = (
-					<Table.Cell rowSpan={x.dur / 20} style={{ backgroundColor: x.color, color: '#FFF' }}>
+					<Table.Cell rowSpan={x.dur / 10} style={{ backgroundColor: x.color, color: '#FFF' }}>
 						<Icon className={`sf-icon-${x.icon}`} />
 						{x.name}
 						<Label
@@ -48,8 +45,8 @@ class Pattern extends Component {
 			}
 			tt.push(
 				<Table.Row key={`a${i}`} style={{ height: '5px' }}>
-					{i % 3 === 0 && (
-						<Table.Cell collapsing rowSpan={3} className={cln}>
+					{i % 6 === 0 && (
+						<Table.Cell collapsing rowSpan={6} className={cln}>
 							{ts.format('HH')}
 						</Table.Cell>
 					)}
@@ -57,7 +54,7 @@ class Pattern extends Component {
 				</Table.Row>
 			);
 
-			ts.add(20, 'm');
+			ts.add(10, 'm');
 		}
 		return tt;
 	};
