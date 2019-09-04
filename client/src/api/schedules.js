@@ -28,4 +28,19 @@ export default class ScheduleAPI {
 			.then((response) => ({ response: response.data }))
 			.catch((err) => ({ errors: err.response.data.errors }));
 	}
+	static generateCourse(payload) {
+		console.log('=========generateCourse================');
+		console.log(payload);
+		console.log('====================================');
+		const data = payload.map((x) => {
+			return {
+				...x,
+				course: x.course._id
+			};
+		});
+		return axios
+			.post(`${root}/savecourse`, data)
+			.then((response) => ({ response: response.data }))
+			.catch((err) => ({ errors: err.response.data.errors }));
+	}
 }

@@ -40,3 +40,15 @@ function* schedulesGenerate(action) {
 export function* schedulesGenerateWatch() {
 	yield takeEvery(schedulesTypes.SCHEDULES_GENERATE, schedulesGenerate);
 }
+function* schedulesGenerateCourse(action) {
+	const { response, errors } = yield call(SchedulesAPI.generateCourse, action.payload);
+	if (response) {
+		yield put({ type: schedulesTypes.SCHEDULES_GENERATE_COURSE_OK, payload: response });
+	} else {
+		yield put({ type: schedulesTypes.SCHEDULES_FAILURE, payload: errors });
+	}
+}
+
+export function* schedulesGenerateCourseWatch() {
+	yield takeEvery(schedulesTypes.SCHEDULES_GENERATE_COURSE, schedulesGenerateCourse);
+}

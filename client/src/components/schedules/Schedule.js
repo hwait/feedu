@@ -30,7 +30,7 @@ class Schedule extends Component {
 			return this.sublists(pl, index, 'book', `[${x.paragraph}] ${x.book.author} ${x.book.name}`);
 		});
 		const tasks = lesson.tasks.map((x, index) => {
-			return this.sublists(tl, index, 'task', `#[${x.nmb}] ${x.book.author} ${x.book.name}`);
+			return this.sublists(tl, index, 'tasks', `#[${x.nmb}] ${x.book.author} ${x.book.name}`);
 		});
 		return (
 			<Table compact="very" size="small" key={`lesson${date}${i}`}>

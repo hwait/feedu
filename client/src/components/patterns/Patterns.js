@@ -63,6 +63,10 @@ class Patterns extends Component {
 		const { patterns, schedulesGenerate } = this.props;
 		schedulesGenerate(patterns);
 	};
+	generateCourse = () => {
+		const { patterns, schedulesGenerateCourse, curCourse } = this.props;
+		schedulesGenerateCourse(patterns, curCourse);
+	};
 	addPattern = (value, date) => {
 		const { curCourse, spread, uid, dur, patternAdd, dates } = this.props;
 		const ts = moment(date).add(9, 'h').add(value * 10, 'm');
@@ -215,10 +219,10 @@ class Patterns extends Component {
 							onClick={spreadToggle}
 						/>
 						<Menu compact className="left-spaced">
-							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(2)}>
+							<Menu.Item active={dur === 4} color="blue" onClick={(e, s, c) => this.setDuration(4)}>
 								40 min
 							</Menu.Item>
-							<Menu.Item active={dur === 6} color="blue" onClick={(e, s, c) => this.setDuration(3)}>
+							<Menu.Item active={dur === 6} color="blue" onClick={(e, s, c) => this.setDuration(6)}>
 								1 hour
 							</Menu.Item>
 						</Menu>
@@ -228,6 +232,14 @@ class Patterns extends Component {
 							labelPosition="left"
 							onClick={this.save}
 							positive
+							className="left-spaced"
+						/>
+						<Button
+							content="Course"
+							icon="calendar"
+							labelPosition="left"
+							onClick={this.generateCourse}
+							color="teal"
 							className="left-spaced"
 						/>
 						<Button

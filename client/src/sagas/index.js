@@ -12,7 +12,7 @@ import {
 import { booksGetWatch, bookGetWatch, bookSaveWatch } from './books';
 import { calendarsGetWatch, calendarsGroupGetWatch, calendarGetWatch, calendarSaveWatch } from './calendar';
 import { patternsGetWatch, patternSaveWatch, patternRemoveWatch } from './patterns';
-import { schedulesGenerateWatch, schedulesGetWatch, syllabusGetWatch } from './schedules';
+import { schedulesGenerateWatch, schedulesGenerateCourseWatch, schedulesGetWatch, syllabusGetWatch } from './schedules';
 import { coursesGetWatch, courseGetWatch, courseSaveWatch, courseRemoveWatch } from './courses';
 
 export default function* rootSaga() {
@@ -25,6 +25,7 @@ export default function* rootSaga() {
 		fork(courseRemoveWatch),
 		fork(courseSaveWatch),
 		fork(schedulesGenerateWatch),
+		fork(schedulesGenerateCourseWatch),
 		fork(schedulesGetWatch),
 		fork(syllabusGetWatch),
 		fork(patternsGetWatch),

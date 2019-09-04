@@ -2,6 +2,8 @@ export const types = {
 	SCHEDULES_GET: 'SCHEDULES_GET',
 	SCHEDULES_GET_OK: 'SCHEDULES_GET_OK',
 	SCHEDULES_GENERATE: 'SCHEDULES_GENERATE',
+	SCHEDULES_GENERATE_COURSE: 'SCHEDULES_GENERATE_COURSE',
+	SCHEDULES_GENERATE_COURSE_OK: 'SCHEDULES_GENERATE_COURSE_OK',
 	SCHEDULES_GENERATE_OK: 'SCHEDULES_GENERATE_OK',
 	SYLLABUS_GET: 'SYLLABUS_GET',
 	SYLLABUS_GET_OK: 'SYLLABUS_GET_OK',
@@ -25,6 +27,7 @@ export default (state = initialState, { type, payload }) => {
 				loading: true
 			};
 		}
+		case types.SCHEDULES_GENERATE_COURSE_OK:
 		case types.SCHEDULES_GENERATE_OK: {
 			return {
 				...state,
@@ -65,5 +68,9 @@ export default (state = initialState, { type, payload }) => {
 export const actions = {
 	schedulesGet: (uid, ds, de) => ({ type: types.SCHEDULES_GET, payload: { uid, ds, de } }),
 	syllabusGet: (uid, cid) => ({ type: types.SYLLABUS_GET, payload: { uid, cid } }),
-	schedulesGenerate: (schedules) => ({ type: types.SCHEDULES_GENERATE, payload: schedules })
+	schedulesGenerate: (schedules) => ({ type: types.SCHEDULES_GENERATE, payload: schedules }),
+	schedulesGenerateCourse: (schedules, course) => ({
+		type: types.SCHEDULES_GENERATE_COURSE,
+		payload: schedules.filter((x) => x.course._id === course._id)
+	})
 };

@@ -13,7 +13,7 @@ const Book = require('../../models/Book');
 // TODO: SAVE: Check Role (Techer, Parent) and binding to supervisored Students only.
 router.post('/save', passport.authenticate('jwt', { session: false }), (req, res) => {
 	let updateSchedulePromise = (schedule) => {
-		console.log(schedule.lesson);
+		//console.log(schedule.lesson);
 
 		return new Promise((resolve, reject) => {
 			Schedule.findOneAndUpdate({ lesson: schedule.lesson, student: schedule.student }, schedule, {
@@ -38,11 +38,11 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 		if (depth >= 0) {
 			const { student, dur, dates, course } = req.body[depth];
 			dates.sort((a, b) => a.localeCompare(b));
-			console.log('============ ', depth, course);
+			//console.log('============ ', depth, course);
 
 			getLessonsPromise(course) //
 				.then((lessons) => {
-					console.log('===lessons ', lessons.length);
+					//console.log('===lessons ', lessons.length);
 					let schedules = lessons.map(({ _id, tasks, course }, index) => {
 						const scores = tasks.map(() => 0);
 						return {
@@ -65,6 +65,67 @@ router.post('/save', passport.authenticate('jwt', { session: false }), (req, res
 		}
 	};
 	Schedule.deleteMany({ student: req.user.id }).then(patternsSave(req.body.length - 1));
+	return res.json({ success: true });
+});
+// @route   POST api/schedules/savecourse
+// @desc    Add Schedules (Recursive)
+// @access  Private
+// TODO: SAVE: Check Role (Techer, Parent) and binding to supervisored Students only.
+router.post('/savecourse', passport.authenticate('jwt', { session: false }), (req, res) => {
+	let updateSchedulePromise = (schedule) => {
+		//console.log(schedule.lesson);
+
+		return new Promise((resolve, reject) => {
+			Schedule.findOneAndUpdate({ lesson: schedule.lesson, student: schedule.student }, schedule, {
+				upsert: true,
+				new: true,
+				setDefaultsOnInsert: true
+			})
+				.then((data) => resolve(data))
+				.catch((err) => reject(err));
+		});
+	};
+	let getLessonsPromise = (course) => {
+		return new Promise((resolve, reject) => {
+			Lesson.find({ course }) //
+				.sort({ nmb: 1 })
+				.then((data) => resolve(data))
+				.catch((err) => reject(err));
+		});
+	};
+
+	const patternsSave = (depth) => {
+		if (depth >= 0) {
+			const { student, dur, dates, course } = req.body[depth];
+			dates.sort((a, b) => a.localeCompare(b));
+			//console.log('============ ', depth, course);
+
+			getLessonsPromise(course) //
+				.then((lessons) => {
+					//console.log('===lessons ', lessons.length);
+					let schedules = lessons.map(({ _id, tasks, course }, index) => {
+						const scores = tasks.map(() => 0);
+						return {
+							lesson: _id,
+							student,
+							course,
+							...(dates.length > index && { ts: dates[index] }),
+							dur,
+							status: 0,
+							scores
+						};
+					});
+					schedules.forEach((schedule) => {
+						updateSchedulePromise(schedule);
+					});
+					patternsSave(depth - 1);
+				})
+				//.catch((errors) => res.status(404).json({ errors: convertError(errors.errors) }));
+				.catch((errors) => console.log(errors));
+		}
+	};
+	const { cid } = req.body;
+	Schedule.deleteMany({ student: req.user.id, course: cid }).then(patternsSave(req.body.length - 1));
 	return res.json({ success: true });
 });
 
